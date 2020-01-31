@@ -1,27 +1,48 @@
 <template>
-  <div id="app">
+  <div :class="{'nav-open': $sidebar.showSidebar}">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
-export default {
-  name: 'app',
-  data() {
-    return {
-
-    }
-  }
-}
+export default {};
 </script>
 
-<style>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
-
   body {
-    overflow: auto;
     font-family: 'Noto Sans KR';
-    background-color: #f0f3f8;
+  }
+
+.vue-notifyjs.notifications {
+  .alert {
+    z-index: 10000;
+  }
+  .list-move {
+    transition: transform 0.3s, opacity 0.4s;
+  }
+  .list-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .list-enter-active {
+    transition: transform 0.2s ease-in, opacity 0.4s ease-in;
+  }
+  .list-leave-active {
+    transition: transform 1s ease-out, opacity 0.4s ease-out;
+  }
+
+  .list-enter {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  .list-leave-to {
+    opacity: 0;
+    transform: scale(1.2, 0.7);
+  }
+}
+
+  .v-modal {
+    z-index: 0 !important;
   }
 </style>

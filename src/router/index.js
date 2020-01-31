@@ -1,42 +1,12 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Main from '../views/main.vue'
-import Login from '../views/login/index.vue'
-import Artists from '../views/artists/index.vue'
-import Business from '../views/business/index.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import routes from "./routes";
+Vue.use(VueRouter);
 
-import Test from '../views/test.vue'
-
-
-Vue.use(VueRouter)
-
+// configure router
 const router = new VueRouter({
-    mode : 'history',
-    routes : [
-        {
-            path : '/login',
-            component : Login
-        },
-        {
-            path : '/',
-            component : Main,
-            children : [
-                {
-                    path : '/artists',
-                    component : Artists
-                },
-                {
-                    path : '/business',
-                    component : Business
-                }
-            ]
-        },
-        {
-            path : '/test',
-            component : Test
-        } 
-        
-    ]
-})
+  routes, // short for routes: routes
+  linkActiveClass: "active"
+});
 
-export default router
+export default router;
