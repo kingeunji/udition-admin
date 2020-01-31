@@ -333,7 +333,6 @@ export default {
     }
 
     .img-fluid {
-        height: 162px;
         max-width: 100%;
     }
 

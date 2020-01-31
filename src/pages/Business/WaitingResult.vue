@@ -277,6 +277,7 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
 
+    
     .profile-btn-group {
         position: absolute;
         right: 0;
@@ -390,5 +391,9 @@ export default {
         border-bottom: solid 1px #d1d1d1;
         box-shadow: 0 4px 3px rgba(0, 0, 0, 0.04);
         transition: 0.4s;
+    }
+
+    .el-dialog {
+        width: 60% !important;
     }
 </style>
