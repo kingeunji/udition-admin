@@ -43,6 +43,17 @@
       <div class="col-xl-8 col-lg-7 col-md-6">
           <card class="card" title="Profile">
               <div class="detail_pannel">
+                    <div v-if="detailInfo.video != ''" class="row loop-row">
+                        <div class="col-9 col-lg-2">
+                            <b>프로필 / 영상</b>
+                        </div>
+                        <div class="col-lg-10" v-if="videoFlg">
+                            <youtube :video-id=videoId> </youtube>
+                        </div>
+                        <div class="col-lg-10" v-else>
+                            <el-image style="width: 150px;" :src="'http://35.243.93.121:8080/fileFolder/' + detailInfo.video" alt="..."> </el-image>
+                        </div>
+                    </div>
                     <div v-if="detailInfo.email != ''" class="row loop-row">
                         <div class="col-9 col-lg-2">
                             <b>이메일 </b>
@@ -322,12 +333,15 @@
 
 <script>
 import {artist} from '../../api/artist.js'
+import { getIdFromUrl } from 'vue-youtube'
 
 export default {
     data() {
         return {
             webUrl : '',
-            detailInfo : ''
+            detailInfo : '',
+            videoId : '',
+            videoFlg : false
         }
     },
     created() {
@@ -340,10 +354,21 @@ export default {
                   .then(data => {
                       this.detailInfo = data.result
                       this.loading = false
+                      this.videoFileCheck(this.detailInfo.video)
                   })
                   .catch(err => {
                       this.error = err.data
                   })
+        },
+        videoFileCheck(fileName) {
+            if(fileName.indexOf("https://youtu.be") == 0) {
+                this.videoId = getIdFromUrl(this.detailInfo.video)
+                this.videoFlg = true
+                console.log("zzzzzz")
+            } else {
+                console.log("dsdsd")
+                this.videoFlg = false
+            }
         }
     }
 }
@@ -371,4 +396,7 @@ export default {
         margin-bottom: 20px;
     }
         
+    iframe {
+        width: 100%;
+    }
 </style>

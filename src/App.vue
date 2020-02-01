@@ -10,8 +10,10 @@ export default {};
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
-  body {
+  
+  html,body {
     font-family: 'Noto Sans KR';
+    overflow-y: auto !important; 
   }
 
 .vue-notifyjs.notifications {

@@ -22,6 +22,9 @@ export const business = {
     },
     detail(formData) {
         return request('post','biz/detail', formData)
+    },
+    update(formData) {
+        return request('post','biz/update', formData)
     }
-}
+} 
 

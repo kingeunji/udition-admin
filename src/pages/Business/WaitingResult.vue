@@ -86,41 +86,40 @@
             </el-pagination>
         </div>
 
-        <el-dialog :visible.sync="dialogVisible" title="기업 정보 확인" >
+        <el-dialog width="65%" :visible.sync="dialogVisible" title="기업 정보 확인" >
             <div class="profile-header">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 col-lg-3">
                             <div class="thumbnail mr-0 mr-md-2">
-                                <el-image :src="'http://35.243.93.121:8080/fileFolder/' + detailInfo.logo"  class="img-fluid" @error="imageLoadOnError">
-                                </el-image>
+                                <el-image :src="'http://35.243.93.121:8080/fileFolder/' + detailInfo.logo"  class="img-fluid" @error="imageLoadOnError"></el-image>
                             </div>
                         </div>
-                        
                         <div class="col-md-8 col-lg-4 col-xl-5">
                             <div class="profile-information">
                                 <div class="profile-name"> {{ detailInfo.bizName }}</div>
                                 <div class="profile-memo">{{ detailInfo.simple }}</div>
                                 <div class="profile-detail">{{ detailInfo.intro }}</div>
                             </div>
-                        <div>
+                        </div>
 
-                        <div class="col-lg-5 col-xl-4 text-center text-md-right">
+                        <div class="col-lg-4 text-center text-md-right">
                             <div class="profile-btn-group-wrap">
                                 <div class="profile-btn-group">
+                                    <el-row>
+                                        <el-tooltip content="추가자료 메일로 요청하기" placement="top">
+                                            <el-button @click="innerVisible=true">승인거절</el-button>
+                                        </el-tooltip>
+                                        <el-button type="primary" v-on:click="businessUpdate(bizInfo.bizUrl)">계정승인</el-button>
+                                    </el-row>
                                     
                                 </div>
                             </div>
                         </div>
-                                
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
-            
-            
-
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
@@ -173,12 +172,20 @@
                             <image :src="'http://35.243.93.121:8080/legal/' + bizInfo.einFileName" style="width: 200px;"  class="img-fluid" />
                         </div>
                     </div>                
-                </div>       
-                         
+                </div>              
             </div>
-            
-            
 
+            <el-dialog width="40%" title="거절 사유 메일 보내기" :visible.sync="innerVisible" append-to-body>
+                <el-form>
+                    <el-form-item label="거절 사유 (추가 자료) :" :label-width="formLabelWidth">
+                        <el-input type="textarea" v-model="rejectReason" autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="innerVisible = false">취소</el-button>
+                    <el-button type="primary" @click="businessReject(bizInfo.bizUrl)" >보내기</el-button>
+                </span>
+            </el-dialog>
         </el-dialog>
     </div>
 </template>
@@ -212,6 +219,8 @@ export default {
             },
             pagination : '',
             dialogVisible : false,
+            innerVisible : false,
+            rejectReason : '',
             detailInfo : '',
             bizInfo : {
                 ein : '',
@@ -251,6 +260,21 @@ export default {
         },
         handleCheckAllChange() {
         },
+        businessUpdate(bizUrl) {
+            var form = {
+                bizUrl : bizUrl,
+                status : 1
+            }
+
+            business.update(form)
+                    .then(data => {
+                        if(data.status.code == "0") {
+                            alert("해당 기업 계정을 승인했습니다!")
+                            this.dialogVisible = false
+                            this.fetchData()
+                        }
+                    })
+        },
         businessDetail(detail) {
             this.dialogVisible = true
             this.bizInfo.ein = detail.ein
@@ -269,6 +293,28 @@ export default {
                         this.error = err.data
                     })
 
+        },
+        businessReject(bizUrl) {
+            if(!this.rejectReason) {
+                alert("메일 내용을 입력해주세요")
+                return false
+            }
+            var form = {
+                bizUrl : bizUrl,
+                status : 2,
+                rejectReason : this.rejectReason
+            }
+
+            business.update(form)
+                    .then(data => {
+                        if(data.status.code == "0") {
+                            alert("해당 기업 계정을 거절했습니다.")
+                            this.innerVisible = false
+                            this.dialogVisible = false
+                            this.rejectReason = ''
+                            this.fetchData()
+                        }
+                    })
         }
     }
 }
@@ -277,6 +323,13 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
 
+    .el-button--default {
+        width: auto !important; 
+    }
+
+    .el-button--primary {
+        width: auto !important; 
+    }
     
     .profile-btn-group {
         position: absolute;
@@ -393,7 +446,11 @@ export default {
         transition: 0.4s;
     }
 
-    .el-dialog {
-        width: 60% !important;
+    .profile-btn-group {
+        position: absolute;
+        right: 0;
+        bottom: 0;
     }
+
+    
 </style>

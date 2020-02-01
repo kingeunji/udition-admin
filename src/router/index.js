@@ -7,6 +7,7 @@ import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
 import Artists from "@/pages/Artists/ArtistDashboard.vue";
 import ArtistDetail from "@/pages/Artists/ArtistDetailDashboard.vue";
 import Business from "@/pages/Business/BusinessDashboard.vue";
+import Audition from "@/pages/Auditions/AuditionDashboard.vue";
 import Login from "@/pages/Login.vue";
 
 
@@ -34,7 +35,7 @@ const router = new VueRouter({
       children: [
         {
           path: "artists",
-          name: "아티스트",
+          name: "아티스트 관리",
           component: Artists
         },
         {
@@ -44,8 +45,13 @@ const router = new VueRouter({
         },
         {
           path: "business",
-          name: "기업 회원",
+          name: "기업 회원 관리",
           component: Business
+        },
+        {
+          path: "auditions",
+          name: "오디션 관리",
+          component: Audition
         }
       ]
     }
