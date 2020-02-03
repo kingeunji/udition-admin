@@ -28,6 +28,9 @@ export const audition = {
     },
     detail(formData) {
         return request('post', 'audition/detail', formData)
+    },
+    update(formData) {
+        return request('post', 'audition/update', formData)
     }
 }
 

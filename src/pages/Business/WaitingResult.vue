@@ -269,7 +269,7 @@ export default {
             business.update(form)
                     .then(data => {
                         if(data.status.code == "0") {
-                            alert("해당 기업 계정을 승인했습니다!")
+                            this.$message("해당 기업 계정을 승인했습니다!")
                             this.dialogVisible = false
                             this.fetchData()
                         }
@@ -296,10 +296,10 @@ export default {
         },
         businessReject(bizUrl) {
             if(!this.rejectReason) {
-                alert("메일 내용을 입력해주세요")
+                this.$message("메일 내용을 입력해주세요")
                 return false
             }
-            var form = {
+            let form = {
                 bizUrl : bizUrl,
                 status : 2,
                 rejectReason : this.rejectReason
@@ -308,7 +308,7 @@ export default {
             business.update(form)
                     .then(data => {
                         if(data.status.code == "0") {
-                            alert("해당 기업 계정을 거절했습니다.")
+                            this.$message("해당 기업 계정을 거절했습니다.")
                             this.innerVisible = false
                             this.dialogVisible = false
                             this.rejectReason = ''

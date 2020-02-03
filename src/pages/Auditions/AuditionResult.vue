@@ -26,6 +26,12 @@
                                         종료
                                     </div>
                                 </span>
+
+                                <div v-if="filterType ==2" style="display : inline; margin-left:5px;">
+                                    <span v-if="item.isPaid == 0" style="background-color: #db3535;" class="badge rounded badge-success">결제미완료</span>
+                                    <span v-else-if="item.isPaid == 1" style="background-color: #db3535;" class="badge rounded badge-success">결제완료</span>
+
+                                </div>
                             </div>        
                         </div>
                         <h4 class="list-subject mb-1 mb-xl-1">
@@ -41,7 +47,15 @@
                                 <el-button @click="auditionDetail(item.auditionNo)">오디션 내용</el-button>
                             </div>
                             <div v-if="filterType == 2" class="col-md-9 text-center text-md-right">
-                                <el-button type="info">오디션 승인</el-button>
+
+                                <el-tooltip placement="top" content="추가자료 메일로 요청하기">
+                                    <el-button type="danger" @click="rejectDialog(item.auditionNo)">승인 거절</el-button>
+                                </el-tooltip>
+
+                                <el-tooltip placement="bottom" content="오디션을 바로 게시합니다.">
+                                    <el-button type="info" @click="updateDialog(item.auditionNo)">오디션 승인</el-button>
+                                </el-tooltip>
+
                             </div>
                             <div v-else class="col-md-9 text-center text-md-right">
                                 <el-button v-if="item.reportCnt != 0" type="danger">신고확인</el-button>
@@ -72,6 +86,29 @@
             </el-pagination>
         </div>
 
+        <el-dialog width="50%" title="거절 사유 메일 보내기" :visible.sync="innerVisible" append-to-body>
+            <el-form>
+                <el-form-item label="거절 사유 (추가 자료) :" >
+                    <el-input type="textarea" v-model="rejectReason" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="innerVisible = false">취소</el-button>
+                <el-button type="primary" @click="rejectAudition">보내기</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog
+            title="알림"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+            <span>오디션을 바로 게시하겠습니까?</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">취소</el-button>
+                <el-button type="primary" @click="updateAudition">승인</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -87,7 +124,11 @@ export default {
                 requestPage : 0,
                 pageSize : 10,
                 filterType : 1
-            }
+            },
+            rejectReason : '',
+            innerVisible : false,
+            selectedAuditionNo : 0,
+            dialogVisible : false
         }
     },
     created(){
@@ -122,14 +163,60 @@ export default {
             audition.pauseAudition(form)
                     .then(data => {
                         this.fetchData()
-                        if(flag == 1) alert("해당 오디션이 정지되었습니다!")
-                        else if(flag == 0) alert("해당 오디션이 게시되었습니다!")
+                        if(flag == 1) this.$message("해당 오디션이 정지되었습니다!")
+                        else if(flag == 0) this.$message("해당 오디션이 게시되었습니다!")
                     })
 
         },
         auditionDetail(auditionNo) {
             let route = this.$router.resolve({path: '/auditions/'+ auditionNo});
             window.open(route.href, '_blank');
+        },
+        rejectDialog(auditionNo) {
+            this.innerVisible = true
+            this.selectedAuditionNo = auditionNo
+        },
+        updateDialog(auditionNo) {
+            this.dialogVisible = true
+            this.selectedAuditionNo = auditionNo
+        },
+        updateAudition() {
+            let form = {
+                auditionNo : this.selectedAuditionNo,
+                isDisplayStart : 1,
+            }
+
+             audition.update(form) 
+                    .then(data => {
+                        if(data.status.code == "0")
+                            this.$message("오디션을 승인했습니다!")
+                            this.innerVisible = false
+                            this.rejectReason = ''
+                            this.selectedAuditionNo = 0
+                            this.fetchData()
+                    })
+        },
+        rejectAudition() {
+            if(!this.rejectReason) {
+                this.$message("메일 내용을 입력해주세요!")
+                return false
+            }
+
+            let form = {
+                auditionNo : this.selectedAuditionNo,
+                isDisplayStart : 2,
+                rejectReason : this.rejectReason
+            }
+
+            audition.update(form) 
+                    .then(data => {
+                        if(data.status.code == "0")
+                            this.$message("오디션 게시를 거절했습니다!")
+                            this.innerVisible = false
+                            this.rejectReason = ''
+                            this.selectedAuditionNo = 0
+                            this.fetchData()
+                    })
         }
     }
 }
@@ -188,5 +275,10 @@ h4 {
     padding: 1px 0;
     color: #666;
     font-size: 12px;
+}
+
+
+.el-button--primary {
+    width: 130px !important; 
 }
 </style>

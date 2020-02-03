@@ -59,7 +59,7 @@ export default {
                         const {token} = data.result.accessToken
                         this.$router.push(this.rPath)
                     } else {
-                        alert("잘못된 계정입니다");
+                        this.$message("잘못된 계정입니다");
                     }
                 })
             console.log(this.email);

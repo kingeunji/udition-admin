@@ -222,7 +222,7 @@ export default {
                 artist.update(this.form)
                   .then(data => {
                       this.fetchData()
-                      alert("선택하신 아티스트의 티어를 설정하였습니다!");
+                      this.$message("선택하신 아티스트의 티어를 설정하였습니다!")
                   })
                   .catch(err => {
                       this.error = err.data
@@ -232,7 +232,7 @@ export default {
                 artist.update(this.form)
                   .then(data => {
                       this.fetchData()
-                      alert("선택하신 아티스트의 티어를 설정하였습니다!");
+                      this.$message("선택하신 아티스트의 티어를 설정하였습니다!")
                   })
                   .catch(err => {
                       this.error = err.data
@@ -242,7 +242,7 @@ export default {
                 artist.update(this.form)
                   .then(data => {
                       this.fetchData()
-                      alert("선택하신 아티스트의 티어를 설정하였습니다!");
+                      this.$message("선택하신 아티스트의 티어를 설정하였습니다!")
                   })
                   .catch(err => {
                       this.error = err.data
@@ -252,7 +252,7 @@ export default {
                 artist.update(this.form)
                   .then(data => {
                       this.fetchData()
-                      alert("선택하신 아티스트의 티어를 설정하였습니다!");
+                      this.$message("선택하신 아티스트의 티어를 설정하였습니다!")
                   })
                   .catch(err => {
                       this.error = err.data
