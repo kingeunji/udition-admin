@@ -2,12 +2,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import DashboardLayout from "@/layout/dashboard/DashboardLayout.vue";
+import NotFound from '@/pages/NotFoundPage.vue'
 
 // Admin pages
 import Artists from "@/pages/Artists/ArtistDashboard.vue";
 import ArtistDetail from "@/pages/Artists/ArtistDetailDashboard.vue";
 import Business from "@/pages/Business/BusinessDashboard.vue";
 import Audition from "@/pages/Auditions/AuditionDashboard.vue";
+import AuditionDetail from "@/pages/Auditions/AuditionDetailDashboard.vue";
 import Login from "@/pages/Login.vue";
 
 
@@ -23,6 +25,10 @@ const requireAuth = (to, from, next) => {
 const router = new VueRouter({
   mode : "history",
   routes : [
+    {
+      path: "*",
+      component : NotFound
+    },
     {
       path: "/login",
       component : Login
@@ -52,7 +58,12 @@ const router = new VueRouter({
           path: "auditions",
           name: "오디션 관리",
           component: Audition
-        }
+        },
+        {
+          path: "auditions/:auditionNo",
+          name: "오디션 상세정보",
+          component: AuditionDetail
+        },
       ]
     }
   ]

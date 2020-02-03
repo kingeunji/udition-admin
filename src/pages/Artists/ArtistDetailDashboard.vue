@@ -364,9 +364,7 @@ export default {
             if(fileName.indexOf("https://youtu.be") == 0) {
                 this.videoId = getIdFromUrl(this.detailInfo.video)
                 this.videoFlg = true
-                console.log("zzzzzz")
             } else {
-                console.log("dsdsd")
                 this.videoFlg = false
             }
         }

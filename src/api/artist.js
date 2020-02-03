@@ -12,8 +12,7 @@ const request = (method, url, data) => {
     }).then(result => result.data)
       .catch(result => {
         const {status} = result.response
-        if (status === UNAUTHORIZED) onUnauthorized()
-        throw result.response
+        throw status
       })
   }
   

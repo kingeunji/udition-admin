@@ -18,10 +18,16 @@ const request = (method, url, data) => {
 
 export const audition = {
     count() {
-        return request('post', 'audition/sideCnt')
+        return request('post', 'audition/sideCnt', {})
     },
     search(formData) {
         return request('post','audition/search', formData)
+    },
+    pauseAudition(formData) {
+        return request('post','audition/pauseAudition', formData)
+    },
+    detail(formData) {
+        return request('post', 'audition/detail', formData)
     }
 }
 

@@ -15,7 +15,17 @@
                     <div class="col-md-9">
                         <div class="row no-gutters mt-1">
                             <div class="col-6">
-                                <span class="badge rounded badge-success">진행중 / D-{{ item.dday }}</span>
+                                <span v-if="filterType == 1" class="badge rounded badge-success">진행중 / D-{{ item.dday }}</span>
+                                <span v-else-if="filterType == 2" class="badge rounded badge-success">승인대기중</span>
+                                <span v-else-if="filterType == 4" class="badge rounded badge-success">종료</span>
+                                <span v-else-if="filterType == 3" class="badge rounded badge-success">
+                                    <div v-if="item.dday >= 0">
+                                        진행중 / D-{{ item.dday }}
+                                    </div>
+                                    <div v-if="item.dday < 0">
+                                        종료
+                                    </div>
+                                </span>
                             </div>        
                         </div>
                         <h4 class="list-subject mb-1 mb-xl-1">
@@ -28,10 +38,21 @@
                         </ul>
                         <div class="row mt-1 mt-md-4 mt-xl-4">
                             <div class="col-md-3 text-center text-md-left">
-                                <el-button>오디션 내용</el-button>
+                                <el-button @click="auditionDetail(item.auditionNo)">오디션 내용</el-button>
                             </div>
-                            <div class="col-md-9 text-center text-md-right">
-                                <el-button>오디션</el-button>
+                            <div v-if="filterType == 2" class="col-md-9 text-center text-md-right">
+                                <el-button type="info">오디션 승인</el-button>
+                            </div>
+                            <div v-else class="col-md-9 text-center text-md-right">
+                                <el-button v-if="item.reportCnt != 0" type="danger">신고확인</el-button>
+                                <el-tooltip v-if="item.isDelete == 0" content="진행중인 오디션을 정지합니다" placement="top">
+                                    <el-button type="danger" @click="pauseAudition(item.auditionNo, 1)">정지</el-button>
+                                </el-tooltip>
+                                <el-tooltip v-else-if="item.isDelete == 1" content="정지된 오디션을 게시합니다" placement="top">
+                                    <el-button type="danger" @click="pauseAudition(item.auditionNo, 0)">게시</el-button>
+                                </el-tooltip>
+                                <el-button type="info">지원자보기</el-button>
+
                             </div>
                         </div>
                     </div>
@@ -43,6 +64,7 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
+                :page-size="10"
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
                 @next-click="pageChange"
@@ -54,19 +76,31 @@
 </template>
 
 <script>
-import {audition} from '../../api/audition.js'
+import { audition } from '../../api/audition.js'
 export default {
+    props : ['filterType'],
     data() {
         return {
             auditionList : '',
             pagination : '',
             formData : {
-                requestPage : 0
+                requestPage : 0,
+                pageSize : 10,
+                filterType : 1
             }
         }
     },
     created(){
+        this.formData.requestPage = 0
+        this.formData.filterType = this.filterType
         this.fetchData()
+    },
+    watch : {
+        filterType : function() {
+            this.formData.requestPage = 0
+            this.formData.filterType = this.filterType
+            this.fetchData()
+        }
     },
     methods : {
         fetchData() {
@@ -79,12 +113,33 @@ export default {
         pageChange(val) {
             this.formData.requestPage = (val-1)
             this.fetchData()
+        },
+        pauseAudition(auditionNo, flag) {
+            let form = {
+                auditionNo : auditionNo,
+                isDelete : flag
+            }
+            audition.pauseAudition(form)
+                    .then(data => {
+                        this.fetchData()
+                        if(flag == 1) alert("해당 오디션이 정지되었습니다!")
+                        else if(flag == 0) alert("해당 오디션이 게시되었습니다!")
+                    })
+
+        },
+        auditionDetail(auditionNo) {
+            let route = this.$router.resolve({path: '/auditions/'+ auditionNo});
+            window.open(route.href, '_blank');
         }
     }
 }
 </script>
 
 <style scoped>
+.el-button--default {
+    width: 130px !important;
+}
+
 h4 {
     font-size: 18px;
     margin-top: 15px !important;

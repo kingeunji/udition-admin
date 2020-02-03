@@ -2,9 +2,9 @@
   <div class="wrapper">
     <side-bar>
       <template slot="links">
-        <sidebar-link to="/artists" name="아티스트" icon="el-icon-user-solid"/>
-        <sidebar-link to="/business" name="기업회원" icon="el-icon-suitcase"/>
-        <sidebar-link to="/auditions" name="오디션" icon="el-icon-data-line"/>
+        <sidebar-link to="/artists" name="아티스트 관리" icon="el-icon-user-solid"/>
+        <sidebar-link to="/business" name="기업회원 관리" icon="el-icon-suitcase"/>
+        <sidebar-link to="/auditions" name="오디션 관리" icon="el-icon-data-line"/>
       </template>
       <mobile-menu>
         <li class="nav-item">
