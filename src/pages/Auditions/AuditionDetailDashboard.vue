@@ -4,7 +4,7 @@
             <card class="card-user">
                 <div slot="image">
                     <div v-if="loading">
-                        <el-image :src="'http://35.243.93.121:8080/fileFolder/' + detailInfo.image" alt="..."> </el-image>
+                        <el-image :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.image" alt="..."> </el-image>
                     </div>
                 </div>
                 <div>
@@ -172,7 +172,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
     .detail_pannel {
         padding: 10px 10px;
     }
@@ -180,8 +180,5 @@ export default {
     .detail_pannel .loop-row {
         margin-bottom: 20px;
     }
-        
-    iframe {
-        width: 100%;
-    }
+    
 </style>

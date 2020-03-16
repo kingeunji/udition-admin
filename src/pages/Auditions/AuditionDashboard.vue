@@ -19,7 +19,7 @@
                     <li :class="{active:selected == 5}">
                         <a href="#" @click="selected = 5">신고받은 오디션 ({{ countResult.reportCnt }})</a>
                     </li>
-
+                
                 </ul>
             </div>
         </div>

@@ -10,8 +10,7 @@ const request = (method, url, data) => {
     }).then(result => result.data)
       .catch(result => {
         const {status} = result.response
-        if (status === UNAUTHORIZED) onUnauthorized()
-        throw result.response
+        throw status
       })
   }
   
@@ -25,6 +24,11 @@ export const business = {
     },
     update(formData) {
         return request('post','biz/update', formData)
+    },
+    billingSearch(formData) {
+        return request('post', 'billing/search', formData)
+    },
+    subDetail(formData) {
+      return request('post','biz/sub/detail', formData)
     }
 } 
-

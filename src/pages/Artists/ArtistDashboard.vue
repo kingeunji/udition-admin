@@ -13,13 +13,14 @@
             </ul>
 
             <!-- fillter -->
-            <artistFilter />
+            <artistFilter v-if="selected == 1" />
         </div>
     </div>
 
     <!-- Content -->
     <div id="contents" class="col-8">
-        <artistResult />
+        <artistResult v-if="selected == 1" />
+        <collectionResult v-else-if="selected == 2" />
     </div>
 </div>
 </template>
@@ -27,10 +28,11 @@
 <script>
 import artistFilter from './ArtistFilter.vue'
 import artistResult from './ArtistResult.vue'
+import collectionResult from './CollectionResult.vue'
 
 
 export default {
-    components : { artistFilter, artistResult },
+    components : { artistFilter, artistResult, collectionResult },
     data() {
         return {
             selected : 1,

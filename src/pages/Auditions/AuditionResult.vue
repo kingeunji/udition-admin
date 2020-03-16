@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-6 offset-3 col-md offset-md-0">
                                 <div class="mb-3 mb-md-0 mr-0 mr-md-3 mr-xl-4">
-                                    <img :src="'http://35.243.93.121:8080/fileFolder/' + item.image"  class="img-fluid">
+                                    <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + item.image"  class="img-fluid">
                                 </div>
                             </div>
                         </div>
@@ -101,8 +101,7 @@
         <el-dialog
             title="알림"
             :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
+            width="30%">
             <span>오디션을 바로 게시하겠습니까?</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">취소</el-button>

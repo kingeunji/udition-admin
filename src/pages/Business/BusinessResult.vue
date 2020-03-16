@@ -37,7 +37,7 @@
 
                 <el-table-column label="기업 로고"  width="120">
                     <template slot-scope="scope">
-                        <img :src="'http://35.243.93.121:8080/fileFolder/' + scope.row.logo"  class="img-fluid" @error="imageLoadOnError">
+                        <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + scope.row.logo"  class="img-fluid" @error="imageLoadOnError">
                     </template>
                 </el-table-column>
 
@@ -67,9 +67,11 @@
                 </el-table-column>
 
                 <el-table-column align="center" >
-                    <div style="padding: 30px;">
-                        <el-button size="mini">기업 상세</el-button>
-                    </div>
+                    <template slot-scope="scope">
+                        <div style="padding: 30px;">
+                            <el-button size="mini" @click="businessDetail(scope.row.bizUrl)">기업 상세</el-button>
+                        </div>
+                    </template>
                 </el-table-column>
             </el-table> 
         </div>
@@ -141,6 +143,10 @@ export default {
             this.fetchData()
         },
         handleCheckAllChange() {
+        },
+        businessDetail(bizUrl) {
+            let route = this.$router.resolve({path: '/business/'+ bizUrl});
+            window.open(route.href, '_blank');
         }
     }
 }

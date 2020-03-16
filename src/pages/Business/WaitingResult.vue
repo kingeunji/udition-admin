@@ -8,7 +8,7 @@
                     <el-form-item> <el-radio v-model="formData.modelType" label="2">어드밴스 기업</el-radio> </el-form-item>    
                 </el-form>
                 
-                <span style="font-weight:600">필터/검색 결과 기업 : {{ this.pagination.dbCount }} 개 </span>
+                <span style="font-weight:600; font-size:14px;">필터/검색 결과 기업 : {{ this.pagination.dbCount }} 개 </span>
             </div>
             <div class="col-6" style="display: inline-block; float: right; text-align: right;">
                 <el-form :inline="true" class="demo-form-inline">
@@ -38,7 +38,7 @@
 
                 <el-table-column label="기업 로고"  width="120">
                     <template slot-scope="scope">
-                        <img :src="'http://35.243.93.121:8080/fileFolder/' + scope.row.logo"  class="img-fluid" @error="imageLoadOnError">
+                        <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + scope.row.logo"  class="img-fluid" @error="imageLoadOnError">
                     </template>
                 </el-table-column>
 
@@ -92,7 +92,7 @@
                     <div class="row">
                         <div class="col-md-4 col-lg-3">
                             <div class="thumbnail mr-0 mr-md-2">
-                                <el-image :src="'http://35.243.93.121:8080/fileFolder/' + detailInfo.logo"  class="img-fluid" @error="imageLoadOnError"></el-image>
+                                <el-image :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.logo"  class="img-fluid" @error="imageLoadOnError"></el-image>
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-4 col-xl-5">

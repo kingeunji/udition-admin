@@ -29,6 +29,8 @@
             <div v-else-if="selected == 2">
                 <WaitingResult />
             </div>
+            <div v-else-if="selected == 3">
+            </div>
         </div>
     </div>
 </template>
@@ -36,6 +38,7 @@
 <script>
 import BusinessResult from './BusinessResult.vue'
 import WaitingResult from './WaitingResult.vue'
+
 
 export default {
     components : {BusinessResult, WaitingResult},

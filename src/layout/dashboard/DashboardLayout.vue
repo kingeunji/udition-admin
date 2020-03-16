@@ -5,6 +5,8 @@
         <sidebar-link to="/artists" name="아티스트 관리" icon="el-icon-user-solid"/>
         <sidebar-link to="/business" name="기업회원 관리" icon="el-icon-suitcase"/>
         <sidebar-link to="/auditions" name="오디션 관리" icon="el-icon-data-line"/>
+        <sidebar-link to="/banner" name="배너 관리" icon="el-icon-picture"/>
+        <sidebar-link to="/uditok" name="유디톡 관리" icon="el-icon-notebook-1"/>
       </template>
       <mobile-menu>
         <li class="nav-item">

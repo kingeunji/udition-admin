@@ -21,11 +21,12 @@ import PaperDashboard from "./plugins/paperDashboard";
 import "vue-notifyjs/themes/default.css";
 
 import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 import 'element-ui/lib/theme-chalk/index.css';
 import Viewer from 'v-viewer'
 import VueYoutube  from 'vue-youtube'
 
-Vue.use(ElementUI);
+Vue.use(ElementUI , {locale});
 Vue.use(Viewer);
 Vue.use(PaperDashboard);
 Vue.use(VueYoutube);

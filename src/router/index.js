@@ -10,6 +10,11 @@ import ArtistDetail from "@/pages/Artists/ArtistDetailDashboard.vue";
 import Business from "@/pages/Business/BusinessDashboard.vue";
 import Audition from "@/pages/Auditions/AuditionDashboard.vue";
 import AuditionDetail from "@/pages/Auditions/AuditionDetailDashboard.vue";
+import BusienssDetail from "@/pages/Business/BusinessDetail.vue";
+import Banner from "@/pages/Banner/BannerDashboard.vue";
+import Uditok from "@/pages/Uditok/UditokDashboard.vue";
+
+
 import Login from "@/pages/Login.vue";
 
 
@@ -55,6 +60,11 @@ const router = new VueRouter({
           component: Business
         },
         {
+          path: "business/:bizUrl",
+          name: "기업 상세정보",
+          component: BusienssDetail
+        },
+        {
           path: "auditions",
           name: "오디션 관리",
           component: Audition
@@ -63,6 +73,16 @@ const router = new VueRouter({
           path: "auditions/:auditionNo",
           name: "오디션 상세정보",
           component: AuditionDetail
+        },
+        {
+          path: "banner",
+          name: "배너 관리",
+          component: Banner
+        },
+        {
+          path: "uditok",
+          name: "유디톡 관리",
+          component: Uditok
         },
       ]
     }
