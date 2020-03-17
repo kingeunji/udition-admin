@@ -68,7 +68,8 @@
                        <b> 내용 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        {{ noticeInfo.tts }}
+                        <el-input type="textarea" v-model="noticeInfo.tts" autocomplete="off" rows="20" style="border: none;" readonly="readonly"></el-input>
+                        <!-- {{ noticeInfo.tts }} -->
                     </div>
                 </div>
             </div>
