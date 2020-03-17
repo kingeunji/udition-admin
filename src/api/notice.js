@@ -22,6 +22,12 @@ export const notice = {
     },
     delete(noticeNo) {
         return request('post', 'notice/delete', { noticeNo : noticeNo } )
+    },
+    insert(form) {
+        return request('post', 'notice/insert', form)
+    },
+    update(form){
+        return request('post', 'notice/update', form)
     }
 }
 
