@@ -17,11 +17,11 @@
             </el-table-column>
 
             <el-table-column align="center">
-                <span>
-                <div style="padding: 30px;">
-                    <el-button size="mini" v-on:click="noticeSortUp()">위로</el-button>
-                    <el-button size="mini" >아래로</el-button>
-                </div>
+                <span slot-scope="scope">
+                    <div style="padding: 30px;">
+                        <el-button size="mini" @click="sortUp(scope.row)">위로</el-button>
+                        <el-button size="mini" @click="sortDown(scope.row)">아래로</el-button>
+                    </div>
                 </span>
             </el-table-column>
 
@@ -178,6 +178,10 @@ export default {
             dialogUpdate : false,
             title : '',
             tts : '',
+            keyValue : '',
+            sortValue : '',
+            targetKey : '',
+            targetSort : '',
             noticeInfo : {
                 noticeNo : '',
                 title : '',
@@ -252,6 +256,68 @@ export default {
                     }
                 })
         },
+        sortUp : function(detail){
+            var indexL = this.noticeList.findIndex(function(notice){
+                return notice.noticeNo == detail.noticeNo;
+            })
+
+            if(indexL == "0"){
+                this.$message("이전의 공지사항이 없습니다.")
+                return false
+            }
+
+            var indexPre = indexL - 1;
+
+            var preNoticeNo = this.noticeList[indexPre].noticeNo;
+            var preSortNo = this.noticeList[indexPre].sortNo;
+            var nowNoticeNo = this.noticeList[indexL].noticeNo;
+            var nowSortNo = this.noticeList[indexL].sortNo;
+
+            const form = new FormData();
+            form.append("keyValue", nowNoticeNo);
+            form.append("sortValue", nowSortNo);
+            form.append("targetKey", preNoticeNo);
+            form.append("targetSort", preSortNo);
+
+            notice.updateList(form)
+                .then(data => {
+                    if(data.status.code == "0"){
+                        this.$message("공지사항의 순서를 변경하였습니다")
+                        this.fetchData()
+                    }
+                })
+        },
+        sortDown: function(detail){
+            var indexL = this.noticeList.findIndex(function(notice){
+                return notice.noticeNo == detail.noticeNo;
+            })
+            if(indexL == this.noticeList.length-1){
+                this.$message("이후의 공지사항이 없습니다")
+                return false
+            }
+
+            var indexPre = indexL + 1;
+
+            var preNoticeNo = this.noticeList[indexPre].noticeNo;
+            var preSortNo = this.noticeList[indexPre].sortNo;
+            var nowNoticeNo = this.noticeList[indexL].noticeNo;
+            var nowSortNo = this.noticeList[indexL].sortNo;
+
+            const form = new FormData();
+            form.append("keyValue", nowNoticeNo);
+            form.append("sortValue", nowSortNo);
+            form.append("targetKey", preNoticeNo);
+            form.append("targetSort", preSortNo);
+
+            notice.updateList(form)
+                .then(data => {
+                    if(data.status.code == "0"){
+                        this.$message("공지사항의 순서를 변경하였습니다")
+                        this.fetchData()
+                    }
+                })
+
+        },
         noticeUpdate() {
             if(this.noticeInfo.title == null){
                 this.$message("공지사항 제목을 입력해주세요")
@@ -276,31 +342,6 @@ export default {
                     }
                 })
             }
-        },
-        noticeSortUp() {
-            alert("11")
-            
-            if(!(this.sortNo-1)){
-                this.$message("이전의 공지사항이 없습니다.")
-                return false
-            }
-            let form = {
-                keyValue : this.noticeNo,
-                sortValue : this.sortNo - 1,
-                targetKey : (this.sortNo-1).noticeNo,
-                targetValue : this.sortNo
-            }
-            alert("keyValue: " + keyValue)
-            alert("sortValur: " + sortValue)
-            alert("targetKey: " + targetKey)
-            alert("targetValue: " + this.sortNo)
-
-            notice.updateSort(form)
-                .then(data => {
-                    if(data.status.code == "0"){
-                        this.fetchData()
-                    }
-                })
         }
 
     }
