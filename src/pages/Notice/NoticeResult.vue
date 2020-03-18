@@ -4,16 +4,25 @@
 
             <el-table-column label="#" width="80" align="center">
                 <template slot-scope="scope">
-                    {{ scope.row.noticeNo }}
+                    {{ scope.row.noticeNo }}/{{ scope.row.sortNo }}
                 </template>
             </el-table-column>
 
-            <el-table-column label="제목" width="400" align="center">
+            <el-table-column label="제목" width="450" align="center">
                 <template slot-scope="scope">
                 <div>
                     <b v-on:click="noticeDetail(scope.row)">{{ scope.row.title }}</b>
                 </div>
                 </template>
+            </el-table-column>
+
+            <el-table-column align="center">
+                <span>
+                <div style="padding: 30px;">
+                    <el-button size="mini" v-on:click="noticeSortUp()">위로</el-button>
+                    <el-button size="mini" >아래로</el-button>
+                </div>
+                </span>
             </el-table-column>
 
             <el-table-column align="center">
@@ -24,6 +33,7 @@
                 </div>
                 </span>
             </el-table-column>
+
         </el-table>
 
         <div class="col-6" style="display: inline-block; float: right; text-align: right; margin-top:10px;">
@@ -75,10 +85,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog
-            title="알림"
-            :visible.sync="dialogDelte"
-            width="30%">
+        <el-dialog title="알림" :visible.sync="dialogDelte" width="30%">
             <div class="detail_pannel">
                 <span>
                     해당 공지사항을 삭제하겠습니까? 
@@ -115,7 +122,7 @@
             </div>
         </el-dialog>
 
-                <el-dialog width="65%" :visible.sync="dialogUpdate" title="공지사항" >
+        <el-dialog width="65%" :visible.sync="dialogUpdate" title="공지사항" >
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
@@ -174,7 +181,8 @@ export default {
             noticeInfo : {
                 noticeNo : '',
                 title : '',
-                tts : ''
+                tts : '',
+                sortNo : ''
             }
             
         }
@@ -200,7 +208,7 @@ export default {
                   .then(data => {
                       if(data.status.code == 0) {
                           this.$message("공지사항이 삭제되었습니다")
-                          this.dialogVisible = false
+                          this.dialogDelte = false
                           this.fetchData()
                       }
                   })
@@ -268,7 +276,33 @@ export default {
                     }
                 })
             }
+        },
+        noticeSortUp() {
+            alert("11")
+            
+            if(!(this.sortNo-1)){
+                this.$message("이전의 공지사항이 없습니다.")
+                return false
+            }
+            let form = {
+                keyValue : this.noticeNo,
+                sortValue : this.sortNo - 1,
+                targetKey : (this.sortNo-1).noticeNo,
+                targetValue : this.sortNo
+            }
+            alert("keyValue: " + keyValue)
+            alert("sortValur: " + sortValue)
+            alert("targetKey: " + targetKey)
+            alert("targetValue: " + this.sortNo)
+
+            notice.updateSort(form)
+                .then(data => {
+                    if(data.status.code == "0"){
+                        this.fetchData()
+                    }
+                })
         }
+
     }
 
 </script>

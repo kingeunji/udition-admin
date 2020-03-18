@@ -28,6 +28,10 @@ export const notice = {
     },
     update(form){
         return request('post', 'notice/update', form)
+    },
+    updateSort(form) {
+        return request('post', 'notice/updateSort', form)
     }
+
 }
 
