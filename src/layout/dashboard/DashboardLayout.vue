@@ -7,6 +7,7 @@
         <sidebar-link to="/auditions" name="오디션 관리" icon="el-icon-data-line"/>
         <sidebar-link to="/banner" name="배너 관리" icon="el-icon-picture"/>
         <sidebar-link to="/uditok" name="유디톡 관리" icon="el-icon-notebook-1"/>
+        <sidebar-link to="/notice" name="공지사항 관리" icon="el-icon-notebook-1"/>
       </template>
       <mobile-menu>
         <li class="nav-item">

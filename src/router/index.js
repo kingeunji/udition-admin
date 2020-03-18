@@ -13,6 +13,7 @@ import AuditionDetail from "@/pages/Auditions/AuditionDetailDashboard.vue";
 import BusienssDetail from "@/pages/Business/BusinessDetail.vue";
 import Banner from "@/pages/Banner/BannerDashboard.vue";
 import Uditok from "@/pages/Uditok/UditokDashboard.vue";
+import Notice from "@/pages/Notice/NoticeDashboard.vue";
 
 
 import Login from "@/pages/Login.vue";
@@ -83,6 +84,11 @@ const router = new VueRouter({
           path: "uditok",
           name: "유디톡 관리",
           component: Uditok
+        },
+        {
+          path: "notice",
+          name: "공지사항 관리",
+          component: Notice
         },
       ]
     }
