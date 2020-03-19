@@ -1,17 +1,17 @@
 <template>
     <div>
-        <el-table ref="multiTable" :data="qnaList" v-loading="loading" style="width:100%">
+        <el-table ref="multiTable" :data="advisorList" v-loading="loading" style="width:100%">
 
             <el-table-column label="#" width="80" align="center">
                 <template slot-scope="scope">
-                    {{ scope.row.qnaNo }}
+                    {{ scope.row.id }}
                 </template>
             </el-table-column>
 
             <el-table-column label="제목" width="450" align="center">
                 <template slot-scope="scope">
                 <div>
-                    <b v-on:click="qnaDetail(scope.row)">{{ scope.row.title }}</b>
+                    <b v-on:click="advisorDetail(scope.row)">{{ scope.row.title }}</b>
                 </div>
                 </template>
             </el-table-column>
@@ -28,8 +28,8 @@
             <el-table-column align="center">
                 <span slot-scope="scope">
                 <div style="padding: 30px;">
-                    <el-button size="mini" @click="qnaDetailUpdate(scope.row)">수정</el-button>
-                    <el-button size="mini" @click="deleteDialog(scope.row.qnaNo)">삭제</el-button>
+                    <el-button size="mini" @click="advisorDetailUpdate(scope.row)">수정</el-button>
+                    <el-button size="mini" @click="deleteDialog(scope.row.id)">삭제</el-button>
                 </div>
                 </span>
             </el-table-column>
@@ -39,7 +39,7 @@
         <div class="col-6" style="display: inline-block; float: right; text-align: right; margin-top:10px;">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item> 
-                    <el-button size="small" type="primary" @click="dialogInsert=true">자주하는 질문 추가</el-button>
+                    <el-button size="small" type="primary" @click="dialogInsert=true">어드바이저의 팁 추가</el-button>
                 </el-form-item>            
             </el-form>
         </div>
@@ -55,14 +55,14 @@
             </el-pagination>
         </div>
 
-        <el-dialog width="65%" :visible.sync="dialogVisible" title="자주하는 질문" >
+        <el-dialog width="50%" :visible.sync="dialogVisible" title="어드바이저의 팁" >
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
                        <b> 번호 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        {{ qnaInfo.qnaNo }}
+                        {{ advisorInfo.id }}
                     </div>
                 </div>
                 <div class="row loop-row">
@@ -70,16 +70,24 @@
                        <b> 제목 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        {{ qnaInfo.title }}
+                        {{ advisorInfo.title }}
                     </div>
                 </div>
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
-                       <b> 내용 </b>
+                       <b> url </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        <el-input type="textarea" v-model="qnaInfo.tts" autocomplete="off" rows="20" style="border: none;" readonly="readonly"></el-input>
-                        <!-- {{ qnaInfo.tts }} -->
+                        <a v-bind:href="advisorInfo.url"> {{ advisorInfo.url }} </a>
+                        <!-- <a @click="OpenWin_variety(advisorInfo.url, '어드바이저의 팁', width='65%')">{{ advisorInfo.url }}</a> -->
+                    </div>
+                </div>
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 이름 </b>
+                    </div>
+                    <div class="col-md-11 col-lg-9">
+                        {{ advisorInfo.advisor }}
                     </div>
                 </div>
             </div>
@@ -93,11 +101,11 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button style="width: auto" @click="dialogDelete = false">취소</el-button>
-                <el-button style="width: auto" type="primary" @click="deleteQna">삭제</el-button>
+                <el-button style="width: auto" type="primary" @click="deleteAdvisor">삭제</el-button>
             </span>
         </el-dialog>
 
-        <el-dialog width="65%" :visible.sync="dialogInsert" title="자주하는 질문" >
+        <el-dialog width="65%" :visible.sync="dialogInsert" title="어드바이저의 팁" >
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
@@ -109,27 +117,35 @@
                 </div>
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
-                       <b> 내용 </b>
+                       <b> url </b>
                     </div>
-                    <div class="col-md-10 col-lg-9">
-                        <el-input type="textarea" v-model="tts" autocomplete="off" rows="20"></el-input>
+                    <div class="col-md-11 col-lg-9">
+                        <el-input type="text" v-model="url" autocomplete="off"></el-input>
+                    </div>
+                </div>
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 이름 </b>
+                    </div>
+                    <div class="col-md-11 col-lg-9">
+                        <el-input type="text" v-model="advisor" autocomplete="off"></el-input>
                     </div>
                 </div>
                     <span>
                         <el-button @click="dialogInsert = false">취소</el-button>
-                        <el-button type="primary" @click="qnaInsert" >보내기</el-button>
+                        <el-button type="primary" @click="advisorInsert" >보내기</el-button>
                     </span>
             </div>
         </el-dialog>
 
-        <el-dialog width="65%" :visible.sync="dialogUpdate" title="자주하는 질문" >
+        <el-dialog width="65%" :visible.sync="dialogUpdate" title="어드바이저의 팁" >
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
                        <b> 번호 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        {{ qnaInfo.qnaNo }}
+                        {{ advisorInfo.id }}
                     </div>
                 </div>
                 <div class="row loop-row">
@@ -137,21 +153,35 @@
                        <b> 제목 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        <el-input type="text" v-model="qnaInfo.title" autocomplete="off"></el-input>
+                        <el-input type="text" v-model="advisorInfo.title" autocomplete="off"></el-input>
                     </div>
                 </div>
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
-                       <b> 내용 </b>
+                       <b> 주소 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        <el-input type="textarea" v-model="qnaInfo.tts" autocomplete="off" rows="20"></el-input>
+                        <el-input type="text" v-model="advisorInfo.url" autocomplete="off" rows="20"></el-input>
+                    </div>
+                </div>
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 이름 </b>
+                    </div>
+                    <div class="col-md-11 col-lg-9">
+                        <el-input type="text" v-model="advisorInfo.advisor" autocomplete="off" rows="20"></el-input>
                     </div>
                 </div>
                 <span>
                     <el-button @click="dialogUpdate = false">취소</el-button>
-                    <el-button type="primary" @click="qnaUpdate" >수정하기</el-button>
+                    <el-button type="primary" @click="advisorUpdate" >수정하기</el-button>
                 </span>
+            </div>
+        </el-dialog>
+
+        <el-dialog width="65%" :visible.sync="dialogUrl" title="어드바이저의 팁" >
+            <div class="detail_pannel">
+
             </div>
         </el-dialog>
 
@@ -161,12 +191,12 @@
 </template>
 
 <script>
-import {qna} from '../../api/qna.js'
+import {advisor} from '../../api/advisor.js'
 
 export default {
     data() {
         return {
-            qnaList : [],
+            advisorList : [],
             loading : true,
             pagination : '',
             form : {
@@ -176,17 +206,20 @@ export default {
             dialogDelete : false,
             dialogInsert : false,
             dialogUpdate : false,
+            dialogUrl : false,
             title : '',
-            tts : '',
+            url : '',
+            advisor : '',
             keyValue : '',
             sortValue : '',
             targetKey : '',
             targetSort : '',
-            qnaInfo : {
-                qnaNo : '',
+            advisorInfo : {
+                id : '',
                 title : '',
-                tts : '',
-                sortNo : ''
+                url : '',
+                advisor: '',
+                sortOrder : ''
             }
             
         }
@@ -196,22 +229,22 @@ export default {
     },
     methods : {
         fetchData() {
-            qna.search(this.form)
+            advisor.search(this.form)
                   .then(data => {
-                      this.qnaList = data.results
+                      this.advisorList = data.results
                       this.pagination = data.page
                       this.loading = false
                   })
         },
-        deleteDialog(qnaNo) {
+        deleteDialog(id) {
             this.dialogDelete = true
-            this.qnaNo = qnaNo
+            this.id = id
         },
-        deleteQna() {
-            qna.delete(this.qnaNo) 
+        deleteAdvisor() {
+            advisor.delete(this.id) 
                   .then(data => {
                       if(data.status.code == 0) {
-                          this.$message("자주하는 질문이 삭제되었습니다")
+                          this.$message("어드바이저의 팁이 삭제되었습니다")
                           this.dialogDelete = false
                           this.fetchData()
                       }
@@ -221,122 +254,147 @@ export default {
             this.form.requestPage = (val-1)
             this.fetchData()
         },
-        qnaDetail(detail) {
+        advisorDetail(detail) {
             this.dialogVisible = true,
-            this.qnaInfo.qnaNo = detail.qnaNo,
-            this.qnaInfo.title = detail.title,
-            this.qnaInfo.tts = detail.tts
+            this.advisorInfo.id = detail.id,
+            this.advisorInfo.title = detail.title,
+            this.advisorInfo.url = detail.url,
+            this.advisorInfo.advisor = detail.advisor
         },
-        qnaDetailUpdate(detail) {
+        advisorDetailUpdate(detail) {
             this.dialogUpdate = true,
-            this.qnaInfo.qnaNo = detail.qnaNo,
-            this.qnaInfo.title = detail.title,
-            this.qnaInfo.tts = detail.tts
+            this.advisorInfo.id = detail.id,
+            this.advisorInfo.title = detail.title,
+            this.advisorInfo.url = detail.url,
+            this.advisorInfo.advisor = detail.advisor
         },
-        qnaInsert(){
+        urlDetail(detail){
+            this.dialogUrl = true,
+            this.dialogUrl = detail.url
+
+            window.open(detail.url);
+        },
+        openUrl : function(detail) {
+            var openUrl = detail.url;
+
+            window.open(openUrl, "", "width=65%;");
+        },
+
+
+        advisorInsert(){
             if(!this.title){
-                this.$message("자주하는 질문 제목을 입력해주세요")
+                this.$message("어드바이저의 팁 제목을 입력해주세요")
                 return false
             }
-            if(!this.tts){
-                this.$message("자주하는 질문 내용을 입력해주세요")
+            if(!this.url){
+                this.$message("어드바이저의 팁 url을 입력해주세요")
+                return false
+            }
+            if(!this.advisor){
+                this.$message("어드바이저의 팁 이름을 입력해주세요")
                 return false
             }
             let form = {
                 title :  this.title,
-                tts : this.tts
+                url : this.url,
+                advisor :  this.advisor
             }
             
-            qna.insert(form)
+            advisor.insert(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("자주하는 질문 등록이 완료되었습니다.")
+                        this.$message("어드바이저의 팁 등록이 완료되었습니다.")
                         this.dialogInsert = false
                         this.fetchData()
                     }
                 })
         },
         sortUp : function(detail){
-            var indexL = this.qnaList.findIndex(function(qna){
-                return qna.qnaNo == detail.qnaNo;
+            var indexL = this.advisorList.findIndex(function(advisor){
+                return advisor.id == detail.id;
             })
 
             if(indexL == "0"){
-                this.$message("이전의 자주하는 질문이 없습니다.")
+                this.$message("이전의 어드바이저의 팁이 없습니다.")
                 return false
             }
 
             var indexPre = indexL - 1;
 
-            var preQnaNo = this.qnaList[indexPre].qnaNo;
-            var preSortNo = this.qnaList[indexPre].sortNo;
-            var nowQnaNo = this.qnaList[indexL].qnaNo;
-            var nowSortNo = this.qnaList[indexL].sortNo;
+            var preid = this.advisorList[indexPre].id;
+            var preSortOrder = this.advisorList[indexPre].sortOrder;
+            var nowid = this.advisorList[indexL].id;
+            var nowSortOrder = this.advisorList[indexL].sortOrder;
 
             const form = new FormData();
-            form.append("keyValue", nowQnaNo);
-            form.append("sortValue", nowSortNo);
-            form.append("targetKey", preQnaNo);
-            form.append("targetSort", preSortNo);
+            form.append("keyValue", nowid);
+            form.append("sortValue", nowSortOrder);
+            form.append("targetKey", preid);
+            form.append("targetSort", preSortOrder);
 
-            qna.updateList(form)
+            advisor.updateList(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("자주하는 질문의 순서를 변경하였습니다")
+                        this.$message("어드바이저의 팁 순서를 변경하였습니다")
                         this.fetchData()
                     }
                 })
         },
         sortDown: function(detail){
-            var indexL = this.qnaList.findIndex(function(qna){
-                return qna.qnaNo == detail.qnaNo;
+            var indexL = this.advisorList.findIndex(function(advisor){
+                return advisor.id == detail.id;
             })
-            if(indexL == this.qnaList.length-1){
-                this.$message("이후의 자주하는 질문이 없습니다")
+            if(indexL == this.advisorList.length-1){
+                this.$message("이후의 어드바이저의 팁이 없습니다")
                 return false
             }
 
             var indexPre = indexL + 1;
 
-            var preQnaNo = this.qnaList[indexPre].qnaNo;
-            var preSortNo = this.qnaList[indexPre].sortNo;
-            var nowQnaNo = this.qnaList[indexL].qnaNo;
-            var nowSortNo = this.qnaList[indexL].sortNo;
+            var preid = this.advisorList[indexPre].id;
+            var preSortOrder = this.advisorList[indexPre].sortOrder;
+            var nowid = this.advisorList[indexL].id;
+            var nowSortOrder = this.advisorList[indexL].sortOrder;
 
             const form = new FormData();
-            form.append("keyValue", nowQnaNo);
-            form.append("sortValue", nowSortNo);
-            form.append("targetKey", preQnaNo);
-            form.append("targetSort", preSortNo);
+            form.append("keyValue", nowid);
+            form.append("sortValue", nowSortOrder);
+            form.append("targetKey", preid);
+            form.append("targetSort", preSortOrder);
 
-            qna.updateList(form)
+            advisor.updateList(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("자주하는 질문의 순서를 변경하였습니다")
+                        this.$message("어드바이저의 팁 순서를 변경하였습니다")
                         this.fetchData()
                     }
                 })
 
         },
-        qnaUpdate() {
-            if(this.qnaInfo.title == null){
-                this.$message("자주하는 질문 제목을 입력해주세요")
+        advisorUpdate() {
+            if(this.advisorInfo.title == null){
+                this.$message("어드바이저의 팁 제목을 입력해주세요")
                 return false
             }
-            if(this.qnaInfo.tts == null){
-                this.$message("자주하는 잘문 내용을 입력해주세요")
+            if(this.advisorInfo.url == null){
+                this.$message("어드바이저의 팁 url을 입력해주세요")
+                return false
+            }
+            if(this.advisorInfo.advisor == null){
+                this.$message("어드바이저의 팁 이름을 입력해주세요")
                 return false
             }
             let form = {
-                qnaNo : this.qnaInfo.qnaNo,
-                title : this.qnaInfo.title,
-                tts : this.qnaInfo.tts
+                id : this.advisorInfo.id,
+                title : this.advisorInfo.title,
+                url : this.advisorInfo.url,
+                advisor : this.advisorInfo.advisor
             }
 
-            qna.update(form)
+            advisor.update(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("자주하는 질문 수정이 완료되었습니다.")
+                        this.$message("어드바이저의 팁 수정이 완료되었습니다.")
                         this.dialogUpdate = false
                         this.fetchData()
                     }
