@@ -1,17 +1,17 @@
 <template>
     <div>
-        <el-table ref="multiTable" :data="noticeList" v-loading="loading" style="width:100%">
+        <el-table ref="multiTable" :data="qnaList" v-loading="loading" style="width:100%">
 
             <el-table-column label="#" width="80" align="center">
                 <template slot-scope="scope">
-                    {{ scope.row.noticeNo }}
+                    {{ scope.row.qnaNo }}
                 </template>
             </el-table-column>
 
             <el-table-column label="제목" width="450" align="center">
                 <template slot-scope="scope">
                 <div>
-                    <b v-on:click="noticeDetail(scope.row)">{{ scope.row.title }}</b>
+                    <b v-on:click="qnaDetail(scope.row)">{{ scope.row.title }}</b>
                 </div>
                 </template>
             </el-table-column>
@@ -28,8 +28,8 @@
             <el-table-column align="center">
                 <span slot-scope="scope">
                 <div style="padding: 30px;">
-                    <el-button size="mini" @click="noticeDetailUpdate(scope.row)">수정</el-button>
-                    <el-button size="mini" @click="deleteDialog(scope.row.noticeNo)">삭제</el-button>
+                    <el-button size="mini" @click="qnaDetailUpdate(scope.row)">수정</el-button>
+                    <el-button size="mini" @click="deleteDialog(scope.row.qnaNo)">삭제</el-button>
                 </div>
                 </span>
             </el-table-column>
@@ -39,7 +39,7 @@
         <div class="col-6" style="display: inline-block; float: right; text-align: right; margin-top:10px;">
             <el-form :inline="true" class="demo-form-inline">
                 <el-form-item> 
-                    <el-button size="small" type="primary" @click="dialogInsert=true">공지 추가</el-button>
+                    <el-button size="small" type="primary" @click="dialogInsert=true">자주하는 질문 추가</el-button>
                 </el-form-item>            
             </el-form>
         </div>
@@ -55,14 +55,14 @@
             </el-pagination>
         </div>
 
-        <el-dialog width="65%" :visible.sync="dialogVisible" title="공지사항" >
+        <el-dialog width="65%" :visible.sync="dialogVisible" title="자주하는 질문" >
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
                        <b> 번호 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        {{ noticeInfo.noticeNo }}
+                        {{ qnaInfo.qnaNo }}
                     </div>
                 </div>
                 <div class="row loop-row">
@@ -70,7 +70,7 @@
                        <b> 제목 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        {{ noticeInfo.title }}
+                        {{ qnaInfo.title }}
                     </div>
                 </div>
                 <div class="row loop-row">
@@ -78,8 +78,8 @@
                        <b> 내용 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        <el-input type="textarea" v-model="noticeInfo.tts" autocomplete="off" rows="20" style="border: none;" readonly="readonly"></el-input>
-                        <!-- {{ noticeInfo.tts }} -->
+                        <el-input type="textarea" v-model="qnaInfo.tts" autocomplete="off" rows="20" style="border: none;" readonly="readonly"></el-input>
+                        <!-- {{ qnaInfo.tts }} -->
                     </div>
                 </div>
             </div>
@@ -88,16 +88,16 @@
         <el-dialog title="알림" :visible.sync="dialogDelete" width="30%">
             <div class="detail_pannel">
                 <span>
-                    해당 공지사항을 삭제하겠습니까? 
+                    해당 게시글을 삭제하겠습니까? 
                 </span>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button style="width: auto" @click="dialogDelete = false">취소</el-button>
-                <el-button style="width: auto" type="primary" @click="deleteNotice">삭제</el-button>
+                <el-button style="width: auto" type="primary" @click="deleteQna">삭제</el-button>
             </span>
         </el-dialog>
 
-        <el-dialog width="65%" :visible.sync="dialogInsert" title="공지사항" >
+        <el-dialog width="65%" :visible.sync="dialogInsert" title="자주하는 질문" >
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
@@ -117,19 +117,19 @@
                 </div>
                     <span>
                         <el-button @click="dialogInsert = false">취소</el-button>
-                        <el-button type="primary" @click="noticeInsert" >보내기</el-button>
+                        <el-button type="primary" @click="qnaInsert" >보내기</el-button>
                     </span>
             </div>
         </el-dialog>
 
-        <el-dialog width="65%" :visible.sync="dialogUpdate" title="공지사항" >
+        <el-dialog width="65%" :visible.sync="dialogUpdate" title="자주하는 질문" >
             <div class="detail_pannel">
                 <div class="row loop-row">
                     <div class="col-9 col-lg-2">
                        <b> 번호 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        {{ noticeInfo.noticeNo }}
+                        {{ qnaInfo.qnaNo }}
                     </div>
                 </div>
                 <div class="row loop-row">
@@ -137,7 +137,7 @@
                        <b> 제목 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        <el-input type="text" v-model="noticeInfo.title" autocomplete="off"></el-input>
+                        <el-input type="text" v-model="qnaInfo.title" autocomplete="off"></el-input>
                     </div>
                 </div>
                 <div class="row loop-row">
@@ -145,12 +145,12 @@
                        <b> 내용 </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        <el-input type="textarea" v-model="noticeInfo.tts" autocomplete="off" rows="20"></el-input>
+                        <el-input type="textarea" v-model="qnaInfo.tts" autocomplete="off" rows="20"></el-input>
                     </div>
                 </div>
                 <span>
                     <el-button @click="dialogUpdate = false">취소</el-button>
-                    <el-button type="primary" @click="noticeUpdate" >수정하기</el-button>
+                    <el-button type="primary" @click="qnaUpdate" >수정하기</el-button>
                 </span>
             </div>
         </el-dialog>
@@ -161,12 +161,12 @@
 </template>
 
 <script>
-import {notice} from '../../api/notice.js'
+import {qna} from '../../api/qna.js'
 
 export default {
     data() {
         return {
-            noticeList : [],
+            qnaList : [],
             loading : true,
             pagination : '',
             form : {
@@ -182,8 +182,8 @@ export default {
             sortValue : '',
             targetKey : '',
             targetSort : '',
-            noticeInfo : {
-                noticeNo : '',
+            qnaInfo : {
+                qnaNo : '',
                 title : '',
                 tts : '',
                 sortNo : ''
@@ -196,22 +196,22 @@ export default {
     },
     methods : {
         fetchData() {
-            notice.search(this.form)
+            qna.search(this.form)
                   .then(data => {
-                      this.noticeList = data.results
+                      this.qnaList = data.results
                       this.pagination = data.page
                       this.loading = false
                   })
         },
-        deleteDialog(noticeNo) {
+        deleteDialog(qnaNo) {
             this.dialogDelete = true
-            this.noticeNo = noticeNo
+            this.qnaNo = qnaNo
         },
-        deleteNotice() {
-            notice.delete(this.noticeNo) 
+        deleteQna() {
+            qna.delete(this.qnaNo) 
                   .then(data => {
                       if(data.status.code == 0) {
-                          this.$message("공지사항이 삭제되었습니다")
+                          this.$message("자주하는 질문이 삭제되었습니다")
                           this.dialogDelete = false
                           this.fetchData()
                       }
@@ -221,25 +221,25 @@ export default {
             this.form.requestPage = (val-1)
             this.fetchData()
         },
-        noticeDetail(detail) {
+        qnaDetail(detail) {
             this.dialogVisible = true,
-            this.noticeInfo.noticeNo = detail.noticeNo,
-            this.noticeInfo.title = detail.title,
-            this.noticeInfo.tts = detail.tts
+            this.qnaInfo.qnaNo = detail.qnaNo,
+            this.qnaInfo.title = detail.title,
+            this.qnaInfo.tts = detail.tts
         },
-        noticeDetailUpdate(detail) {
+        qnaDetailUpdate(detail) {
             this.dialogUpdate = true,
-            this.noticeInfo.noticeNo = detail.noticeNo,
-            this.noticeInfo.title = detail.title,
-            this.noticeInfo.tts = detail.tts
+            this.qnaInfo.qnaNo = detail.qnaNo,
+            this.qnaInfo.title = detail.title,
+            this.qnaInfo.tts = detail.tts
         },
-        noticeInsert(){
+        qnaInsert(){
             if(!this.title){
-                this.$message("공지사항 제목을 입력해주세요")
+                this.$message("자주하는 질문 제목을 입력해주세요")
                 return false
             }
             if(!this.tts){
-                this.$message("공지사항 내용을 입력해주세요")
+                this.$message("자주하는 질문 내용을 입력해주세요")
                 return false
             }
             let form = {
@@ -247,96 +247,96 @@ export default {
                 tts : this.tts
             }
             
-            notice.insert(form)
+            qna.insert(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("공지사항 등록이 완료되었습니다.")
+                        this.$message("자주하는 짏문 등록이 완료되었습니다.")
                         this.dialogInsert = false
                         this.fetchData()
                     }
                 })
         },
         sortUp : function(detail){
-            var indexL = this.noticeList.findIndex(function(notice){
-                return notice.noticeNo == detail.noticeNo;
+            var indexL = this.qnaList.findIndex(function(qna){
+                return qna.qnaNo == detail.qnaNo;
             })
 
             if(indexL == "0"){
-                this.$message("이전의 공지사항이 없습니다.")
+                this.$message("이전의 자주하는 질문이 없습니다.")
                 return false
             }
 
             var indexPre = indexL - 1;
 
-            var preNoticeNo = this.noticeList[indexPre].noticeNo;
-            var preSortNo = this.noticeList[indexPre].sortNo;
-            var nowNoticeNo = this.noticeList[indexL].noticeNo;
-            var nowSortNo = this.noticeList[indexL].sortNo;
+            var preQnaNo = this.qnaList[indexPre].qnaNo;
+            var preSortNo = this.qnaList[indexPre].sortNo;
+            var nowQnaNo = this.qnaList[indexL].qnaNo;
+            var nowSortNo = this.qnaList[indexL].sortNo;
 
             const form = new FormData();
-            form.append("keyValue", nowNoticeNo);
+            form.append("keyValue", nowQnaNo);
             form.append("sortValue", nowSortNo);
-            form.append("targetKey", preNoticeNo);
+            form.append("targetKey", preQnaNo);
             form.append("targetSort", preSortNo);
 
-            notice.updateList(form)
+            qna.updateList(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("공지사항의 순서를 변경하였습니다")
+                        this.$message("자주하는 짏문의 순서를 변경하였습니다")
                         this.fetchData()
                     }
                 })
         },
         sortDown: function(detail){
-            var indexL = this.noticeList.findIndex(function(notice){
-                return notice.noticeNo == detail.noticeNo;
+            var indexL = this.qnaList.findIndex(function(qna){
+                return qna.qnaNo == detail.qnaNo;
             })
-            if(indexL == this.noticeList.length-1){
-                this.$message("이후의 공지사항이 없습니다")
+            if(indexL == this.qnaList.length-1){
+                this.$message("이후의 자주하는 질문이 없습니다")
                 return false
             }
 
             var indexPre = indexL + 1;
 
-            var preNoticeNo = this.noticeList[indexPre].noticeNo;
-            var preSortNo = this.noticeList[indexPre].sortNo;
-            var nowNoticeNo = this.noticeList[indexL].noticeNo;
-            var nowSortNo = this.noticeList[indexL].sortNo;
+            var preQnaNo = this.qnaList[indexPre].qnaNo;
+            var preSortNo = this.qnaList[indexPre].sortNo;
+            var nowQnaNo = this.qnaList[indexL].qnaNo;
+            var nowSortNo = this.qnaList[indexL].sortNo;
 
             const form = new FormData();
-            form.append("keyValue", nowNoticeNo);
+            form.append("keyValue", nowQnaNo);
             form.append("sortValue", nowSortNo);
-            form.append("targetKey", preNoticeNo);
+            form.append("targetKey", preQnaNo);
             form.append("targetSort", preSortNo);
 
-            notice.updateList(form)
+            qna.updateList(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("공지사항의 순서를 변경하였습니다")
+                        this.$message("자주하는 질문의 순서를 변경하였습니다")
                         this.fetchData()
                     }
                 })
 
         },
-        noticeUpdate() {
-            if(this.noticeInfo.title == null){
-                this.$message("공지사항 제목을 입력해주세요")
+        qnaUpdate() {
+            if(this.qnaInfo.title == null){
+                this.$message("자주하는 질문 제목을 입력해주세요")
                 return false
             }
-            if(this.noticeInfo.tts == null){
-                this.$message("공지사항 내용을 입력해주세요")
+            if(this.qnaInfo.tts == null){
+                this.$message("자주하는 잘문 내용을 입력해주세요")
                 return false
             }
             let form = {
-                noticeNo : this.noticeInfo.noticeNo,
-                title : this.noticeInfo.title,
-                tts : this.noticeInfo.tts
+                qnaNo : this.qnaInfo.qnaNo,
+                title : this.qnaInfo.title,
+                tts : this.qnaInfo.tts
             }
 
-            notice.update(form)
+            qna.update(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("공지사항 수정이 완료되었습니다.")
+                        this.$message("자주하는 질문 수정이 완료되었습니다.")
                         this.dialogUpdate = false
                         this.fetchData()
                     }

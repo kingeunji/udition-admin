@@ -14,6 +14,7 @@ import BusienssDetail from "@/pages/Business/BusinessDetail.vue";
 import Banner from "@/pages/Banner/BannerDashboard.vue";
 import Uditok from "@/pages/Uditok/UditokDashboard.vue";
 import Notice from "@/pages/Notice/NoticeDashboard.vue";
+import Qna from "@/pages/Qna/QnaDashboard.vue";
 
 
 import Login from "@/pages/Login.vue";
@@ -89,6 +90,11 @@ const router = new VueRouter({
           path: "notice",
           name: "공지사항 관리",
           component: Notice
+        },
+        {
+          path: "qna",
+          name: "자주하는 질문 관리",
+          component: Qna
         },
       ]
     }
