@@ -8,6 +8,7 @@
         <sidebar-link to="/banner" name="배너 관리" icon="el-icon-picture"/>
         <sidebar-link to="/uditok" name="유디톡 관리" icon="el-icon-notebook-1"/>
         <sidebar-link to="/notice" name="공지사항 관리" icon="el-icon-check"/>
+        <sidebar-link to="/advisor" name="어드바이저의 팁 관리" icon="el-icon-star-on"/>
         <sidebar-link to="/qna" name="자주하는 질문 관리" icon="el-icon-question"/>
       </template>
       <mobile-menu>
