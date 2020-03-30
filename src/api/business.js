@@ -30,5 +30,11 @@ export const business = {
     },
     subDetail(formData) {
       return request('post','biz/sub/detail', formData)
+    },
+    mail(formData) {
+      return request('post', 'biz/mail', formData)
+    },
+    push(formData) {
+      return request('post', 'biz/push', formData)
     }
 } 
