@@ -4,8 +4,8 @@
             <div class="col-6" style="display: inline-block;">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item> <el-checkbox v-model="allSelect" label="1" @change="handleCheckAllChange">모든 결과 선택</el-checkbox> </el-form-item>
-                    <el-form-item> <el-radio v-model="formData.modelType" label="1">스탠다드 기업</el-radio> </el-form-item>
-                    <el-form-item> <el-radio v-model="formData.modelType" label="2">어드밴스 기업</el-radio> </el-form-item>    
+                    <el-form-item> <el-radio v-model="formData.modelType" label="1" @change="changeFilter">스탠다드 기업</el-radio> </el-form-item>
+                    <el-form-item> <el-radio v-model="formData.modelType" label="2" @change="changeFilter">어드밴스 기업</el-radio> </el-form-item>    
                 </el-form>
                 
                 <span style="font-weight:600">필터/검색 결과 기업 : {{ this.pagination.dbCount }} 개 </span>
@@ -172,10 +172,10 @@ export default {
             bizList : [],
             error : '',
             formData : {
-                modelType : '',
+                modelType : 0,
                 requestPage : 0,
                 searchTts : '',
-                allFlag : 0
+                allFlag : 0,
             },
             pagination : '',
             loading: true,
@@ -185,6 +185,8 @@ export default {
             title : '',
             content : '',
             bizNoSelected : [],
+            bizNoList : [],
+            bizNo : '',
         }
     },
     created() {
@@ -206,11 +208,12 @@ export default {
             this.formData.allFlag = 0
         },
         handleSelectChange(val) {
-            console.log(val);
-            this.bizNoSelected.push();
-            this.selectedProfile = val.length;
-            // console.log(val.length);
-            // console.log(this.bizNoSelected);
+            console.log(val[val.length-1].bizNo);
+            this.bizNoSelected.push(val[val.length-1].bizNo);
+            console.log(this.bizNoSelected);
+            this.bizNoList = this.bizNoSelected;
+            console.log(this.bizNoList);
+            this.selectedProfile = this.bizNoList;
         },
         imageLoadOnError(e) {
             e.target.src = image
@@ -237,8 +240,12 @@ export default {
             let route = this.$router.resolve({path: '/business/'+ bizUrl});
             window.open(route.href, '_blank');
         },
+        changeFilter(val){
+            this.formData.modelType = val
+            this.fetchData()
+        },
         actionDialog() {
-            console.log(this.formData.allFlag + ", " + this.selectedProfile)
+            console.log(this.formData.allFlag + ", " + this.selectedProfile.length)
             if(this.allSelect == 0 && this.selectedProfile == 0 ) {
                 this.$message("선택한 기업이 존재하지 않습니다!")
                 return false
@@ -252,7 +259,7 @@ export default {
             }
         },
         mailSend(){
-            this.formData.bizNoList = this.bizNoSelected
+            this.formData.bizNoList = this.selectedProfile
             if(!this.title){
                 this.$message("메일 제목을 입력해주세요")
                 return false
@@ -268,14 +275,14 @@ export default {
                   .then(data => {
                       this.fetchData()
                       this.mailDialog = false
-                      this.$message("선택하신 아티스트에게 메일을 전송하였습니다!")
+                      this.$message("선택하신 기업에게 메일을 전송하였습니다!")
                   })
                   .catch(err =>{
                       this.error = err.data
                   })
         },
         pushSend(){
-            this.formData.bizNoList = this.bizNoSelected
+            this.formData.bizNoList = this.selectedProfile
             if(!this.title){
                 this.$message("푸시 제목을 입력해주세요")
                 return false
@@ -292,7 +299,7 @@ export default {
                   .then(data => {
                       this.fetchData()
                       this.pushDialog = false
-                      this.$message("선택하신 아티스트에게 푸시를 전송하였습니다!")
+                      this.$message("선택하신 기업에게 푸시를 전송하였습니다!")
                   })
                   .catch(err =>{
                       this.error = err.data
