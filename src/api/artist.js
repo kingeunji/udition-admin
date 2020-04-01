@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-//const domain = 'http://192.168.0.65:8081/api/'
+// const domain = 'http://192.168.0.65:8085/api/'
 const domain = 'https://webapi.udition.co/api/'
 
 
@@ -26,6 +26,12 @@ export const artist = {
     },
     detail(formData) {
       return request('post', 'profile/detail', formData)
+    },
+    mail(formData){
+      return request('post', 'member/mail', formData)
+    },
+    push(formData){
+      return request('post', 'member/push', formData)
     }
 }
 

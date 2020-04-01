@@ -4,8 +4,8 @@
             <div class="col-6" style="display: inline-block;">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item> <el-checkbox v-model="allSelect" label="1" @change="handleCheckAllChange">모든 결과 선택</el-checkbox> </el-form-item>
-                    <el-form-item> <el-radio v-model="formData.modelType" label="1">스탠다드 기업</el-radio> </el-form-item>
-                    <el-form-item> <el-radio v-model="formData.modelType" label="2">어드밴스 기업</el-radio> </el-form-item>    
+                    <el-form-item> <el-radio v-model="formData.modelType" label="1" @change="changeFilter">스탠다드 기업</el-radio> </el-form-item>
+                    <el-form-item> <el-radio v-model="formData.modelType" label="2" @change="changeFilter">어드밴스 기업</el-radio> </el-form-item>    
                 </el-form>
                 
                 <span style="font-weight:600">필터/검색 결과 기업 : {{ this.pagination.dbCount }} 개 </span>
@@ -25,14 +25,19 @@
                         </el-select>    
                     </el-form-item>
                     <el-form-item> 
-                        <el-button size="small" type="primary">확인</el-button>
+                        <el-button size="small" type="primary" :disabled="!actionSelect" v-on:click="actionDialog">확인</el-button>
                     </el-form-item>            
                 </el-form>
             </div>
         </div>
         <div class="option">
-            <el-table ref="multiTable" :data="bizList" v-loading="loading" style="width:100%" @selection-change="handleSelectChange">
+            <el-table ref="multiTable" :data="bizList" v-loading="loading" style="width:100%" 
+                @selection-change="handleSelectChange">
                 <el-table-column type="selection" width="55">
+                    <!-- <template slot-scope="scope"> -->
+                        <!-- <el-checkbox v-model="selectedProfile" :value=scope.row.bizNo :id=scope.row.bizNo></el-checkbox> -->
+                        <!-- <input type="checkbox" v-model="selectedProfile" :value=scope.row.bizNo :id=scope.row.bizNo> -->
+                    <!-- </template> -->
                 </el-table-column>
 
                 <el-table-column label="기업 로고"  width="120">
@@ -86,6 +91,64 @@
                 @prev-click="pageChange">
             </el-pagination>
         </div>
+
+        <el-dialog
+            title="이메일 보내기"
+            :visible.sync="mailDialog"
+            width="40%">
+            <div class="detail_pannel">
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 제목 </b>
+                    </div>
+                    <div class="col-md-11 col-lg-9">
+                        <el-input type="text" v-model="title" autocomplete="off"></el-input>
+                    </div>
+                </div>
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 내용 </b>
+                    </div>
+                    <div class="col-md-10 col-lg-9">
+                        <el-input type="textarea" v-model="content" autocomplete="off" rows="20"></el-input>
+                    </div>
+                </div>
+                    <span>
+                        <el-button @click="mailDialog = false">취소</el-button>
+                        <el-button type="primary" @click="mailSend" >보내기</el-button>
+                    </span>
+            </div>
+        </el-dialog>
+
+
+        <el-dialog
+            title="푸시 보내기"
+            :visible.sync="pushDialog"
+            width="40%">
+            <div class="detail_pannel">
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 제목 </b>
+                    </div>
+                    <div class="col-md-11 col-lg-9">
+                        <el-input type="text" v-model="title" autocomplete="off"></el-input>
+                    </div>
+                </div>
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 내용 </b>
+                    </div>
+                    <div class="col-md-10 col-lg-9">
+                        <el-input type="textarea" v-model="content" autocomplete="off" rows="20"></el-input>
+                    </div>
+                </div>
+                <span>
+                    <el-button @click="pushDialog = false">취소</el-button>
+                    <el-button type="primary" @click="pushSend" >보내기</el-button>
+                </span>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -109,12 +172,21 @@ export default {
             bizList : [],
             error : '',
             formData : {
-                modelType : '',
+                modelType : 0,
                 requestPage : 0,
-                searchTts : ''
+                searchTts : '',
+                allFlag : 0,
             },
             pagination : '',
-            loading: true
+            loading: true,
+            selectedProfile : [],
+            mailDialog : false,
+            pushDialog : false,
+            title : '',
+            content : '',
+            bizNoSelected : [],
+            bizNoList : [],
+            bizNo : '',
         }
     },
     created() {
@@ -131,9 +203,17 @@ export default {
                     .catch(err => {
                         this.error = err.data
                     })
+            this.allSelect = false
+            this.selectedProfile = []
+            this.formData.allFlag = 0
         },
-        handleSelectChange() {
-
+        handleSelectChange(val) {
+            console.log(val[val.length-1].bizNo);
+            this.bizNoSelected.push(val[val.length-1].bizNo);
+            console.log(this.bizNoSelected);
+            this.bizNoList = this.bizNoSelected;
+            console.log(this.bizNoList);
+            this.selectedProfile = this.bizNoList;
         },
         imageLoadOnError(e) {
             e.target.src = image
@@ -143,11 +223,89 @@ export default {
             this.fetchData()
         },
         handleCheckAllChange() {
+            // 전체 선택 
+            var selectedProfile = [];
+            if(this.allSelect) {
+                this.formData.allFlag = 1
+                this.bizList.forEach(function(business) {
+                    selectedProfile.push(business.bizNo)
+                })
+            } else {
+                this.formData.allFlag = 0
+            }
+            this.selectedProfile = selectedProfile
+
         },
         businessDetail(bizUrl) {
             let route = this.$router.resolve({path: '/business/'+ bizUrl});
             window.open(route.href, '_blank');
-        }
+        },
+        changeFilter(val){
+            this.formData.modelType = val
+            this.fetchData()
+        },
+        actionDialog() {
+            console.log(this.formData.allFlag + ", " + this.selectedProfile.length)
+            if(this.allSelect == 0 && this.selectedProfile == 0 ) {
+                this.$message("선택한 기업이 존재하지 않습니다!")
+                return false
+            } else{
+                this.formData.bizNoList = this.selectedProfile
+                if(this.actionSelect === 'mail'){
+                    this.mailDialog = true
+                } else if(this.actionSelect === 'push'){
+                    this.pushDialog = true
+                }
+            }
+        },
+        mailSend(){
+            this.formData.bizNoList = this.selectedProfile
+            if(!this.title){
+                this.$message("메일 제목을 입력해주세요")
+                return false
+            }
+            if(!this.content){
+                this.$message("메일 내용을 입력해주세요")
+                return false
+            }
+            this.formData.title = this.title
+            this.formData.content = this.content
+            
+            business.mail(this.formData)
+                  .then(data => {
+                      this.fetchData()
+                      this.mailDialog = false
+                      this.$message("선택하신 기업에게 메일을 전송하였습니다!")
+                  })
+                  .catch(err =>{
+                      this.error = err.data
+                  })
+        },
+        pushSend(){
+            this.formData.bizNoList = this.selectedProfile
+            if(!this.title){
+                this.$message("푸시 제목을 입력해주세요")
+                return false
+            }
+            if(!this.content){
+                this.$message("푸시 내용을 입력해주세요")
+                return false
+            }
+
+            this.formData.title = this.title
+            this.formData.content = this.content
+            
+            business.push(this.formData)
+                  .then(data => {
+                      this.fetchData()
+                      this.pushDialog = false
+                      this.$message("선택하신 기업에게 푸시를 전송하였습니다!")
+                  })
+                  .catch(err =>{
+                      this.error = err.data
+                  })
+        }        
+
     }
 }
 </script>

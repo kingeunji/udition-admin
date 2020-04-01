@@ -130,6 +130,63 @@
         </div>
 
         <el-dialog
+            title="이메일 보내기"
+            :visible.sync="mailDialog"
+            width="40%">
+            <div class="detail_pannel">
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 제목 </b>
+                    </div>
+                    <div class="col-md-11 col-lg-9">
+                        <el-input type="text" v-model="title" autocomplete="off"></el-input>
+                    </div>
+                </div>
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 내용 </b>
+                    </div>
+                    <div class="col-md-10 col-lg-9">
+                        <el-input type="textarea" v-model="content" autocomplete="off" rows="20"></el-input>
+                    </div>
+                </div>
+                    <span>
+                        <el-button @click="mailDialog = false">취소</el-button>
+                        <el-button type="primary" @click="mailSend" >보내기</el-button>
+                    </span>
+            </div>
+        </el-dialog>
+
+
+        <el-dialog
+            title="푸시 보내기"
+            :visible.sync="pushDialog"
+            width="40%">
+            <div class="detail_pannel">
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 제목 </b>
+                    </div>
+                    <div class="col-md-11 col-lg-9">
+                        <el-input type="text" v-model="title" autocomplete="off"></el-input>
+                    </div>
+                </div>
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 내용 </b>
+                    </div>
+                    <div class="col-md-10 col-lg-9">
+                        <el-input type="textarea" v-model="content" autocomplete="off" rows="20"></el-input>
+                    </div>
+                </div>
+                <span>
+                    <el-button @click="pushDialog = false">취소</el-button>
+                    <el-button type="primary" @click="pushSend" >보내기</el-button>
+                </span>
+            </div>
+        </el-dialog>
+
+        <el-dialog
             title="알림"
             :visible.sync="dialogVisible"
             width="40%">
@@ -226,7 +283,11 @@ export default {
                 memberTier : ''
             },
             loading: true,
-            dialogVisible : false
+            dialogVisible : false,
+            mailDialog : false,
+            pushDialog : false,
+            title : '',
+            content : ''
         }
     },
     created() {
@@ -349,9 +410,16 @@ export default {
             if(this.allSelect == 0 && this.selectedProfile.length == 0 ) {
                 this.$message("선택한 아티스트가 존재하지 않습니다!")
                 return false
+            } else{
+                this.form.webUrlList = this.selectedProfile
+                if(this.actionSelect === 'mail'){
+                    this.mailDialog = true
+                } else if(this.actionSelect === 'push'){
+                    this.pushDialog = true
+                } else{
+                    this.dialogVisible=true
+                }
             }
-
-            this.dialogVisible=true
 
         },
         profileAction() {
@@ -376,6 +444,53 @@ export default {
                       this.error = err.data
                   })
 
+        },
+        mailSend(){
+            this.form.webUrlList = this.selectedProfile
+            if(!this.title){
+                this.$message("메일 제목을 입력해주세요")
+                return false
+            }
+            if(!this.content){
+                this.$message("메일 내용을 입력해주세요")
+                return false
+            }
+            this.form.title = this.title
+            this.form.content = this.content
+            
+            artist.mail(this.form)
+                  .then(data => {
+                      this.fetchData()
+                      this.mailDialog = false
+                      this.$message("선택하신 아티스트에게 메일을 전송하였습니다!")
+                  })
+                  .catch(err =>{
+                      this.error = err.data
+                  })
+        },
+        pushSend(){
+            this.form.webUrlList = this.selectedProfile
+            if(!this.title){
+                this.$message("푸시 제목을 입력해주세요")
+                return false
+            }
+            if(!this.content){
+                this.$message("푸시 내용을 입력해주세요")
+                return false
+            }
+
+            this.form.title = this.title
+            this.form.content = this.content
+            
+            artist.push(this.form)
+                  .then(data => {
+                      this.fetchData()
+                      this.pushDialog = false
+                      this.$message("선택하신 아티스트에게 푸시를 전송하였습니다!")
+                  })
+                  .catch(err =>{
+                      this.error = err.data
+                  })
         }
     }
 }
