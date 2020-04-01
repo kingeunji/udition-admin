@@ -16,6 +16,7 @@ import Uditok from "@/pages/Uditok/UditokDashboard.vue";
 import Notice from "@/pages/Notice/NoticeDashboard.vue";
 import Qna from "@/pages/Qna/QnaDashboard.vue";
 import Advisor from "@/pages/Advisor/AdvisorDashboard.vue";
+import Featuring from "@/pages/Featuring/FeaturingDashboard.vue";
 
 
 import Login from "@/pages/Login.vue";
@@ -81,6 +82,11 @@ const router = new VueRouter({
           path: "banner",
           name: "배너 관리",
           component: Banner
+        },
+        {
+          path: "featuring",
+          name: "피처링 관리",
+          component: Featuring
         },
         {
           path: "uditok",
