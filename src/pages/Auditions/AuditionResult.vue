@@ -65,7 +65,9 @@
                                 <el-tooltip v-else-if="item.isDelete == 1" content="정지된 오디션을 게시합니다" placement="top">
                                     <el-button type="danger" @click="pauseAudition(item.auditionNo, 0)">게시</el-button>
                                 </el-tooltip>
-                                <el-button type="info">지원자보기</el-button>
+                                <el-button type="info" >
+                                    <router-link style="color : #fff;font-weight: 400;" :to="'/apply/' + item.auditionNo">지원자보기</router-link>  
+                                </el-button>
 
                             </div>
                         </div>

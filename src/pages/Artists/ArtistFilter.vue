@@ -219,7 +219,7 @@
                     </el-collapse>
                     <div>
                         <el-row style="padding-top : 10px;">
-                             <el-button type="primary" icon="el-icon-search" v-on:click="search">조건 검색</el-button>
+                             <el-button type="primary" style="width: 100%;" icon="el-icon-search" v-on:click="search">조건 검색</el-button>
                         </el-row>
                         <el-row>
                              <el-button plain>필터 초기화</el-button>
@@ -381,10 +381,10 @@ export default {
     }
 
     .el-button--primary {
-        width: 100%;
+        width: 100% !important;
     }
 
     .el-button--default {
-        width: 100%;
+        width: 100% !important;
     }
 </style>
