@@ -323,14 +323,6 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
 
-    .el-button--default {
-        width: auto !important; 
-    }
-
-    .el-button--primary {
-        width: auto !important; 
-    }
-    
     .profile-btn-group {
         position: absolute;
         right: 0;
