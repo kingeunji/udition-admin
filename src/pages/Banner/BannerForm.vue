@@ -63,8 +63,12 @@
             </el-form-item>
 
             <el-form-item style="text-align: right;">
-                <el-button @click="bannerInsert">배너 등록</el-button>
-                <el-button type="primary">즉시 등록</el-button>
+                <div style="display: inline-block;">
+                    <el-button @click="bannerInsert">배너 등록</el-button>
+                </div>
+                <div style="display: inline-block; margin-left: 10px;">
+                    <el-button type="primary">즉시 등록</el-button>
+                </div>
             </el-form-item>
       </el-form>
   </div>

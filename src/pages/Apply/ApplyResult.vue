@@ -2,9 +2,9 @@
     <div class="sort-option">
 
         <div class="details-info-wrap">
-            <h6 class="title" style="margin-bottom: 5px;"> {{ auditionDetail.title }} </h6>
+            <!-- <h6 class="title" style="margin-bottom: 5px;"> {{ auditionDetail.title }} </h6>
             <p style="margin-bottom: 0px;"> {{ auditionDetail.term }} </p>
-            <p style="margin-bottom: 0px;"> 지원자수 : {{ auditionDetail.applyCnt }}명 </p>
+            <p style="margin-bottom: 0px;"> 지원자수 : {{ auditionDetail.applyCnt }}명 </p> -->
         </div>
 
         <el-tabs v-model="activeName">
