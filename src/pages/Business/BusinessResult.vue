@@ -32,7 +32,7 @@
         </div>
         <div class="option">
             <el-table ref="multiTable" :data="bizList" v-loading="loading" style="width:100%" 
-                @selection-change="handleSelectChange">
+                @selection-change="handleSelectChange" @current-change="handleCurrentChange">
                 <el-table-column type="selection" width="55">
                     <!-- <template slot-scope="scope"> -->
                         <!-- <el-checkbox v-model="selectedProfile" :value=scope.row.bizNo :id=scope.row.bizNo></el-checkbox> -->
@@ -214,6 +214,9 @@ export default {
             this.bizNoList = this.bizNoSelected;
             console.log(this.bizNoList);
             this.selectedProfile = this.bizNoList;
+        },
+        handleCurrentChange(val) {
+            console.log(val);
         },
         imageLoadOnError(e) {
             e.target.src = image

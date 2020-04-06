@@ -20,7 +20,7 @@
     <!-- Content -->
     <div id="contents" class="col-8">
         <FeaturingResult v-if="selected == 1" />
-        <collectionResult v-else-if="selected == 2" />
+        <updateFeaturingResult v-else-if="selected == 2" />
     </div>
 </div>
 </template>
@@ -28,11 +28,11 @@
 <script>
 import artistFilter from './ArtistFilter.vue'
 import FeaturingResult from './FeaturingResult.vue'
-import collectionResult from './CollectionResult.vue'
+import updateFeaturingResult from './UpdateFeaturingResult.vue'
 
 
 export default {
-    components : { artistFilter, FeaturingResult, collectionResult },
+    components : { artistFilter, FeaturingResult, updateFeaturingResult },
     data() {
         return {
             selected : 1,

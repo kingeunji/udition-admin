@@ -11,11 +11,14 @@
                 <el-radio v-model="form.keyCodes" label="prof_comedian">개그맨</el-radio>
                 <el-radio v-model="form.keyCodes" label="prof_model">모델</el-radio>
                 <el-radio v-model="form.keyCodes" label="prof_announcer">아나운서</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_other">다른 재능</el-radio>
+                <el-radio v-model="form.keyCodes" label="prof_others">다른 재능</el-radio>
 
                 <div class="block">
                     <span class="demonstration">기간 설정</span>
-                    <el-date-picker v-model="form.term" type="daterange" range-separator="~"
+                    <el-date-picker v-model="rangeDate" type="daterange" 
+                    :value-format="datepickerFormat"
+                    :disabledDates="disableDate"
+                    range-separator="~"
                     start-placeholder="Start date"
                     end-placeholder="End date">
                     </el-date-picker>
@@ -23,44 +26,47 @@
 
                 <div class="featuringButton">
                 <el-row style="padding-top : 10px;">
-                    <el-button type="primary" v-on:click="addFeaturing">피처링 추가하기</el-button>
+                    <el-button type="primary" @click="addFeaturing">피처링 추가하기</el-button>
                 </el-row>
                 </div>
 
             </div>
-        </div>
-
+        </div>        
+        
 
         <div class="row" style="margin-bottom : 20px;">
-            <div class="col-6" style="display: inline-block; padding-right :0px;">                
+            <div class="col-6" style="display: inline-block; padding-right :0px;">
+                
+                
                 <span style="font-weight:600; font-size: 13px">필터/검색 아티스트 결과 : {{ this.pagination.dbCount }} 개 </span>
             </div>
-        </div>
-        <div class="col-4" style="padding :0px; display: inline-block; float: right; text-align: right; margin-top:-60px;">
-            <div style="margin: 15px;">
-                <el-select v-model="form.pageSize" size="mini" style="width: 100px;" @change="changePageSize">
-                    <el-option
-                        v-for="item in pageSizeOption"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
-                </el-select>
+            <div class="col-6" style="padding :0px; display: inline-block; float: right; text-align: right; margin-top:-20px;">
 
-            </div>       
-        </div>
+                <div style="margin: 15px;">
+                    <el-select v-model="form.pageSize" size="mini" style="width: 100px;" @change="changePageSize">
+                        <el-option
+                            v-for="item in pageSizeOption"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+
+                </div>       
+            </div>
+        </div>            
 
         <div class="list-group-gallery auditon-detail-list">
             <div class="row" v-loading="loading">
                 
                 
-                <div class="col-3" v-for="item in this.noFeatList" v-bind:key="item.uid">
+                <div class="col-3" v-for="item in this.noFeatArtistList" v-bind:key="item.uid">
                     <div class="list-type-action">
                         <div style="display:inline;">{{ item.perfection }} %</div>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" v-model="selectedProfile" :value=item.webUrl :id=item.uid>
+                            <input type="checkbox" class="custom-control-input" v-model="selectedProfile" :value=item.uid :id=item.uid>
                             <label class="custom-control-label" :for=item.uid>
-                                {{ item.webUrl }}
+                                {{ item.stageName }}
                             </label>
                         </div>
                     </div>
@@ -91,7 +97,6 @@
                 @prev-click="pageChange">
             </el-pagination>
         </div>
-
 
         <el-dialog
             title="알림"
@@ -141,6 +146,8 @@ import { EventBus } from '../../utils/event-bus'
 export default {
     data() {
         return {
+            activeName : "0",
+            datepickerFormat : 'yyyy-MM-dd',
             pageSizeOption : [{
                 value : 40,
                 label : '40개씩'
@@ -160,15 +167,21 @@ export default {
             profileSelect : false,
             perfectionSelect : "1",
             actionSelect : '',
-            noFeatList : [],
+            artistList : [],
             error : '',
-            form : { filterType : 0, allFlag : 0, pageSize : 40, keyCodes : 'all' },
+            form : { filterType : 0, allFlag : 0, pageSize : 40, keyCodes : 'all', term : '' },
             pagination : '',
             localType : {
                 filterType : '',
                 memberTier : ''
             },
             loading: true,
+            dialogVisible : false,
+            rangeDate : [],
+            uid : '',
+            code : '',
+            showStart : '',
+            showEnd : ''
         }
     },
     created() {
@@ -183,20 +196,32 @@ export default {
         });
     },
     watch : {
-        
+        activeName : function() {
+            this.form = {}
+            this.form.memberTier = this.activeName
+            this.form.pageSize = 40
+            this.localType.memberTier = this.activeName
+
+            this.perfectionFlg = false
+            this.profileFlg = false
+
+            this.profileSelect = false
+            this.perfection = [0, 40]
+            this.fetchData()
+        }
     },
     methods : {
         fetchData() {
             this.loading = true
-            featuring.noFeatList(this.from)
-                     .then(data => {
-                         this.noFeatList = data.results
-                         this.pagination = data.page
-                         this.loading = false
-                     })
-                     .catch(err => {
-                         this.error = err.data
-                     })
+            featuring.noFeatList(this.form)
+                  .then(data => {
+                      this.noFeatArtistList = data.results
+                      this.pagination = data.page
+                      this.loading = false
+                  })
+                  .catch(err => {
+                      this.error = err.data
+                  })
             // form 값 초기화
             this.allSelect = false
             this.selectedProfile = []
@@ -271,6 +296,63 @@ export default {
             this.form.pageSize = val
             this.fetchData()
         },
+        actionDialog() {
+            console.log(this.form.allFlag + ", " + this.selectedProfile.length)
+            if(this.allSelect == 0 && this.selectedProfile.length == 0 ) {
+                this.$message("선택한 아티스트가 존재하지 않습니다!")
+                return false
+            } else{
+                this.form.webUrlList = this.selectedProfile
+                if(this.actionSelect === 'mail'){
+                    this.mailDialog = true
+                } else if(this.actionSelect === 'push'){
+                    this.pushDialog = true
+                } else{
+                    this.dialogVisible=true
+                }
+            }
+
+        },
+        addFeaturing() {
+            console.log(this.rangeDate[0]);
+            console.log(this.rangeDate[1]);
+            if(!this.form.keyCodes){
+                this.$message("피처링을 추가할 카테고리를 선택해주세요")
+                return false
+            }
+            if(!this.selectedProfile){
+                this.$message("피처링을 추가할 아티스트르를 선택해주세요")
+                return false
+            }
+            if(this.rangeDate[0] < new Date()){
+                this.$message("시작 날짜를 올바르게 선택해주세요")
+                return false
+            }
+            if(!this.rangeDate[0]) {
+                this.$message("피처링을 추가할 날짜를 선택해주세요")
+                return false
+            }
+            if(!this.rangeDate[1]) {
+                this.$message("피처링을 추가할 날짜를 선택해주세요")
+                return false
+            }
+
+            let form = {
+                uid : this.selectedProfile[0],
+                code : this.form.keyCodes,
+                showStart : new Date(this.rangeDate[0]),
+                showEnd : new Date(this.rangeDate[1])
+            }
+
+            featuring.insert(form)
+                .then(data => {
+                    if(data.status.code == "0"){
+                        this.$message("아티스트 피처링 등록이 완료되었습니다.")
+                        this.fetchData()
+                    }
+                })
+
+        },
     }
 }
 </script>
@@ -293,15 +375,10 @@ export default {
         margin: 15px;
     }
 
-    .el-date-editor .el-range-separator {
-        width: 10%;
-        width: 20px;
-    }
-
     .featuringButton {
         float: right;
         margin-top: -60px;
-    }
+    }    
 
     .el-form-item__content {
         line-height: 25px !important;

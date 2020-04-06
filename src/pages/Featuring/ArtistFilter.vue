@@ -29,7 +29,6 @@ export default {
             value2: '',
             form : {
                 searchTts : '',
-                keyCodes: [],
                 filterType : '',
                 memberTier : '',
                 orderType : ''

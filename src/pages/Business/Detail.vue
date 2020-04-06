@@ -34,7 +34,8 @@
                 <b>구독플랜</b>
             </div>
             <div class="col-lg-10">
-                {{ subscriptionInfo }}
+                <el-radio v-model="subscriptionInfo.modelType" label="beta">구독 없음</el-radio>
+                <el-radio v-model="subscriptionInfo.modelType" label="premium">Premium</el-radio>
             </div>
         </div>
 
@@ -49,21 +50,27 @@ export default {
     props: ['detailInfo', 'bizNo'],
     data() {
         return {
-            subscriptionInfo : '',
+            loading: false,
+            subscriptionInfo : {
+                // modelType : '',
+            },
+            formData : {
+                // modelType : '',
+            }
         }   
     },
-    mounted() {
-        this.fetchSubInfo(this.bizNo)
+    created() {
+        console.log(this.bizNo);
+        this.fetchSubInfo()
     }, 
     methods : {
-        fetchSubInfo(bizNo) {
-            let form = {
-                bizNo : bizNo
-            }
-            business.subDetail(form)
+        fetchSubInfo() {
+            business.subDetail({bizNo : this.bizNo})
                     .then(data => {
-                        this.subscriptionInfo = data.results
+                        this.subscriptionInfo = data.result
+                        this.loading = true
                     })
+            console.log(this.subscriptionInfo);
         }
     }
 }

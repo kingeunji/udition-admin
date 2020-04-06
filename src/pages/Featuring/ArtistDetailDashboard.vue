@@ -93,7 +93,7 @@ export default {
     },
     methods : {
         fetchData() {
-            artist.detail({webUrl : this.webUrl})
+            featuring.detail({webUrl : this.webUrl})
                   .then(data => {
                       this.detailInfo = data.result
                       this.loading = false
