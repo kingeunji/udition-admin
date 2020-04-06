@@ -98,43 +98,6 @@
             </el-pagination>
         </div>
 
-        <el-dialog
-            title="알림"
-            :visible.sync="dialogVisible"
-            width="40%">
-            <div class="detail_pannel">
-                <div v-if="!allSelect">
-                    <span>
-                        총  <b>{{ selectedProfile.length }}</b>명의 아티스트 티어를 변경하겠습니까?
-                    </span>
-                </div>
-                <div v-else>
-                    <div>
-                        <span>
-                            총  <b>{{ pagination.dbCount }}</b>명의 아티스트 티어를 변경하겠습니까?
-                        </span>
-                    </div>
-                    <div style="margin-top: 15px;">
-                        검색 조건 :  &nbsp;&nbsp;
-                        <el-tag type="success" style="margin-right:5px;" v-if="profileSelect == '1'"> 프로필 등록</el-tag>
-                        <el-tag type="success" style="margin-right:5px;" v-if="profileSelect == '2'"> 프로필 미등록</el-tag>
-                        <el-tag v-if="perfectionFlg"> 
-                            <span v-if="perfectionFlg == '1'">
-                                완성도 {{ perfection[0] }} ~ {{ perfection[1]}}
-                            </span>
-                            
-                        </el-tag>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <span slot="footer" class="dialog-footer">
-                <el-button style="width: auto" @click="dialogVisible = false">취소</el-button>
-                <el-button style="width: auto" type="primary" @click="profileAction">변경</el-button>
-            </span>
-        </el-dialog>
-
     </div>
 </template>
 
