@@ -29,16 +29,20 @@
             </div>
         </div>
 
-        <div class="row loop-row">
+        <!-- <div class="row loop-row">
             <div class="col-9 col-lg-2">
                 <b>구독플랜</b>
             </div>
+        </div> -->
+
+        <div class="row loop-row">
+            <div class="col-9 col-lg-2">
+                <b>기업 회원 가입일</b>
+            </div>
             <div class="col-lg-10">
-                <el-radio v-model="subscriptionInfo.modelType" label="beta">구독 없음</el-radio>
-                <el-radio v-model="subscriptionInfo.modelType" label="premium">Premium</el-radio>
+                {{ this.subscriptionInfo.createDate }}
             </div>
         </div>
-
 
     </div>
 </template>
@@ -52,11 +56,12 @@ export default {
         return {
             loading: false,
             subscriptionInfo : {
-                // modelType : '',
+                
             },
             formData : {
-                // modelType : '',
-            }
+                
+            },
+            bizNo : '',
         }   
     },
     created() {
