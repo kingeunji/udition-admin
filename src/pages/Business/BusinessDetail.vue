@@ -50,10 +50,10 @@
             <card class="card">
                 <el-tabs type="card">
                     <el-tab-pane label="상세정보">
-                        <Detail v-bind:detailInfo="detailInfo" v-bind:bizNo="detailInfo.bizNo" />
+                        <Detail v-if="loading" v-bind:detailInfo="detailInfo" v-bind:bizNo="detailInfo.bizNo" />
                     </el-tab-pane>
                     <el-tab-pane label="오디션">
-                        <AuditionList v-bind:bizNo="detailInfo.bizNo" />
+                        <AuditionList v-if="loading" v-bind:bizNo="detailInfo.bizNo" />
                     </el-tab-pane>
                 </el-tabs>
 
@@ -79,7 +79,7 @@ export default {
             detailInfo : {
                 phoneInfos : []
             },
-            activeName : "first"
+            activeName : "first",
         }
     },
     created() {
@@ -91,6 +91,7 @@ export default {
             business.detail({ bizUrl : this.bizUrl })
                     .then(data => {
                         this.detailInfo = data.result
+                        console.log(this.detailInfo.bizNo);
                         this.loading = true
                     })
         }
