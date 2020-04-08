@@ -3,7 +3,6 @@
         <div class="sort-option"> 
             <div class="col-6" style="display: inline-block;">
                 <el-form :inline="true" class="demo-form-inline">
-                    <el-form-item> <el-checkbox v-model="allSelect" label="1" @change="handleCheckAllChange">모든 결과 선택</el-checkbox> </el-form-item>
                     <el-form-item> <el-radio v-model="formData.modelType" label="1" @change="changeFilter">스탠다드 기업</el-radio> </el-form-item>
                     <el-form-item> <el-radio v-model="formData.modelType" label="2" @change="changeFilter">어드밴스 기업</el-radio> </el-form-item>    
                 </el-form>
@@ -31,8 +30,8 @@
             </div>
         </div>
         <div class="option">
-            <el-table ref="multiTable" :data="bizList" v-loading="loading" style="width:100%" 
-                @selection-change="handleSelectChange">
+            <el-table ref="multiTable" :data="bizList" v-loading="loading" style="width:100%"
+                    @selection-change="handleSelectChange">
                 <el-table-column type="selection" width="55">
                     <!-- <template slot-scope="scope"> -->
                         <!-- <el-checkbox v-model="selectedProfile" :value=scope.row.bizNo :id=scope.row.bizNo></el-checkbox> -->
@@ -159,6 +158,9 @@ import image from '../../assets/img/img_default_user@3x.png'
 export default {
     data() {
         return {
+            getRowKeys(row){
+                return row.orderId;
+            },
             options : [{
                 value : 'mail',
                 label : '이메일 보내기'
@@ -207,13 +209,27 @@ export default {
             this.selectedProfile = []
             this.formData.allFlag = 0
         },
-        handleSelectChange(val) {
-            console.log(val[val.length-1].bizNo);
-            this.bizNoSelected.push(val[val.length-1].bizNo);
-            console.log(this.bizNoSelected);
-            this.bizNoList = this.bizNoSelected;
-            console.log(this.bizNoList);
+        
+        handleSelectChange(rows) {
+            // console.log("nowBizNo: " + val[val.length-1].bizNo);
+            // this.bizNoSelected.push(val[val.length-1].bizNo);
+            // this.bizNoList = this.bizNoSelected;
+            // console.log("bizList: " + this.bizNoList);
+            
+            this.multipleSelection = rows;
+            this.select_order_number = this.multipleSelection.length;
+
+            this.bizNoList = [];
+            if(rows){
+                rows.forEach(row =>{
+                    if(row){
+                    this.bizNoList.push(row.bizNo);
+                }
+                });
+                
+            }
             this.selectedProfile = this.bizNoList;
+            console.log(this.bizNoList)
         },
         imageLoadOnError(e) {
             e.target.src = image
@@ -221,20 +237,6 @@ export default {
         pageChange(val) {
             this.formData.requestPage = (val-1)
             this.fetchData()
-        },
-        handleCheckAllChange() {
-            // 전체 선택 
-            var selectedProfile = [];
-            if(this.allSelect) {
-                this.formData.allFlag = 1
-                this.bizList.forEach(function(business) {
-                    selectedProfile.push(business.bizNo)
-                })
-            } else {
-                this.formData.allFlag = 0
-            }
-            this.selectedProfile = selectedProfile
-
         },
         businessDetail(bizUrl) {
             let route = this.$router.resolve({path: '/business/'+ bizUrl});

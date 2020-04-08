@@ -29,15 +29,20 @@
             </div>
         </div>
 
-        <div class="row loop-row">
+        <!-- <div class="row loop-row">
             <div class="col-9 col-lg-2">
                 <b>구독플랜</b>
             </div>
+        </div> -->
+
+        <div class="row loop-row">
+            <div class="col-9 col-lg-2">
+                <b>기업 회원 가입일</b>
+            </div>
             <div class="col-lg-10">
-                {{ subscriptionInfo }}
+                {{ this.subscriptionInfo.createDate }}
             </div>
         </div>
-
 
     </div>
 </template>
@@ -49,21 +54,28 @@ export default {
     props: ['detailInfo', 'bizNo'],
     data() {
         return {
-            subscriptionInfo : '',
+            loading: false,
+            subscriptionInfo : {
+                
+            },
+            formData : {
+                
+            },
+            bizNo : '',
         }   
     },
-    mounted() {
-        this.fetchSubInfo(this.bizNo)
+    created() {
+        console.log(this.bizNo);
+        this.fetchSubInfo()
     }, 
     methods : {
-        fetchSubInfo(bizNo) {
-            let form = {
-                bizNo : bizNo
-            }
-            business.subDetail(form)
+        fetchSubInfo() {
+            business.subDetail({bizNo : this.bizNo})
                     .then(data => {
-                        this.subscriptionInfo = data.results
+                        this.subscriptionInfo = data.result
+                        this.loading = true
                     })
+            console.log(this.subscriptionInfo);
         }
     }
 }

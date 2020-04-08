@@ -28,8 +28,8 @@ export const business = {
     billingSearch(formData) {
         return request('post', 'billing/search', formData)
     },
-    subDetail(formData) {
-      return request('post','biz/sub/detail', formData)
+    subDetail(bizNo) {
+      return request('post','biz/sub/detail', {bizNo : bizNo})
     },
     mail(formData) {
       return request('post', 'biz/mail', formData)

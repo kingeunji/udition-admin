@@ -77,7 +77,8 @@ export default {
             bizUrl : 0,
             loading : false,
             detailInfo : {
-                phoneInfos : []
+                phoneInfos : [],
+                modelType : 0,
             },
             activeName : "first"
         }
