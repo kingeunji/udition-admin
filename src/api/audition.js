@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const domain = 'https://webapi.udition.co/api/'
+// const domain = 'http://localhost:8082/api/'
 
 
 const request = (method, url, data) => {
