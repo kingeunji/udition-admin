@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const domain = 'https://webapi.udition.co/api/'
+// const domain = 'http://localhost:8082/api/'
 
 const request = (method, url, data) => {
     return axios({
@@ -29,7 +30,10 @@ export const business = {
         return request('post', 'billing/search', formData)
     },
     subDetail(bizNo) {
-      return request('post','biz/sub/detail', {bizNo : bizNo})
+      return request('post','biz/sub/detail', { bizNo:bizNo })
+    },
+    subUpdate(formData) {
+      return request('post','biz/sub/update', formData)
     },
     mail(formData) {
       return request('post', 'biz/mail', formData)

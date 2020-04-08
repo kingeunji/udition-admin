@@ -3,6 +3,7 @@
         <div class="sort-option"> 
             <div class="col-6" style="display: inline-block;">
                 <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item> <el-radio v-model="formData.modelType" label="0" @change="changeFilter">모든 결과 선택</el-radio> </el-form-item>
                     <el-form-item> <el-radio v-model="formData.modelType" label="1" @change="changeFilter">스탠다드 기업</el-radio> </el-form-item>
                     <el-form-item> <el-radio v-model="formData.modelType" label="2" @change="changeFilter">어드밴스 기업</el-radio> </el-form-item>    
                 </el-form>
@@ -154,7 +155,6 @@
 <script>
 import {business} from '../../api/business.js'
 import image from '../../assets/img/img_default_user@3x.png'
-
 export default {
     data() {
         return {
@@ -174,7 +174,7 @@ export default {
             bizList : [],
             error : '',
             formData : {
-                modelType : 0,
+                modelType : '0',
                 requestPage : 0,
                 searchTts : '',
                 allFlag : 0,
@@ -218,7 +218,6 @@ export default {
             
             this.multipleSelection = rows;
             this.select_order_number = this.multipleSelection.length;
-
             this.bizNoList = [];
             if(rows){
                 rows.forEach(row =>{
@@ -237,6 +236,19 @@ export default {
         pageChange(val) {
             this.formData.requestPage = (val-1)
             this.fetchData()
+        },
+        handleCheckAllChange() {
+            // 전체 선택 
+            var selectedProfile = [];
+            if(this.allSelect) {
+                this.formData.allFlag = 1
+                this.bizList.forEach(function(business) {
+                    selectedProfile.push(business.bizNo)
+                })
+            } else {
+                this.formData.allFlag = 0
+            }
+            this.selectedProfile = selectedProfile
         },
         businessDetail(bizUrl) {
             let route = this.$router.resolve({path: '/business/'+ bizUrl});
@@ -293,7 +305,6 @@ export default {
                 this.$message("푸시 내용을 입력해주세요")
                 return false
             }
-
             this.formData.title = this.title
             this.formData.content = this.content
             
@@ -307,30 +318,24 @@ export default {
                       this.error = err.data
                   })
         }        
-
     }
 }
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/earlyaccess/notosanskr.css');
-
     div {
         font-family: 'Noto Sans KR';
     }
-
     span {
         font-family: 'Noto Sans KR';
     }
-
     .col-6 {
         padding : 0px !important;
     }
-
     .el-form-item {
         margin-bottom: 0px;
     }
-
     .sort-option {
         margin-bottom: 20px;
     }
