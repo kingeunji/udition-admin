@@ -159,11 +159,4 @@ export default {
     margin-left: 14px;
 }
 
-.el-button--default {
-    width: auto !important;
-}
-
-.el-button--primary {
-    width: auto !important;
-}
 </style>
