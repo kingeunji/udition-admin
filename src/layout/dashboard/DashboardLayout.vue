@@ -6,6 +6,7 @@
         <sidebar-link to="/business" name="기업회원 관리" icon="el-icon-suitcase"/>
         <sidebar-link to="/auditions" name="오디션 관리" icon="el-icon-data-line"/>
         <sidebar-link to="/banner" name="배너 관리" icon="el-icon-picture"/>
+        <sidebar-link to="/featuring" name="피처링 관리" icon="el-icon-trophy"/>
         <sidebar-link to="/uditok" name="유디톡 관리" icon="el-icon-notebook-1"/>
         <sidebar-link to="/notice" name="공지사항 관리" icon="el-icon-check"/>
         <sidebar-link to="/advisor" name="어드바이저의 팁 관리" icon="el-icon-star-on"/>
