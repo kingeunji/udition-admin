@@ -30,6 +30,12 @@
             </div>
         </div>
 
+        <!-- <div class="row loop-row">
+            <div class="col-9 col-lg-2">
+                <b>기업 회원 가입일</b>
+            </div>
+        </div> -->
+
         <div class="row loop-row">
             <div class="col-9 col-lg-2">
                 <b>기업 회원 가입일</b>
@@ -126,6 +132,10 @@
                 <el-button style="width: auto" type="primary" @click="bizSubUpdate()">저장</el-button>
             </span>
         </el-dialog>
+                {{ this.subscriptionInfo.createDate }}
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -162,6 +172,14 @@ export default {
             },
             dbload : false,
             // loading : true,
+            loading: false,
+            subscriptionInfo : {
+                
+            },
+            formData : {
+                
+            },
+            bizNo : '',
         }   
     },
     created() {
@@ -220,6 +238,18 @@ export default {
                         }
                     })
         },
+
+        this.fetchSubInfo()
+    }, 
+    methods : {
+        fetchSubInfo() {
+            business.subDetail({bizNo : this.bizNo})
+                    .then(data => {
+                        this.subscriptionInfo = data.result
+                        this.loading = true
+                    })
+            console.log(this.subscriptionInfo);
+        }
     }
 }
 </script>
