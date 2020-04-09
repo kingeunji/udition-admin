@@ -132,10 +132,6 @@
                 <el-button style="width: auto" type="primary" @click="bizSubUpdate()">저장</el-button>
             </span>
         </el-dialog>
-                {{ this.subscriptionInfo.createDate }}
-            </div>
-        </div>
-
     </div>
 </template>
 
@@ -238,19 +234,8 @@ export default {
                         }
                     })
         },
-
-        this.fetchSubInfo()
     }, 
-    methods : {
-        fetchSubInfo() {
-            business.subDetail({bizNo : this.bizNo})
-                    .then(data => {
-                        this.subscriptionInfo = data.result
-                        this.loading = true
-                    })
-            console.log(this.subscriptionInfo);
-        }
-    }
+    
 }
 </script>
 
