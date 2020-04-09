@@ -2,16 +2,8 @@
     <div class="sort-option">
         <div class="search-wrap">
             <div class="search-inner">
-                <el-radio v-model="form.keyCodes" label="all">전체</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_singer">가수</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_actor">배우</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_dancer">댄서</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_musician">연주자</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_rapper">래퍼</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_comedian">개그맨</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_model">모델</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_announcer">아나운서</el-radio>
-                <el-radio v-model="form.keyCodes" label="prof_others">다른 재능</el-radio>
+                <el-radio v-model="form.featuringType" label="specialAud">눈여겨볼 오디션</el-radio>
+                <el-radio v-model="form.featuringType" label="newAud">새로운 오디션</el-radio>
 
                 <div class="block">
                     <span class="demonstration">기간 설정</span>
@@ -35,7 +27,11 @@
 
         <div class="row" style="margin-bottom : 20px;">
             <div class="col-6" style="display: inline-block; padding-right :0px;">
-                
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-form-item> <el-radio v-model="form.bizFilter" label="0" @change="changeFilter">모든 결과 선택</el-radio> </el-form-item>
+                    <el-form-item> <el-radio v-model="form.bizFilter" label="1" @change="changeFilter">스탠다드 기업</el-radio> </el-form-item>
+                    <el-form-item> <el-radio v-model="form.bizFilter" label="2" @change="changeFilter">어드밴스 기업</el-radio> </el-form-item>    
+                </el-form>
                 
                 <span style="font-weight:600; font-size: 13px">필터/검색 아티스트 결과 : {{ this.pagination.dbCount }} 개 </span>
             </div>
@@ -55,34 +51,43 @@
             </div>
         </div>            
 
-        <div class="list-group-gallery auditon-detail-list">
-            <div class="row" v-loading="loading">
-                
-                
-                <div class="col-3" v-for="item in this.noFeatArtistList" v-bind:key="item.uid">
-                    <div class="list-type-action">
-                        <div style="display:inline;">{{ item.perfection }} %</div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" v-model="selectedProfile" :value=item.uid :id=item.uid>
-                            <label class="custom-control-label" :for=item.uid>
-                                {{ item.stageName }}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="list-type-inner">
-                        <div class="list-thumbnail">
-                            <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + item.image" style="width:162px; height:162px;" class="img-fluid" @error="imageLoadOnError">
-                        </div>
+        <div class="option">
+            <el-table ref="multiTable" :data="noFeatAuditionList" v-loading="loading" style="width:100%; padding-left:20px;" @selection-change="handleSelectChange">
+                <!-- <el-table-column type="selection" width="55">
+                </el-table-column> -->
+                <el-table-column label=""  width="25">
+                    <template slot-scope="scope" >
+                    <el-radio v-model="form.auditionSelected" :label="scope.row.auditionNo" ></el-radio>
+                    </template>
+                    <!-- <template slot-scope="scope">
+                        <div style="padding-left:15px;"><input type="radio" :id="scope.row.auditionNo" name="auditionSelected"/></div>
+                    </template> -->
+                </el-table-column>
 
-                        <div class="list-profile-play">
-                            <router-link :to='"/artists/"+ item.webUrl' tag="button" class="btn-profile-view"><a style="color: #606266" target="_blank">프로필 보기 </a></router-link>
-                            <button type="button" class="btn-profile-play"> <i class="el-icon-caret-right"></i> </button>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>    
-                </div>
+                <el-table-column label="오디션 명"  width="300" align="center">
+                    <template slot-scope="scope">
+                        <div> <b>{{ scope.row.title }}</b> </div>
+                    </template>
+                </el-table-column>
 
-            </div>
+                <el-table-column label="기업 명"  width="200" align="center">
+                    <template slot-scope="scope">
+                        <div> <b> {{ scope.row.bizName }} </b> </div>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="기간"  width="110" align="center">
+                    <template slot-scope="scope">
+                        <div> {{ scope.row.term }} </div>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="지원자 수"  width="110" align="center">
+                    <template slot-scope="scope">
+                        <div> {{ scope.row.applyCnt }} 명</div>
+                    </template>
+                </el-table-column>
+            </el-table> 
         </div>
 
         <div style="text-align: center; margin-top: 15px;">
@@ -103,12 +108,10 @@
 <script>
 import { featuring } from '../../api/featuring.js'
 import image from '../../assets/img/img_default_user@3x.png'
-import { EventBus } from '../../utils/event-bus'
 
 export default {
     data() {
         return {
-            activeName : "0",
             datepickerFormat : 'yyyy-MM-dd',
             pageSizeOption : [{
                 value : 40,
@@ -123,20 +126,15 @@ export default {
             selectedProfile : [],
             allSelect : false,
             pageSelect : false,
-            perfectionFlg : false,
-            perfection : [0, 40],
             profileFlg : false,
             profileSelect : false,
-            perfectionSelect : "1",
             actionSelect : '',
-            artistList : [],
-            noFeatArtistList : [],
+            noFeatAuditionList : [],
             error : '',
-            form : { filterType : 0, allFlag : 0, pageSize : 40, keyCodes : 'all', term : '' },
+            form : { bizFilter : '0', allFlag : 0, pageSize : 40, term : '', auditionSelected: '' },
             pagination : '',
             localType : {
-                filterType : '',
-                memberTier : ''
+                bizFilter : 0,
             },
             loading: true,
             dialogVisible : false,
@@ -151,19 +149,10 @@ export default {
         this.fetchData()
 
     },
-    mounted() {
-        EventBus.$on("emitEvent", form => {
-            this.form = form;
-            this.settingLocalData()
-            this.fetchData()
-        });
-    },
     watch : {
         activeName : function() {
             this.form = {}
-            this.form.memberTier = this.activeName
             this.form.pageSize = 40
-            this.localType.memberTier = this.activeName
 
             this.perfectionFlg = false
             this.profileFlg = false
@@ -176,9 +165,9 @@ export default {
     methods : {
         fetchData() {
             this.loading = true
-            featuring.noFeatList(this.form)
+            featuring.noFeatAuditionList(this.form)
                   .then(data => {
-                      this.noFeatArtistList = data.results
+                      this.noFeatAuditionList = data.results
                       this.pagination = data.page
                       this.loading = false
                   })
@@ -191,6 +180,19 @@ export default {
             this.form.allFlag = 0
             
         },
+        handleSelectChange(rows) {
+            this.multipleSelection = rows;
+            this.auditionNoList = '';
+            if(rows){
+                rows.forEach(row =>{
+                    if(row){
+                    this.auditionNoList.push(row.auditionNo);
+                }
+                });
+            }
+            this.selectedProfile = this.auditionNoList;
+            console.log(this.auditionNoList)
+        },
         imageLoadOnError(e) {
             e.target.src = image
         },
@@ -199,11 +201,8 @@ export default {
             this.fetchData()
         },
         settingLocalData() {
-            if(!this.localType.filterType) {
-                this.form.filterType = this.localType.filterType
-            }
-            if(!this.localType.memberTier) {
-                this.form.memberTier = this.localType.memberTier
+            if(!this.localType.bizFilter) {
+                this.form.bizFilter = this.localType.bizFilter
             }
         },
         selectAll() {
@@ -219,72 +218,35 @@ export default {
             }
             this.selectedProfile = selectedProfile
         },
-        perfectionFlgHandle() {
-            // 완성도 플래그 선택시 
-            if(this.perfectionFlg) {
-                
-            } else {
-                this.perfection = ''
-                this.perfectionSelect = '1'
-
-                this.form.minPerfection = 0
-                this.form.maxPerfection = 0
-
-                this.form.perfectionType = ''
-                this.fetchData()
-            }
-        },
         profileFlgHandle() {
             // 이미지 플래그 선택시 
             if(this.profileFlg) {
 
                 
             } else {
-                this.form.filterType = ''
                 this.profileSelect = ''
                 this.fetchData()
             }
         },
-        changePerfection(val) {
-            this.form.minPerfection = val[0]
-            this.form.maxPerfection = val[1]
-            this.form.perfectionType = this.perfectionSelect
-            this.fetchData()
-        },
         changeFilter(val) {
-            this.form.filterType = val
+            this.form.bizFilter = val
             this.fetchData()
         },
         changePageSize(val) {
             this.form.pageSize = val
             this.fetchData()
         },
-        actionDialog() {
-            console.log(this.form.allFlag + ", " + this.selectedProfile.length)
-            if(this.allSelect == 0 && this.selectedProfile.length == 0 ) {
-                this.$message("선택한 아티스트가 존재하지 않습니다!")
-                return false
-            } else{
-                this.form.webUrlList = this.selectedProfile
-                if(this.actionSelect === 'mail'){
-                    this.mailDialog = true
-                } else if(this.actionSelect === 'push'){
-                    this.pushDialog = true
-                } else{
-                    this.dialogVisible=true
-                }
-            }
-
-        },
         addFeaturing() {
             console.log(this.rangeDate[0]);
             console.log(this.rangeDate[1]);
-            if(!this.form.keyCodes){
+            console.log(this.form.auditionSelected);
+            console.log(this.form.featuringType);
+            if(!this.form.featuringType){
                 this.$message("피처링을 추가할 카테고리를 선택해주세요")
                 return false
             }
-            if(!this.selectedProfile){
-                this.$message("피처링을 추가할 아티스트를 선택해주세요")
+            if(!this.form.auditionSelected){
+                this.$message("피처링을 추가할 오디션을 선택해주세요")
                 return false
             }
             if(this.rangeDate[0] < new Date()){
@@ -301,16 +263,16 @@ export default {
             }
 
             let form = {
-                uid : this.selectedProfile[0],
-                code : this.form.keyCodes,
+                auditionNo : this.form.auditionSelected,
+                featuringType : this.form.featuringType,
                 showStart : new Date(this.rangeDate[0]),
                 showEnd : new Date(this.rangeDate[1])
             }
 
-            featuring.insert(form)
+            featuring.auditionInsert(form)
                 .then(data => {
                     if(data.status.code == "0"){
-                        this.$message("아티스트 피처링 등록이 완료되었습니다.")
+                        this.$message("오디션 피처링 등록이 완료되었습니다.")
                         this.fetchData()
                     }
                 })
