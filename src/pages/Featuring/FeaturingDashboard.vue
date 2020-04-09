@@ -3,12 +3,27 @@
     <!-- sidebar -->
     <div class="col-3">
         <div class="sidebar-wrap">
+
             <ul id="artist-navi" class="sidebar-navi">
                 <li :class="{active:selected == 1}">
                     <a href="#" @click="selected = 1">[추가] 아티스트 피처링 </a>
                 </li>
                 <li :class="{active:selected == 2}">
                     <a href="#" @click="selected = 2">프로필 업데이트를 했어요 </a>
+                </li>
+            </ul>
+
+            <br/>
+
+            <ul id="audition-navi" class="sidebar-navi">
+                <li :class="{active:selected == 3}">
+                    <a href="#" @click="selected = 3">[추가] 오디션 피처링 </a>
+                </li>
+                <li :class="{active:selected == 4}">
+                    <a href="#" @click="selected = 4">눈여겨볼 오디션</a>
+                </li>
+                <li :class="{active:selected == 5}">
+                    <a href="#" @click="selected = 5">새로운 오디션</a>
                 </li>
             </ul>
 
@@ -21,18 +36,26 @@
     <div id="contents" class="col-8">
         <FeaturingResult v-if="selected == 1" />
         <updateFeaturingResult v-else-if="selected == 2" />
+        <AuditionFeaturingResult v-else-if="selected == 3" />
+        <UpdateSpecialAudition v-else-if="selected == 4" />
+        <UpdateNewAudition v-else-if="selected == 5" />
     </div>
 </div>
 </template>
 
 <script>
+import AuditionFeaturingResult from './AuditionFeaturingResult.vue'
+import UpdateSpecialAudition from './UpdateSpecialAudition.vue'
+import UpdateNewAudition from './UpdateNewAudition.vue'
+
 import artistFilter from './ArtistFilter.vue'
 import FeaturingResult from './FeaturingResult.vue'
 import updateFeaturingResult from './UpdateFeaturingResult.vue'
 
 
+
 export default {
-    components : { artistFilter, FeaturingResult, updateFeaturingResult },
+    components : { artistFilter, FeaturingResult, updateFeaturingResult, AuditionFeaturingResult, UpdateSpecialAudition, UpdateNewAudition },
     data() {
         return {
             selected : 1,
