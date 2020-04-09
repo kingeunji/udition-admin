@@ -379,12 +379,12 @@ export default {
         font-weight: 400;
         font-family: 'Noto Sans KR';
     }
-
+/* 
     .el-button--primary {
         width: 100% !important;
     }
 
     .el-button--default {
         width: 100% !important;
-    }
+    } */
 </style>
