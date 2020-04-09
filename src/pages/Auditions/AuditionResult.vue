@@ -224,9 +224,9 @@ export default {
 </script>
 
 <style scoped>
-/* .el-button--default {
+.el-button--default {
     width: 130px !important;
-} */
+}
 
 h4 {
     font-size: 18px;
@@ -278,8 +278,8 @@ h4 {
     font-size: 12px;
 }
 
-/* 
+
 .el-button--primary {
     width: 130px !important; 
-} */
+}
 </style>
