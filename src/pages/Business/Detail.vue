@@ -238,8 +238,6 @@ export default {
                         }
                     })
         },
-
-        this.fetchSubInfo()
     }, 
     methods : {
         fetchSubInfo() {
