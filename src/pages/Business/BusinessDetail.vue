@@ -55,6 +55,9 @@
                     <el-tab-pane label="오디션">
                         <AuditionList v-if="loading" v-bind:bizNo="detailInfo.bizNo" />
                     </el-tab-pane>
+                    <el-tab-pane label="계정이력">
+                        <Log v-if="loading" v-bind:bizNo="detailInfo.bizNo" />
+                    </el-tab-pane>
                 </el-tabs>
 
                 
@@ -68,10 +71,11 @@
 import {business} from '../../api/business'
 import Detail from './Detail.vue'
 import AuditionList from './AuditionList.vue'
+import Log from './Log.vue'
 
 
 export default {
-    components : {Detail, AuditionList},
+    components : {Detail, AuditionList, Log},
     data() {
         return {
             bizUrl : 0,

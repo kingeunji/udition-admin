@@ -71,6 +71,18 @@
 
             </div>
         </div>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="this.pagination.dbCount"
+                @current-change="pageChange"
+                @next-click="pageChange"
+                @prev-click="pageChange">
+            </el-pagination>
+        </div>
+
     </div>
 </template>
 
@@ -84,8 +96,10 @@ export default {
             auditionList : [],
             form : {
                 filterType : 3,
-                pageSize : 10
+                pageSize : 10,
+                bizNo : this.bizNo
             },
+            pagination : '',
             rejectReason : '',
             innerVisible : false,
             selectedAuditionNo : 0,
@@ -97,12 +111,15 @@ export default {
     },
     methods : {
         fetchData() {
-            var form = { bizNo : this.bizNo, filterType : 3, pageSize : 10 }
-            console.log(form + ", " + this.bizNo)
-            audition.search(form)
+            audition.search(this.form)
                     .then(data => {
                         this.auditionList = data.results
+                        this.pagination = data.page
                     })
+        },
+        pageChange(val) {
+            this.form.requestPage = (val-1)
+            this.fetchData()
         },
         pauseAudition(auditionNo, flag) {
             let form = {

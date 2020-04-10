@@ -40,5 +40,11 @@ export const business = {
     },
     push(formData) {
       return request('post', 'biz/push', formData)
+    },
+    logSearch(formData) {
+      return request('post', 'biz/log/search', formData)
+    },
+    logInsert(formData) {
+      return request('post', 'biz/log/insert', formData)
     }
 } 
