@@ -29,6 +29,9 @@ export const business = {
     billingSearch(formData) {
         return request('post', 'billing/search', formData)
     },
+    billingUpdate(formData) {
+        return request('post', 'billing/update', formData)
+    },
     subDetail(bizNo) {
       return request('post','biz/sub/detail', { bizNo:bizNo })
     },

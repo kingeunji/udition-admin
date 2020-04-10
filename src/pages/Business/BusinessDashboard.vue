@@ -30,7 +30,7 @@
                 <WaitingResult />
             </div>
             <div v-else-if="selected == 3">
-                <BillingResult/>
+                <BillingResult />
             </div>
         </div>
     </div>

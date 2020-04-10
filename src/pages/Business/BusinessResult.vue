@@ -211,11 +211,6 @@ export default {
         },
         
         handleSelectChange(rows) {
-            // console.log("nowBizNo: " + val[val.length-1].bizNo);
-            // this.bizNoSelected.push(val[val.length-1].bizNo);
-            // this.bizNoList = this.bizNoSelected;
-            // console.log("bizList: " + this.bizNoList);
-            
             this.multipleSelection = rows;
             this.select_order_number = this.multipleSelection.length;
             this.bizNoList = [];
