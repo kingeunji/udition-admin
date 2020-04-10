@@ -30,6 +30,7 @@
                 <WaitingResult />
             </div>
             <div v-else-if="selected == 3">
+                <BillingResult/>
             </div>
         </div>
     </div>
@@ -38,10 +39,11 @@
 <script>
 import BusinessResult from './BusinessResult.vue'
 import WaitingResult from './WaitingResult.vue'
+import BillingResult from './BillingResult.vue'
 
 
 export default {
-    components : {BusinessResult, WaitingResult},
+    components : {BusinessResult, WaitingResult, BillingResult},
     data() {
         return {
             selected : 1
