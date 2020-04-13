@@ -40,7 +40,7 @@
         </div>
 
         <!-- 컬렉션 리스트 -->
-        <div class="list-group-gallery auditon-detail-list">
+        <div class="list-group-gallery auditon-detail-list" v-if="!loading"> 
             <div class="row">
                 <div class="col-3" v-for="item in this.collectionList" v-bind:key="item.expNo">
                     <div class="list-type-action">
@@ -53,7 +53,7 @@
                     </div>
                     <div class="list-type-inner" v-loading="loading">
                         <div class="list-thumbnail" v-if="videoFileCheck(item.referencesItems[0])">
-                            <youtube :video-id=videoFileCheck(item.referencesItems[0]) style="width:162px; height:162px;" class="img-fluid"> </youtube>
+                            <youtube :video-id="videoFileCheck(item.referencesItems[0])" style="width:162px; height:162px;" class="img-fluid"> </youtube>
                         </div>
                         <div class="list-thumbnail" v-else>
                             <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + item.referencesItems[0]" style="width:162px; height:162px;" class="img-fluid">
@@ -109,7 +109,7 @@ export default {
                 
             },
             pagination : '',
-            activeName : '',
+            activeName : "0",
             loading : false,
             selectedProfile : [],
         }
