@@ -655,8 +655,8 @@ export default {
         font-size: 13px !important;
     }
 
-    /* .el-form-item {
+    .el-form-item {
         margin-bottom: 0px !important;
-    } */
+    }
 
 </style>

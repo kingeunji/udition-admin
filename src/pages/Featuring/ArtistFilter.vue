@@ -92,11 +92,11 @@ export default {
         font-family: 'Noto Sans KR';
     }
 
-    /* .el-button--primary {
+    .el-button--primary {
         width: 100%;
     }
 
     .el-button--default {
         width: 100%;
-    } */
+    }
 </style>

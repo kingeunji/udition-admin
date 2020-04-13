@@ -63,8 +63,12 @@
             </el-form-item>
 
             <el-form-item style="text-align: right;">
-                <el-button @click="bannerInsert">배너 등록</el-button>
-                <el-button type="primary">즉시 등록</el-button>
+                <div style="display: inline-block;">
+                    <el-button @click="bannerInsert">배너 등록</el-button>
+                </div>
+                <div style="display: inline-block; margin-left: 10px;">
+                    <el-button type="primary">즉시 등록</el-button>
+                </div>
             </el-form-item>
       </el-form>
   </div>
@@ -72,6 +76,7 @@
 
 <script>
 import { file } from '../../api/file'
+import { banner } from '../../api/banner'
 
 export default {
     props : ['bannerType'],
@@ -107,12 +112,21 @@ export default {
         bannerInsert() {
             if(this.validCheck()) {
                 // 1. 파일 업로드 
-                console.log(this.imageFile)
-                file.upload(this.imageFile)
-                    .then(data => {
-                        this.form.image = data.fileName
+                var formData = new FormData();
+                formData.append("file", this.imageFile);
+                file.upload(formData)
+                    .then(response => {
+                        this.form.image = response.data
                         console.log(this.form.image)
-                    })
+                    });
+
+                banner.insert(this.bannerType, this.form)
+                      .then(response => {
+                        if(response.data.status.code == 0) {
+                            alert("배너 등록 성공!");
+                        }
+                      });
+
             }
         },
         validCheck() {

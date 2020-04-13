@@ -1,10 +1,10 @@
 <template>
     <div class="sort-option">
 
-        <div class="details-info-wrap">
+        <div class="details-info-wrap" v-if="!loading">
             <h6 class="title" style="margin-bottom: 5px;"> {{ auditionDetail.title }} </h6>
             <p style="margin-bottom: 0px;"> {{ auditionDetail.term }} </p>
-            <p style="margin-bottom: 0px;"> 지원자수 : {{ auditionDetail.applyCnt }}명 </p>
+            <p style="margin-bottom: 0px;"> 지원자수 : {{ auditionDetail.applyCnt }}명 </p> 
         </div>
 
         <el-tabs v-model="activeName">
@@ -13,13 +13,19 @@
             <el-tab-pane label="보류" name="2"></el-tab-pane>
             <el-tab-pane label="불합격" name="3"></el-tab-pane>
         </el-tabs>
+
+        
+        <a :href="'https://webapi.udition.co/api/audition/apply/excelDownload?auditionNo=' + form.auditionNo + '&passed=' 
+        + activeName" > 지원자 목록 엑셀 다운로드 </a>
        
-        <div class="list-group-gallery auditon-detail-list">
+        <div class="list-group-gallery auditon-detail-list"  style="margin-top: 15px;">
             <div class="row" v-loading="loading">
                 
                 
                 <div class="col-3" v-for="item in this.artistList" v-bind:key="item.uid">
                     <div class="list-type-action">
+                        <div> <p>가입일: {{item.createDate}} </p> </div>
+
                         <div v-if="item.passed == 1" class="list-option-info" style="background-color: #50b0b1;
                                                              padding: 1px 5px 1px;
                                                              font-weight : 400;
