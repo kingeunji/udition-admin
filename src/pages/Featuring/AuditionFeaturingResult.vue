@@ -17,6 +17,7 @@
 
                 <div class="featuringButton">
                 <el-row style="padding-top : 10px;">
+                    <el-button type="primary" @click="addFeaturingNow">즉시 추가하기</el-button>
                     <el-button type="primary" @click="addFeaturing">피처링 추가하기</el-button>
                 </el-row>
                 </div>
@@ -270,6 +271,48 @@ export default {
             }
 
             featuring.auditionInsert(form)
+                .then(data => {
+                    if(data.status.code == "0"){
+                        this.$message("오디션 피처링 등록이 완료되었습니다.")
+                        this.fetchData()
+                    }
+                })
+
+        },
+        addFeaturingNow() {
+            console.log(this.rangeDate[0]);
+            console.log(this.rangeDate[1]);
+            console.log(this.form.auditionSelected);
+            console.log(this.form.featuringType);
+            if(!this.form.featuringType){
+                this.$message("피처링을 추가할 카테고리를 선택해주세요")
+                return false
+            }
+            if(!this.form.auditionSelected){
+                this.$message("피처링을 추가할 오디션을 선택해주세요")
+                return false
+            }
+            if(this.rangeDate[0] < new Date()){
+                this.$message("시작 날짜를 올바르게 선택해주세요")
+                return false
+            }
+            if(!this.rangeDate[0]) {
+                this.$message("피처링을 추가할 날짜를 선택해주세요")
+                return false
+            }
+            if(!this.rangeDate[1]) {
+                this.$message("피처링을 추가할 날짜를 선택해주세요")
+                return false
+            }
+
+            let form = {
+                auditionNo : this.form.auditionSelected,
+                featuringType : this.form.featuringType,
+                showStart : new Date(this.rangeDate[0]),
+                showEnd : new Date(this.rangeDate[1])
+            }
+
+            featuring.auditionInsertNow(form)
                 .then(data => {
                     if(data.status.code == "0"){
                         this.$message("오디션 피처링 등록이 완료되었습니다.")

@@ -31,6 +31,9 @@ export const featuring = {
     insert(formData){
         return request('post', 'featuring/profile/insert', formData)
     },
+    insertNow(formData){
+        return request('post', 'featuring/profile/showFeaturing', formData)
+    },
     updateSort(formData) {
         return request('post', 'featuring/profile/updateList', formData)
     },
@@ -42,6 +45,9 @@ export const featuring = {
     },
     auditionInsert(formData){
       return request('post', 'featuring/audition/insert', formData)
+    },
+    auditionInsertNow(formData){
+        return request('post', 'featuring/audition/showFeaturing', formData)
     },
     auditionSearch(formData){
       return request('post', 'featuring/audition/search', formData)
