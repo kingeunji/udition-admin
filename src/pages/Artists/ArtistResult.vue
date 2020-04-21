@@ -94,6 +94,12 @@
                 <div class="col-3" v-for="item in this.artistList" v-bind:key="item.uid">
                     <div class="list-type-action">
                         <div style="display:inline;">{{ item.perfection }} %</div>
+                        <div style="display:inline; margin-left: 10px;">
+                            <div style="display:inline;" v-if="item.memberTier == 1"> Tier 01 </div>
+                            <div style="display:inline;" v-if="item.memberTier == 2"> Tier 02 </div>
+                            <div style="display:inline;" v-if="item.memberTier == 3 && item.isBlocked == 0"> Tier 03 </div>
+                            <div style="display:inline;" v-if="item.memberTier == 3 && item.isBlocked == 1"> Tier B </div>
+                        </div>
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" v-model="selectedProfile" :value=item.webUrl :id=item.uid>
                             <label class="custom-control-label" :for=item.uid>
