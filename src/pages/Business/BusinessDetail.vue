@@ -55,6 +55,9 @@
                     <el-tab-pane label="오디션">
                         <AuditionList v-if="loading" v-bind:bizNo="detailInfo.bizNo" />
                     </el-tab-pane>
+                    <el-tab-pane label="소속 아티스트">
+                        <MemberList v-if="loading" v-bind:bizNo="detailInfo.bizNo" />
+                    </el-tab-pane>
                     <el-tab-pane label="계정이력">
                         <Log v-if="loading" v-bind:bizNo="detailInfo.bizNo" />
                     </el-tab-pane>
@@ -72,10 +75,11 @@ import {business} from '../../api/business'
 import Detail from './Detail.vue'
 import AuditionList from './AuditionList.vue'
 import Log from './Log.vue'
+import MemberList from './MemberList.vue'
 
 
 export default {
-    components : {Detail, AuditionList, Log},
+    components : {Detail, AuditionList, Log, MemberList},
     data() {
         return {
             bizUrl : 0,
@@ -83,6 +87,7 @@ export default {
             detailInfo : {
                 phoneInfos : [],
                 modelType : 0,
+                filterType : 0
             },
             activeName : "first",
         }
