@@ -188,7 +188,7 @@ export default {
             this.featuringNo = featuringNo
         },
         deleteFeaturing() {
-            featuring.delete(this.featuringNo) 
+            featuring.auditionDelete(this.featuringNo) 
                   .then(data => {
                       if(data.status.code == 0) {
                           this.$message("피처링이 삭제되었습니다")

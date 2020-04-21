@@ -25,6 +25,7 @@
 
                 <div class="featuringButton">
                 <el-row style="padding-top : 10px;">
+                    <el-button type="primary" @click="addFeaturingNow">즉시 추가하기</el-button>
                     <el-button type="primary" @click="addFeaturing">피처링 추가하기</el-button>
                 </el-row>
                 </div>
@@ -154,7 +155,6 @@ export default {
     mounted() {
         EventBus.$on("emitEvent", form => {
             this.form = form;
-            this.settingLocalData()
             this.fetchData()
         });
     },
@@ -198,42 +198,6 @@ export default {
             this.form.requestPage = (val-1)
             this.fetchData()
         },
-        settingLocalData() {
-            if(!this.localType.filterType) {
-                this.form.filterType = this.localType.filterType
-            }
-            if(!this.localType.memberTier) {
-                this.form.memberTier = this.localType.memberTier
-            }
-        },
-        selectAll() {
-            // 전체 선택 
-            var selectedProfile = [];
-            if(this.allSelect) {
-                this.form.allFlag = 1
-                this.artistList.forEach(function(artist) {
-                    selectedProfile.push(artist.webUrl)
-                })
-            } else {
-                this.form.allFlag = 0
-            }
-            this.selectedProfile = selectedProfile
-        },
-        perfectionFlgHandle() {
-            // 완성도 플래그 선택시 
-            if(this.perfectionFlg) {
-                
-            } else {
-                this.perfection = ''
-                this.perfectionSelect = '1'
-
-                this.form.minPerfection = 0
-                this.form.maxPerfection = 0
-
-                this.form.perfectionType = ''
-                this.fetchData()
-            }
-        },
         profileFlgHandle() {
             // 이미지 플래그 선택시 
             if(this.profileFlg) {
@@ -245,75 +209,104 @@ export default {
                 this.fetchData()
             }
         },
-        changePerfection(val) {
-            this.form.minPerfection = val[0]
-            this.form.maxPerfection = val[1]
-            this.form.perfectionType = this.perfectionSelect
-            this.fetchData()
-        },
-        changeFilter(val) {
-            this.form.filterType = val
-            this.fetchData()
-        },
         changePageSize(val) {
             this.form.pageSize = val
             this.fetchData()
         },
-        actionDialog() {
-            console.log(this.form.allFlag + ", " + this.selectedProfile.length)
-            if(this.allSelect == 0 && this.selectedProfile.length == 0 ) {
+        addFeaturing() {
+            if(this.allSelect == 0 && this.selectedProfile == 0 ) {
                 this.$message("선택한 아티스트가 존재하지 않습니다!")
                 return false
             } else{
-                this.form.webUrlList = this.selectedProfile
-                if(this.actionSelect === 'mail'){
-                    this.mailDialog = true
-                } else if(this.actionSelect === 'push'){
-                    this.pushDialog = true
-                } else{
-                    this.dialogVisible=true
+                this.noFeatArtistList.uid = this.selectedProfile
+                console.log(this.noFeatArtistList.uid)
+                console.log(this.rangeDate[0]);
+                console.log(this.rangeDate[1]);
+                
+                
+                if(!this.form.keyCodes){
+                    this.$message("피처링을 추가할 카테고리를 선택해주세요")
+                    return false
                 }
+                if(!this.selectedProfile){
+                    this.$message("피처링을 추가할 아티스트를 선택해주세요")
+                    return false
+                }
+                if(this.rangeDate[0] < new Date()){
+                    this.$message("시작 날짜를 올바르게 선택해주세요")
+                    return false
+                }
+                if(!this.rangeDate[0]) {
+                    this.$message("피처링을 추가할 날짜를 선택해주세요")
+                    return false
+                }
+                if(!this.rangeDate[1]) {
+                    this.$message("피처링을 추가할 날짜를 선택해주세요")
+                    return false
+                }
+
+                let form = {
+                    uid : this.selectedProfile[0],
+                    code : this.form.keyCodes,
+                    showStart : new Date(this.rangeDate[0]),
+                    showEnd : new Date(this.rangeDate[1])
+                }
+
+                featuring.insert(form)
+                    .then(data => {
+                        if(data.status.code == "0"){
+                            this.$message("아티스트 피처링 등록이 완료되었습니다.")
+                            this.fetchData()
+                        }
+                    })
             }
 
         },
-        addFeaturing() {
-            console.log(this.rangeDate[0]);
-            console.log(this.rangeDate[1]);
-            if(!this.form.keyCodes){
-                this.$message("피처링을 추가할 카테고리를 선택해주세요")
+        addFeaturingNow() {
+            if(this.allSelect == 0 && this.selectedProfile == 0 ) {
+                this.$message("선택한 아티스트가 존재하지 않습니다!")
                 return false
-            }
-            if(!this.selectedProfile){
-                this.$message("피처링을 추가할 아티스트를 선택해주세요")
-                return false
-            }
-            if(this.rangeDate[0] < new Date()){
-                this.$message("시작 날짜를 올바르게 선택해주세요")
-                return false
-            }
-            if(!this.rangeDate[0]) {
-                this.$message("피처링을 추가할 날짜를 선택해주세요")
-                return false
-            }
-            if(!this.rangeDate[1]) {
-                this.$message("피처링을 추가할 날짜를 선택해주세요")
-                return false
-            }
+            } else{
+                this.noFeatArtistList.uid = this.selectedProfile
+                console.log(this.noFeatArtistList.uid)
+                console.log(this.rangeDate[0]);
+                console.log(this.rangeDate[1]);
+                if(!this.form.keyCodes){
+                    this.$message("피처링을 추가할 카테고리를 선택해주세요")
+                    return false
+                }
+                if(!this.selectedProfile){
+                    this.$message("피처링을 추가할 아티스트를 선택해주세요")
+                    return false
+                }
+                if(this.rangeDate[0] < new Date()){
+                    this.$message("시작 날짜를 올바르게 선택해주세요")
+                    return false
+                }
+                if(!this.rangeDate[0]) {
+                    this.$message("피처링을 추가할 날짜를 선택해주세요")
+                    return false
+                }
+                if(!this.rangeDate[1]) {
+                    this.$message("피처링을 추가할 날짜를 선택해주세요")
+                    return false
+                }
 
-            let form = {
-                uid : this.selectedProfile[0],
-                code : this.form.keyCodes,
-                showStart : new Date(this.rangeDate[0]),
-                showEnd : new Date(this.rangeDate[1])
-            }
+                let form = {
+                    uid : this.selectedProfile[0],
+                    code : this.form.keyCodes,
+                    showStart : new Date(this.rangeDate[0]),
+                    showEnd : new Date(this.rangeDate[1])
+                }
 
-            featuring.insert(form)
-                .then(data => {
-                    if(data.status.code == "0"){
-                        this.$message("아티스트 피처링 등록이 완료되었습니다.")
-                        this.fetchData()
-                    }
-                })
+                featuring.insertNow(form)
+                    .then(data => {
+                        if(data.status.code == "0"){
+                            this.$message("아티스트 피처링 등록이 완료되었습니다.")
+                            this.fetchData()
+                        }
+                    })
+            }
 
         },
     }
