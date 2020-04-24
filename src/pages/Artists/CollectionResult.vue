@@ -75,7 +75,7 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
-                :current-page="this.form.requestPage + 1"
+                :current-page="this.formData.requestPage + 1"
                 :page-size=40
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
