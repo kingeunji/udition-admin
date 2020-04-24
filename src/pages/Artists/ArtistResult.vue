@@ -127,7 +127,6 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
-                :current-page="this.form.requestPage + 1"
                 :page-size="this.form.pageSize"
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
@@ -314,14 +313,14 @@ export default {
             this.form.memberTier = this.activeName
             this.form.pageSize = 40
             this.localType.memberTier = this.activeName
-            
+
             this.perfectionFlg = false
             this.profileFlg = false
 
             this.profileSelect = false
             this.perfection = [0, 40]
             this.fetchData()
-        },
+        }
     },
     methods : {
         fetchData() {

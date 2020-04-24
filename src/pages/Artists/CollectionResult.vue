@@ -33,7 +33,7 @@
                         </el-select>    
                     </el-form-item>
                     <el-form-item> 
-                        <el-button size="small" type="primary" :disabled="!actionSelect" @click="collectionAction">확인</el-button>
+                        <el-button size="small" type="primary" @click="colectionAction">확인</el-button>
                     </el-form-item>            
                 </el-form>
             </div>
@@ -75,7 +75,6 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
-                :current-page="this.form.requestPage + 1"
                 :page-size=40
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
@@ -162,7 +161,7 @@ export default {
             }
             this.fetchData()
         },
-        collectionAction() {
+        colectionAction() {
             let form = {
                 expNoList : [],
                 isBizView : 0
