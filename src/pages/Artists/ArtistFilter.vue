@@ -370,9 +370,9 @@ export default {
 
     .el-row {
         margin-bottom: 10px;
-    }
-    .el-row :last-child { 
-        margin-bottom: 0;
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 
     span {
