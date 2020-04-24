@@ -24,9 +24,9 @@
                 </div>
 
                 <div class="featuringButton">
-                <el-row style="padding-top : 10px;">
-                    <el-button type="primary" @click="addFeaturingNow">즉시 추가하기</el-button>
-                    <el-button type="primary" @click="addFeaturing">피처링 추가하기</el-button>
+                <el-row style="padding-top : 4px;">
+                    <el-button type="primary" style="padding: 12px 15px;" @click="addFeaturingNow">즉시 추가하기</el-button>
+                    <el-button type="primary" style="padding: 12px 15px;" @click="addFeaturing">피처링 추가하기</el-button>
                 </el-row>
                 </div>
 

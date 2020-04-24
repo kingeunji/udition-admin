@@ -3,7 +3,7 @@
         <div class="sort-option"> 
             <div class="col-6" style="display: inline-block;">
                 <el-form :inline="true" class="demo-form-inline">
-                    <el-form-item> <el-radio v-model="formData.modelType" label="0" @change="changeFilter">모든 결과 선택</el-radio> </el-form-item>
+                    <el-form-item> <el-radio v-model="formData.modelType" label="0" @change="changeFilter">모든 기업</el-radio> </el-form-item>
                     <el-form-item> <el-radio v-model="formData.modelType" label="1" @change="changeFilter">스탠다드 기업</el-radio> </el-form-item>
                     <el-form-item> <el-radio v-model="formData.modelType" label="2" @change="changeFilter">어드밴스 기업</el-radio> </el-form-item>    
                 </el-form>
@@ -85,6 +85,7 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
+                :current-page="this.formData.requestPage + 1"
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
                 @next-click="pageChange"
@@ -236,19 +237,6 @@ export default {
         pageChange(val) {
             this.formData.requestPage = (val-1)
             this.fetchData()
-        },
-        handleCheckAllChange() {
-            // 전체 선택 
-            var selectedProfile = [];
-            if(this.allSelect) {
-                this.formData.allFlag = 1
-                this.bizList.forEach(function(business) {
-                    selectedProfile.push(business.bizNo)
-                })
-            } else {
-                this.formData.allFlag = 0
-            }
-            this.selectedProfile = selectedProfile
         },
         businessDetail(bizUrl) {
             let route = this.$router.resolve({path: '/business/'+ bizUrl});
