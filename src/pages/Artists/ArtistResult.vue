@@ -297,7 +297,7 @@ export default {
             pushDialog : false,
             title : '',
             content : '',
-            excelUrl : 'http://localhost:8082/api/artistFilter/excelDownload?',
+            excelUrl : 'https://webapi.udition.co/api/artistFilter/excelDownload?',
         }
     },
     created() {
@@ -307,7 +307,7 @@ export default {
     mounted() {
         EventBus.$on("emitEvent", form => {
             this.form = form;
-            this.excelUrl = 'http://localhost:8082/api/artistFilter/excelDownload?'
+            this.excelUrl = 'https://webapi.udition.co/api/artistFilter/excelDownload?'
             this.excelCheck()
             this.settingLocalData()
             this.fetchData()
