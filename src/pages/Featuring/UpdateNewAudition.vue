@@ -91,7 +91,7 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
-                :page-size=40
+                :page-size="this.form.pageSize"
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
                 @next-click="pageChange"
@@ -123,14 +123,14 @@ export default {
     data() {
         return {
             pageSizeOption : [{
-                value : 40,
-                label : '40개씩'
+                value : 10,
+                label : '10개씩'
             },{
-                value : 120,
-                label : '120개씩'
+                value : 20,
+                label : '20개씩'
             },{
-                value : 240,
-                label : '240개씩'
+                value : 30,
+                label : '30개씩'
             }],
 
             dialogDelete : false,
@@ -140,7 +140,7 @@ export default {
             sortValue : '',
             targetKey : '',
             targetSort : '',
-            form : { bizFilter : '0',  pageSize : 40, term : '', filterType : '2' },
+            form : { bizFilter : '0',  pageSize : 10, term : '', filterType : '2' },
             pagination : '',
             loading : true,
         }

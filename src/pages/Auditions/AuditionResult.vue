@@ -1,5 +1,5 @@
 <template>
-    <div class="sort-option">
+    <div class="sort-option" v-loading="loading">
         <div class="list-type-loop1" v-for="item in this.auditionList" v-bind:key="item.auditionNo" >
             <div class="list-type-inner1s px-3 px-sm-5 py-3 py-sm-5">
                 <div class="row no-gutters">
@@ -126,6 +126,7 @@ export default {
                 pageSize : 10,
                 filterType : 1
             },
+            loading: true,
             rejectReason : '',
             innerVisible : false,
             selectedAuditionNo : 0,
@@ -139,6 +140,7 @@ export default {
     },
     watch : {
         filterType : function() {
+            this.loading = true
             this.formData.requestPage = 0
             this.formData.filterType = this.filterType
             this.fetchData()
@@ -150,9 +152,11 @@ export default {
                     .then(data => {
                         this.auditionList = data.results
                         this.pagination = data.page
+                        this.loading = false
                     })
         },
         pageChange(val) {
+            this.loading = true
             this.formData.requestPage = (val-1)
             this.fetchData()
         },

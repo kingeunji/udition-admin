@@ -18,7 +18,7 @@
 
             <el-table-column align="center">
                 <span slot-scope="scope">
-                    <div style="padding: 30px;">
+                    <div style="padding: 25px;">
                         <el-button size="mini" @click="sortUp(scope.row)">위로</el-button>
                         <el-button size="mini" @click="sortDown(scope.row)">아래로</el-button>
                     </div>
@@ -27,7 +27,7 @@
 
             <el-table-column align="center">
                 <span slot-scope="scope">
-                <div style="padding: 30px;">
+                <div style="padding: 25px;">
                     <el-button size="mini" @click="advisorDetailUpdate(scope.row)">수정</el-button>
                     <el-button size="mini" @click="deleteDialog(scope.row.id)">삭제</el-button>
                 </div>
@@ -48,6 +48,7 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
+                :page-size="this.form.pageSize"
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
                 @next-click="pageChange"
@@ -78,8 +79,7 @@
                        <b> url </b>
                     </div>
                     <div class="col-md-11 col-lg-9">
-                        <a v-bind:href="advisorInfo.url"> {{ advisorInfo.url }} </a>
-                        <!-- <a @click="OpenWin_variety(advisorInfo.url, '어드바이저의 팁', width='65%')">{{ advisorInfo.url }}</a> -->
+                        <a v-bind:href="advisorInfo.url" onclick="window.open(this.href, '_blank'); return false;"> {{ advisorInfo.url }} </a>
                     </div>
                 </div>
                 <div class="row loop-row">
@@ -200,7 +200,7 @@ export default {
             loading : true,
             pagination : '',
             form : {
-                requestPage : 0
+                requestPage : 0, pageSize: 20
             },
             dialogVisible : false,
             dialogDelete : false,

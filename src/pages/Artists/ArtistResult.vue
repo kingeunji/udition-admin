@@ -82,8 +82,10 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-
-                </div>       
+                </div>
+                <div style="margin-right:10px;">
+                    <a :href='excelUrl'> 아티스트 목록 엑셀 다운로드 </a>
+                </div>
             </div>
         </div>            
 
@@ -294,7 +296,8 @@ export default {
             mailDialog : false,
             pushDialog : false,
             title : '',
-            content : ''
+            content : '',
+            excelUrl : 'http://localhost:8082/api/artistFilter/excelDownload?',
         }
     },
     created() {
@@ -304,6 +307,8 @@ export default {
     mounted() {
         EventBus.$on("emitEvent", form => {
             this.form = form;
+            this.excelUrl = 'http://localhost:8082/api/artistFilter/excelDownload?'
+            this.excelCheck()
             this.settingLocalData()
             this.fetchData()
         });
@@ -350,6 +355,86 @@ export default {
         pageChange(val) {
             this.form.requestPage = (val-1)
             this.fetchData()
+        },
+        excelCheck() {
+            if(this.form.searchTts != '') {
+                this.excelUrl += `searchTts=${this.form.searchTts}&`;
+            }
+            if(this.form.careerType != '') {
+                this.excelUrl += `careerType=${this.form.careerType}&`;
+            }
+            if(this.form.cutImageType != '') {
+                this.excelUrl += `cutImageType=${this.form.cutImageType}&`;
+            }
+            if(this.form.eyeType != '') {
+                this.excelUrl += `eyeType=${this.form.eyeType}&`;
+            }
+            if(this.form.filterType != '') {
+                this.excelUrl += `careerType=${this.form.filterType}&`;
+            }
+            if(this.form.footMax != '') {
+                this.excelUrl += `footMax=${this.form.footMax}&`;
+            }
+            if(this.form.footMin != '') {
+                this.excelUrl += `footMin=${this.form.footMin}&`;
+            }
+            if(this.form.genderType != 0) {
+                this.excelUrl += `genderType=${this.form.genderType}&`;
+            }
+            if(this.form.heapMax != '') {
+                this.excelUrl += `heapMax=${this.form.heapMax}&`;
+            }
+            if(this.form.heapMin != '') {
+                this.excelUrl += `heapMin=${this.form.heapMin}&`;
+            }
+            if(this.form.keyCodes != '') {
+                this.excelUrl += `keyCodes=${this.form.keyCodes}&`;
+            }
+            if(this.form.legMax != '') {
+                this.excelUrl += `legMax=${this.form.legMax}&`;
+            }
+            if(this.form.legMin != '') {
+                this.excelUrl += `legMin=${this.form.legMin}&`;
+            }
+            if(this.form.lowerSize != '') {
+                this.excelUrl += `lowerSize=${this.form.lowerSize}&`;
+            }
+            if(this.form.upperSize != '') {
+                this.excelUrl += `upperSize=${this.form.upperSize}&`;
+            }
+            if(this.form.maxAge != '') {
+                this.excelUrl += `maxAge=${this.form.maxAge}&`;
+            }
+            if(this.form.minAge != '') {
+                this.excelUrl += `minAge=${this.form.minAge}&`;
+            }
+            if(this.form.memberTier != '') {
+                this.excelUrl += `memberTier=${this.form.memberTier}&`;
+            }
+            if(this.form.movieType != '') {
+                this.excelUrl += `movieType=${this.form.movieType}&`;
+            }
+            if(this.form.orderType != '') {
+                this.excelUrl += `orderType=${this.form.orderType}&`;
+            }
+            if(this.form.readyToWork != '') {
+                this.excelUrl += `readyToWork=${this.form.readyToWork}&`;
+            }
+            if(this.form.skinType != '') {
+                this.excelUrl += `skinType=${this.form.skinType}&`;
+            }
+            if(this.form.tallMax != '') {
+                this.excelUrl += `tallMax=${this.form.tallMax}&`;
+            }
+            if(this.form.tallMin != '') {
+                this.excelUrl += `tallMin=${this.form.tallMin}&`;
+            }
+            if(this.form.weightMax != '') {
+                this.excelUrl += `weightMax=${this.form.weightMax}&`;
+            }
+            if(this.form.weightMin != '') {
+                this.excelUrl += `weightMin=${this.form.weightMin}&`;
+            }
         },
         settingLocalData() {
             if(!this.localType.filterType) {
@@ -427,6 +512,16 @@ export default {
                     this.dialogVisible=true
                 }
             }
+
+        },
+        filterList() {
+            artist.filterList(this.form)
+                .then(data => {
+                      this.fetchData()
+                  })
+                  .catch(err => {
+                      this.error = err.data
+                  })
 
         },
         profileAction() {

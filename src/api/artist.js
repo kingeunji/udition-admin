@@ -33,6 +33,6 @@ export const artist = {
     },
     push(formData){
       return request('post', 'member/push', formData)
-    }
+    },
 }
 
