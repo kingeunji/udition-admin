@@ -403,6 +403,7 @@ export default {
                     })
         },
         changeFilter(val){
+            this.loading = true
             this.formData.modelType = val
             this.fetchData()
         },

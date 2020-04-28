@@ -188,7 +188,7 @@ export default {
     },
     watch : {
         activeName : function() {
-            console.log(this.activeName)
+            // console.log(this.activeName)
             this.formData = {}
             this.formData.code = this.activeName
             this.fetchData()

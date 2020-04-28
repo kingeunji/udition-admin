@@ -18,7 +18,7 @@
 
             <el-table-column align="center">
                 <span slot-scope="scope">
-                    <div style="padding: 30px;">
+                    <div style="padding: 25px;">
                         <el-button size="mini" @click="sortUp(scope.row)">위로</el-button>
                         <el-button size="mini" @click="sortDown(scope.row)">아래로</el-button>
                     </div>
@@ -27,7 +27,7 @@
 
             <el-table-column align="center">
                 <span slot-scope="scope">
-                <div style="padding: 30px;">
+                <div style="padding: 25px;">
                     <el-button size="mini" @click="qnaDetailUpdate(scope.row)">수정</el-button>
                     <el-button size="mini" @click="deleteDialog(scope.row.qnaNo)">삭제</el-button>
                 </div>
@@ -49,6 +49,7 @@
                 background
                 layout="prev, pager, next"
                 :total="this.pagination.dbCount"
+                :page-size="this.form.pageSize"
                 @current-change="pageChange"
                 @next-click="pageChange"
                 @prev-click="pageChange">
@@ -170,7 +171,7 @@ export default {
             loading : true,
             pagination : '',
             form : {
-                requestPage : 0
+                requestPage : 0, pageSize: 10
             },
             dialogVisible : false,
             dialogDelete : false,

@@ -16,9 +16,9 @@
                 </div>
 
                 <div class="featuringButton">
-                <el-row style="padding-top : 10px;">
-                    <el-button type="primary" @click="addFeaturingNow">즉시 추가하기</el-button>
-                    <el-button type="primary" @click="addFeaturing">피처링 추가하기</el-button>
+                <el-row style="padding-top : 5px;">
+                    <el-button type="primary" style="padding: 12px 15px;" @click="addFeaturingNow">즉시 추가하기</el-button>
+                    <el-button type="primary" style="padding: 12px 15px;" @click="addFeaturing">피처링 추가하기</el-button>
                 </el-row>
                 </div>
 
@@ -54,15 +54,10 @@
 
         <div class="option">
             <el-table ref="multiTable" :data="noFeatAuditionList" v-loading="loading" style="width:100%; padding-left:20px;" @selection-change="handleSelectChange">
-                <!-- <el-table-column type="selection" width="55">
-                </el-table-column> -->
                 <el-table-column label=""  width="25">
                     <template slot-scope="scope" >
                     <el-radio v-model="form.auditionSelected" :label="scope.row.auditionNo" ></el-radio>
                     </template>
-                    <!-- <template slot-scope="scope">
-                        <div style="padding-left:15px;"><input type="radio" :id="scope.row.auditionNo" name="auditionSelected"/></div>
-                    </template> -->
                 </el-table-column>
 
                 <el-table-column label="오디션 명"  width="300" align="center">
@@ -115,14 +110,14 @@ export default {
         return {
             datepickerFormat : 'yyyy-MM-dd',
             pageSizeOption : [{
-                value : 40,
-                label : '40개씩'
+                value : 10,
+                label : '10개씩'
             },{
-                value : 120,
-                label : '120개씩'
+                value : 20,
+                label : '20개씩'
             },{
-                value : 240,
-                label : '240개씩'
+                value : 30,
+                label : '30개씩'
             }],
             selectedProfile : [],
             allSelect : false,
@@ -132,7 +127,7 @@ export default {
             actionSelect : '',
             noFeatAuditionList : [],
             error : '',
-            form : { bizFilter : '0', allFlag : 0, pageSize : 40, term : '', auditionSelected: '' },
+            form : { bizFilter : '0', allFlag : 0, pageSize : 10, term : '', auditionSelected: '' },
             pagination : '',
             localType : {
                 bizFilter : 0,
@@ -149,19 +144,6 @@ export default {
     created() {
         this.fetchData()
 
-    },
-    watch : {
-        activeName : function() {
-            this.form = {}
-            this.form.pageSize = 40
-
-            this.perfectionFlg = false
-            this.profileFlg = false
-
-            this.profileSelect = false
-            this.perfection = [0, 40]
-            this.fetchData()
-        }
     },
     methods : {
         fetchData() {
@@ -238,10 +220,10 @@ export default {
             this.fetchData()
         },
         addFeaturing() {
-            console.log(this.rangeDate[0]);
-            console.log(this.rangeDate[1]);
-            console.log(this.form.auditionSelected);
-            console.log(this.form.featuringType);
+            // console.log(this.rangeDate[0]);
+            // console.log(this.rangeDate[1]);
+            // console.log(this.form.auditionSelected);
+            // console.log(this.form.featuringType);
             if(!this.form.featuringType){
                 this.$message("피처링을 추가할 카테고리를 선택해주세요")
                 return false
@@ -280,10 +262,10 @@ export default {
 
         },
         addFeaturingNow() {
-            console.log(this.rangeDate[0]);
-            console.log(this.rangeDate[1]);
-            console.log(this.form.auditionSelected);
-            console.log(this.form.featuringType);
+            // console.log(this.rangeDate[0]);
+            // console.log(this.rangeDate[1]);
+            // console.log(this.form.auditionSelected);
+            // console.log(this.form.featuringType);
             if(!this.form.featuringType){
                 this.$message("피처링을 추가할 카테고리를 선택해주세요")
                 return false

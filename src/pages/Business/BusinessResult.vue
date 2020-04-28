@@ -34,10 +34,6 @@
             <el-table ref="multiTable" :data="bizList" v-loading="loading" style="width:100%"
                     @selection-change="handleSelectChange">
                 <el-table-column type="selection" width="55">
-                    <!-- <template slot-scope="scope"> -->
-                        <!-- <el-checkbox v-model="selectedProfile" :value=scope.row.bizNo :id=scope.row.bizNo></el-checkbox> -->
-                        <!-- <input type="checkbox" v-model="selectedProfile" :value=scope.row.bizNo :id=scope.row.bizNo> -->
-                    <!-- </template> -->
                 </el-table-column>
 
                 <el-table-column label="기업 로고"  width="120">
@@ -235,6 +231,7 @@ export default {
             e.target.src = image
         },
         pageChange(val) {
+            this.loading = true
             this.formData.requestPage = (val-1)
             this.fetchData()
         },
@@ -243,6 +240,7 @@ export default {
             window.open(route.href, '_blank');
         },
         changeFilter(val){
+            this.loading = true
             this.formData.modelType = val
             this.fetchData()
         },

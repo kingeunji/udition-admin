@@ -224,6 +224,7 @@
                         <el-row>
                              <el-button plain>필터 초기화</el-button>
                         </el-row>
+
                     </div>
                 </div>
 
@@ -238,6 +239,7 @@ import { EventBus } from '../../utils/event-bus'
 export default {
     data() {
         return {
+            excelUrl : 'http://localhost:8082/api/artistFilter/excelDownload?',
             upperOption : [{
                 label : "XS",
                 value : "1"
@@ -320,18 +322,19 @@ export default {
                 filterType : '',
                 memberTier : '',
                 orderType : ''
-            }
+            },
         }
     },
     watch : {
         form : function() {
+            console.log(this.form);
             search()
-        }
+        },
     },
     methods : {
         search() {
             EventBus.$emit('emitEvent', this.form) 
-        }
+        },
     }
 }
 </script>

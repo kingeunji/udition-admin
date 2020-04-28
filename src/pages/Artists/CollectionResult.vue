@@ -40,8 +40,8 @@
         </div>
 
         <!-- 컬렉션 리스트 -->
-        <div class="list-group-gallery auditon-detail-list" v-if="!loading"> 
-            <div class="row">
+        <div class="list-group-gallery auditon-detail-list"> 
+            <div class="row"  v-loading="loading">
                 <div class="col-3" v-for="item in this.collectionList" v-bind:key="item.expNo">
                     <div class="list-type-action">
                         <div class="custom-control custom-checkbox">
@@ -51,7 +51,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="list-type-inner" v-loading="loading">
+                    <div class="list-type-inner" >
                         <div class="list-thumbnail" v-if="videoFileCheck(item.referencesItems[0])">
                             <youtube :video-id="videoFileCheck(item.referencesItems[0])" style="width:162px; height:162px;" class="img-fluid"> </youtube>
                         </div>
@@ -75,8 +75,8 @@
             <el-pagination
                 background
                 layout="prev, pager, next"
-                :current-page="this.formData.requestPage + 1"
-                :page-size=40
+                :current-page="this.form.requestPage + 1"
+                :page-size="this.form.pageSize"
                 :total="this.pagination.dbCount"
                 @current-change="pageChange"
                 @next-click="pageChange"
@@ -106,12 +106,15 @@ export default {
             }],
             actionSelect : '',
             collectionList : '',
-            formData : {
-                
+            form : {
+                pageSize : 40
+            },
+            localType : {
+                memberTier : ''
             },
             pagination : '',
             activeName : "0",
-            loading : false,
+            loading: true,
             selectedProfile : [],
         }
     }, 
@@ -120,22 +123,42 @@ export default {
     },
     watch : {
         activeName : function() {
-            this.formData.collectionTier = this.activeName
+            this.form = {}
+            this.form.collectionTier = this.activeName
+            this.form.pageSize = 40
+            this.localType.collectionTier = this.activeName
+
+            this.profileSelect = false
             this.fetchData()
         }
     },
     methods : {
         fetchData() {
-            collection.list(this.formData)
+            this.loading = true
+            collection.list(this.form)
                       .then(data => {
-                          this.loading = false
                           this.collectionList = data.results
                           this.pagination = data.page  
-                      })                                 
+                          this.loading = false
+                      })
+                      .catch(err => {
+                          this.error = err.data
+                      })
+            if(this.form.collectionTier) {
+                this.activeName = this.form.collectionTier.toString()
+            }
+                this.allSelect = false
+                this.selectedProfile = []
+                this.form.allFlag = 0
         },
         pageChange(val) {
-            this.formData.requestPage = (val-1)
+            this.form.requestPage = (val-1)
             this.fetchData()
+        },
+        settingLocalData() {
+            if(!this.localType.collectionTier) {
+                this.form.collectionTier = this.localType.collectionTier
+            }
         },
         videoFileCheck(fileName) {
             if(fileName.indexOf("https://youtu.be") == 0 || fileName.indexOf("http://youtu.be") == 0) {
@@ -147,42 +170,47 @@ export default {
         selectAll(){
             var selectedProfile = []
             if(this.allSelect) {
+                this.form.allFlag = 1
                 this.collectionList.forEach(function(collection) {
                     selectedProfile.push(collection.expNo)
                 })
+            } else {
+                this.form.allFlag = 0
             }
-
             this.selectedProfile = selectedProfile
         },
         changeFilter() {
             if(this.likeSelect) {
-                this.formData.filterType = 1
+                this.form.filterType = 1
             } else {
-                this.formData.filterType = 0
+                this.form.filterType = 0
             }
             this.fetchData()
         },
         collectionAction() {
-            let form = {
-                expNoList : [],
-                isBizView : 0
-            }
-            if(this.actionSelect === 'Tier1') {
-                form.expNoList = this.selectedProfile
-                form.isBizView = 1
+            console.log(this.form.allFlag + ", " + this.selectedProfile.length)
+            if(this.allSelect == 0 && this.selectedProfile.length == 0 ) {
+                this.$message("선택한 컬렉션이 존재하지 않습니다!")
+                return false
+            } else{
 
-            } else if(this.actionSelect === 'TierB') {
-                form.expNoList = this.selectedProfile
-                form.isBizView = 0
-            }
+                if(this.actionSelect === 'Tier1') {
+                    this.form.expNoList = this.selectedProfile
+                    this.form.isBizView = 1
 
-            collection.update(form)
+                } else if(this.actionSelect === 'TierB') {
+                    this.form.expNoList = this.selectedProfile
+                    this.form.isBizView = 0
+                }
+
+                collection.update(form)
                           .then(data => {
                               if(data.status.code == "0") {
                                   this.fetchData()
                                   this.$message("선택하신 컬렉션의 티어가 선택되었습니다")
                               }
                           })
+            }
 
             this.selectedProfile = []
             this.allSelect = false
