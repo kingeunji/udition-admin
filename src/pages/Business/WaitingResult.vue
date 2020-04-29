@@ -280,6 +280,7 @@ export default {
                 requestPage : 0,
                 searchTts : '',
                 allFlag : 0,
+                filterType : 1
             },
             pagination : '',
             dialogVisible : false,
@@ -303,6 +304,7 @@ export default {
     },
     created() {
         this.fetchData()
+        console.log(filterType);
     },
     methods : {
         fetchData() {
@@ -343,6 +345,7 @@ export default {
             e.target.src = image
         },
         pageChange(val) {
+            this.loading = true
             this.formData.requestPage = (val-1)
             this.fetchData()
         },

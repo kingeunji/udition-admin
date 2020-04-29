@@ -2,28 +2,28 @@
     
     <div class="detail_pannel" v-if="dbload=true">
         <div class="row loop-row">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>상세소개</b>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-9">
                 {{ detailInfo.intro }}
             </div>
         </div>
 
         <div class="row loop-row">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>이메일</b>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-9">
                 {{ detailInfo.email }}
             </div>
         </div>
 
         <div class="row loop-row" v-if="detailInfo.phoneInfos.length >0">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>연락처</b>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-9">
                 <span v-for="item in detailInfo.phoneInfos" v-bind:key="item"> 
                     {{ item.phoneTts }}
                 </span>
@@ -37,19 +37,19 @@
         </div> -->
 
         <div class="row loop-row">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>기업 회원 가입일</b>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-9">
                 {{ subscriptionInfo.createDate }}
             </div>
         </div>
 
         <div class="row loop-row">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>구독 플랜</b>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-9">
                 <el-radio-group v-model="modelType1">
                     <el-radio :value="beta" label="beta">무료 기간</el-radio>
                     <el-radio :value="standard" label="standard">스탠다드</el-radio>
@@ -59,13 +59,13 @@
         </div>
 
         <div class="row loop-row">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>구독 기간</b>
             </div>
-            <div class="col-lg-10">
+            <div class="col-lg-9">
                 <span>
                     <span class="demonstration"></span>
-                    <el-date-picker
+                    <el-date-picker style="width:170px;"
                     v-model="startDate1"
                     type="date"
                     :value="startDate1" :readonly="readonly">
@@ -74,7 +74,7 @@
                 <span style="padding: 20px;">~</span>
                 <span>
                     <span class="demonstration"></span>
-                    <el-date-picker
+                    <el-date-picker style="width:170px;"
                     v-model="endDate1"
                     type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
                     :value="endDate1">
@@ -84,15 +84,15 @@
         </div>
 
         <div class="row loop-row">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>오디션 티켓</b>
             </div>
-            <div class="col-lg-10" style="padding-bottom: 10px;">
+            <div class="col-lg-9" style="padding-bottom: 10px;">
                 현재 보유 {{ subscriptionInfo.auditionCnt }}개
             </div>
-            <div class="col-9 col-lg-2"></div>
-            <div class="col-lg-10">
-                <el-input-number size="mini" v-model="formData.auditionCnt" @change="handleChange" :min="1"></el-input-number>                
+            <div class="col-9 col-lg-3"></div>
+            <div class="col-lg-9">
+                <el-input-number size="mini" v-model="formData.auditionCnt" @change="handleChange" :min="0"></el-input-number>                
                 <el-radio-group v-model="formData.auditionFlag" style="padding-left: 20px;">
                     <el-radio :label="0">지급</el-radio>
                     <el-radio :label="1">회수</el-radio>
@@ -101,21 +101,56 @@
         </div>
 
         <div class="row loop-row">
-            <div class="col-9 col-lg-2">
+            <div class="col-9 col-lg-3">
                 <b>캐스팅 인터뷰 티켓</b>
             </div>
-            <div class="col-lg-10" style="padding-bottom: 10px;">
+            <div class="col-lg-9" style="padding-bottom: 10px;">
                 현재 보유 {{ subscriptionInfo.ticketCnt }}개
             </div>
-            <div class="col-9 col-lg-2"></div>
-            <div class="col-lg-10">
-                <el-input-number size="mini" v-model="formData.ticketCnt" @change="handleChange" :min="1"></el-input-number>                
+            <div class="col-9 col-lg-3"></div>
+            <div class="col-lg-9">
+                <el-input-number size="mini" v-model="formData.ticketCnt" @change="handleChange" :min="0"></el-input-number>                
                 <el-radio-group v-model="formData.ticketFlag" style="padding-left: 20px;">
                     <el-radio :label="0">지급</el-radio>
                     <el-radio :label="1">회수</el-radio>
                 </el-radio-group>
             </div>
         </div>
+
+        <div class="row loop-row">
+            <div class="col-9 col-lg-3">
+                <b>추가 결제한 오디션 티켓</b>
+            </div>
+            <div class="col-lg-9" style="padding-bottom: 10px;">
+                현재 보유 {{ subscriptionInfo.purchaseAuditionCnt }}개
+            </div>
+            <div class="col-9 col-lg-3"></div>
+            <div class="col-lg-9">
+                <el-input-number size="mini" v-model="formData.purchaseAuditionCnt" @change="handleChange" :min="0"></el-input-number>
+                <el-radio-group v-model="formData.purchaseAuditionFlag" style="padding-left: 20px;">
+                    <el-radio :label="0">지급</el-radio>
+                    <el-radio :label="1">회수</el-radio>
+                </el-radio-group>
+            </div>
+        </div>
+
+        <div class="row loop-row">
+            <div class="col-9 col-lg-3">
+                <b>추가 결제한 캐스팅<br/> 인터뷰 티켓</b>
+            </div>
+            <div class="col-lg-9" style="padding-bottom: 10px;">
+                현재 보유 {{ subscriptionInfo.purchaseTicketCnt }}개
+            </div>
+            <div class="col-9 col-lg-3"></div>
+            <div class="col-lg-9">
+                <el-input-number size="mini" v-model="formData.purchaseTicketCnt" @change="handleChange" :min="0"></el-input-number>
+                <el-radio-group v-model="formData.purchaseTicketFlag" style="padding-left: 20px;">
+                    <el-radio :label="0">지급</el-radio>
+                    <el-radio :label="1">회수</el-radio>
+                </el-radio-group>
+            </div>
+        </div>
+
 
         <div style="text-align:center; padding-top:30px;">
             <el-button type="primary" style="text-align:center;" @click="dialogUpdate=true">저장</el-button>
@@ -150,6 +185,8 @@ export default {
             modelType1 : '',
             auditionCnt : 0,
             ticketCnt : 0,
+            purchaseAuditionCnt : 0,
+            purchaseTicketCnt : 0,
             subscriptionInfo : {
                 createDate : '',
                 startDate : '',
@@ -165,14 +202,15 @@ export default {
                 auditionFlag : '',
                 ticketCnt : 0,
                 ticketFlag : '',
+                purchaseAuditionCnt : 0,
+                purchaseAuditionFlag : '',
+                purchaseTicketCnt : 0,
+                purchaseTicketFlag : '',
             },
             dbload : false,
             // loading : true,
             loading: false,
             subscriptionInfo : {
-                
-            },
-            formData : {
                 
             },
             bizNo : '',
@@ -200,7 +238,9 @@ export default {
                         // this.loading = false
                     })
             this.formData.auditionFlag = '',
-            this.formData.ticketFlag = ''
+            this.formData.ticketFlag = '',
+            this.formData.purchaseAuditionFlag = '',
+            this.formData.purchaseTicketFlag = ''
         },
         handleChange(val){
         },
@@ -223,10 +263,17 @@ export default {
                 auditionCnt : this.formData.auditionCnt,
                 auditionFlag : this.formData.auditionFlag,
                 ticketCnt : this.formData.ticketCnt,
-                ticketFlag : this.formData.ticketFlag
+                ticketFlag : this.formData.ticketFlag,
+                purchaseAuditionCnt : this.formData.purchaseAuditionCnt,
+                purchaseAuditionFlag : this.formData.purchaseAuditionFlag,
+                purchaseTicketCnt : this.formData.purchaseTicketCnt,
+                purchaseTicketFlag : this.formData.purchaseTicketFlag
             }
+            console.log(formData)
             business.subUpdate(formData)
-                    .then(data =>{
+            alert("1")
+                    .then(data => {
+                        alert("2")
                         if(data.status.code == "0"){
                             this.$message("기업 수정이 완료되었습니다.")
                             this.dialogUpdate = false

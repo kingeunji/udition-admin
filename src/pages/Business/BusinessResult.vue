@@ -175,6 +175,7 @@ export default {
                 requestPage : 0,
                 searchTts : '',
                 allFlag : 0,
+                filterType : 0
             },
             pagination : '',
             loading: true,
