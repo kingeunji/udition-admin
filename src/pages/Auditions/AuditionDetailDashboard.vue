@@ -40,6 +40,7 @@
                     </div>
                 </div>
             </card>
+            <el-button style="width:360px; height:50px; font-size:large;" type="primary" @click="actionDialog">오디션 푸시 알림 전송</el-button>
         </div>
 
         <!-- 상세정보 -->
@@ -142,6 +143,42 @@
             </card>    
         </div>
 
+
+        <el-dialog
+            title="푸시 보내기"
+            :visible.sync="pushDialog"
+            width="40%">
+            <div class="detail_pannel">
+                <div class="row loop-row">
+                    <div class="col-9 col-lg-2">
+                       <b> 내용 </b>
+                    </div>
+                    <div class="col-md-10 col-lg-9">
+                        <el-input type="textarea" v-model="content" autocomplete="off" rows="20"></el-input>
+                    </div>
+                </div>
+                <div style="text-align:end;">
+                    <el-button @click="pushDialog = false">취소</el-button>
+                    <el-button type="primary" @click="pushCheck" >보내기</el-button>
+                </div>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+            title="알림"
+            :visible.sync="pushAlert"
+            width="40%">
+            <div class="detail_pannel">
+                <div class="row loop-row">
+                    확인을 누르면 되돌릴 수 없습니다. 정말로 보내시겠습니까?
+                </div>
+                <div style="text-align:end;">
+                    <el-button @click="pushAlert = false">취소</el-button>
+                    <el-button type="primary" @click="pushSend" >확인</el-button>
+                </div>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -152,7 +189,10 @@ export default {
         return {
             auditionNo : 0,
             detailInfo : '',
-            loading : false
+            loading : false,
+            pushDialog : false,
+            pushAlert : false,
+            content : '',
         }
     },
     created() {
@@ -166,6 +206,37 @@ export default {
                         this.detailInfo = data.result
                         this.loading = true
                         this.detailInfo.auditionTts = this.detailInfo.auditionTts.replace(/(?:\r\n|\r|\n)/g, '<br>')
+                    })
+        },
+        actionDialog() {
+            this.pushDialog = true;
+        },
+        pushCheck() {
+            if(!this.content) {
+                this.$message("푸시 내용을 입력해주세요")
+                return false
+            }
+            let form = {
+                auditionNo : this.auditionNo,
+                content : this.content
+            }
+            this.pushAlert = true;
+        },
+        pushSend() {
+            
+            let form = {
+                auditionNo : this.auditionNo,
+                content : this.content
+            }
+            audition.push(form)
+                    .then(data => {
+                        this.fetchData()
+                        this.pushAlert = false
+                        this.pushDialog = false
+                        this.$message("해당 오디션에 대한 푸시를 전송하였습니다!")
+                    })
+                    .catch(err => {
+                        this.error = err.data
                     })
         }
     }

@@ -116,10 +116,10 @@
                         <el-input type="textarea" v-model="tts" autocomplete="off" rows="20"></el-input>
                     </div>
                 </div>
-                    <span>
-                        <el-button @click="dialogInsert = false">취소</el-button>
-                        <el-button type="primary" @click="noticeInsert" >보내기</el-button>
-                    </span>
+                <div style="text-align:end;">
+                    <el-button @click="dialogInsert = false">취소</el-button>
+                    <el-button type="primary" @click="noticeInsert" >보내기</el-button>
+                </div>
             </div>
         </el-dialog>
 
@@ -149,10 +149,10 @@
                         <el-input type="textarea" v-model="noticeInfo.tts" autocomplete="off" rows="20"></el-input>
                     </div>
                 </div>
-                <span>
+                <div style="text-align:end;">
                     <el-button @click="dialogUpdate = false">취소</el-button>
                     <el-button type="primary" @click="noticeUpdate" >수정하기</el-button>
-                </span>
+                </div>
             </div>
         </el-dialog>
 
