@@ -32,9 +32,6 @@ export const audition = {
     },
     update(formData) {
         return request('post', 'audition/update', formData)
-    },
-    push(formData) {
-        return request('post', 'audition/push', formData)
     }
 }
 

@@ -131,10 +131,10 @@
                         <el-input type="text" v-model="advisor" autocomplete="off"></el-input>
                     </div>
                 </div>
-                    <div style="text-align:end;">
+                    <span>
                         <el-button @click="dialogInsert = false">취소</el-button>
                         <el-button type="primary" @click="advisorInsert" >보내기</el-button>
-                    </div>
+                    </span>
             </div>
         </el-dialog>
 
@@ -172,10 +172,10 @@
                         <el-input type="text" v-model="advisorInfo.advisor" autocomplete="off" rows="20"></el-input>
                     </div>
                 </div>
-                <div style="text-align:end;">
+                <span>
                     <el-button @click="dialogUpdate = false">취소</el-button>
                     <el-button type="primary" @click="advisorUpdate" >수정하기</el-button>
-                </div>
+                </span>
             </div>
         </el-dialog>
 

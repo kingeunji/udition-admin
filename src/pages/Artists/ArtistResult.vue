@@ -159,10 +159,10 @@
                         <el-input type="textarea" v-model="content" autocomplete="off" rows="20"></el-input>
                     </div>
                 </div>
-                <div style="text-align:end;">
-                    <el-button @click="mailDialog = false">취소</el-button>
-                    <el-button type="primary" @click="mailSend" >보내기</el-button>
-                </div>
+                    <span>
+                        <el-button @click="mailDialog = false">취소</el-button>
+                        <el-button type="primary" @click="mailSend" >보내기</el-button>
+                    </span>
             </div>
         </el-dialog>
 
@@ -188,10 +188,10 @@
                         <el-input type="textarea" v-model="content" autocomplete="off" rows="20"></el-input>
                     </div>
                 </div>
-                <div style="text-align:end;">
+                <span>
                     <el-button @click="pushDialog = false">취소</el-button>
                     <el-button type="primary" @click="pushSend" >보내기</el-button>
-                </div>
+                </span>
             </div>
         </el-dialog>
 
