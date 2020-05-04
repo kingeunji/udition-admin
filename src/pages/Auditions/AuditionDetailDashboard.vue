@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </card>
-            <el-button style="width:360px; height:50px; font-size:large;" type="primary" @click="actionDialog">오디션 푸시 알림 전송</el-button>
+            <el-button style="width:360px; height: 50px;" type="primary" @click="actionDialog">오디션 푸시 알림 전송</el-button>
         </div>
 
         <!-- 상세정보 -->
@@ -143,7 +143,6 @@
             </card>    
         </div>
 
-
         <el-dialog
             title="푸시 보내기"
             :visible.sync="pushDialog"
@@ -192,7 +191,7 @@ export default {
             loading : false,
             pushDialog : false,
             pushAlert : false,
-            content : '',
+            content: '',
         }
     },
     created() {
@@ -223,7 +222,6 @@ export default {
             this.pushAlert = true;
         },
         pushSend() {
-            
             let form = {
                 auditionNo : this.auditionNo,
                 content : this.content
@@ -233,7 +231,7 @@ export default {
                         this.fetchData()
                         this.pushAlert = false
                         this.pushDialog = false
-                        this.$message("해당 오디션에 대한 푸시를 전송하였습니다!")
+                        this.$message("해당 오기션에 대한 푸시를 전송하였습니다!")
                     })
                     .catch(err => {
                         this.error = err.data
