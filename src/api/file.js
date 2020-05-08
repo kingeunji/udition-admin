@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const domain = 'http://35.243.93.121:8080/pickleAPI/api/'
+const domain = 'https://appapi.udition.co/api/'
 
 const request = (method, url, data) => {
     return axios({
@@ -16,8 +16,8 @@ const request = (method, url, data) => {
   
 
 export const file = {
-    upload(multipartFile) {
-        return request('post','file/uploadFile', { file : multipartFile }, 
+    upload(form) {
+        return request('post','file/uploadFile', form, 
         {
           headers: {
               'Content-Type': 'multipart/form-data'

@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </card>
-            <el-button style="width:360px; height: 50px;" type="primary" @click="actionDialog">오디션 푸시 알림 전송</el-button>
+            <el-button style="width:360px; height: 50px; font-size: large;" type="primary" @click="actionDialog">오디션 푸시 알림 전송</el-button>
         </div>
 
         <!-- 상세정보 -->

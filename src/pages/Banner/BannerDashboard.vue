@@ -40,7 +40,17 @@
                 show-icon>
             </el-alert>
 
-            <BannerForm />
+            <!-- <div v-if="bannerType == 'big'">
+            <el-alert
+                effect="dark"
+                title="썸네일 사이즈"
+                type="info"
+                description="44*44"
+                show-icon>
+            </el-alert>
+            </div> -->
+
+            <BannerForm v-bind:bannerType="bannerType"/>
             <BannerList v-bind:bannerType="bannerType" />
         </div>
     </div>

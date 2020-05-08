@@ -204,7 +204,7 @@ export default {
         },
         rejectRank(bizMemberNo){
             if(!this.rejectReason){
-                this.$message("메일 내용을 입력해주세요")
+                this.$message("거절 사유를 입력해주세요")
                 return false
             }
             let form = {

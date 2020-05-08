@@ -13,61 +13,83 @@
             <el-form-item label="2) 랜딩 설정" style="margin-top: 13px;">
                 <div class="row" style="margin-left: 5px;">
                     <el-col :span="4">
-                        <el-radio v-model="form.kind" label="1" style="font-size: 13px;">오디션 랜딩 </el-radio>
+                        <el-radio v-model="form.kind" label="2" name="2" value="2" style="font-size: 13px;">오디션 랜딩 </el-radio>
                     </el-col>
                     <el-col :span="12">
-                        <el-input :disabled="form.kind != 1"  placeholder="오디션을 선택해 주세요"></el-input>
+                        <!-- <el-input :disabled="form.kind != 1"  placeholder="오디션을 선택해 주세요"></el-input> -->
+                        <el-select v-model="form.execution" :disabled="form.kind != 2" placeholder="오디션을 선택해주세요" style="width:100%;">
+                            <el-option
+                                v-for="item in auditionOption"
+                                :key="item.auditionNo"
+                                :value="item.auditionNo"
+                                :label="item.title">
+                            </el-option>
+                        </el-select>
                     </el-col>
                     
                 </div>
                 <div class="row" style="margin-left: 5px; margin-top: 5px;">
                     <el-col :span="4">
-                        <el-radio v-model="form.kind" label="2" style="font-size: 13px;">URL 랜딩 </el-radio>
+                        <el-radio v-model="form.kind" label="1" style="font-size: 13px;">URL 랜딩 </el-radio>
                     </el-col>
                     <el-col :span="12">
-                        <el-input :disabled="form.kind != 2" placeholder="URL 주소 복붙" v-model="form.execution"></el-input>
+                        <el-input :disabled="form.kind != 1" placeholder="URL 주소 복붙" v-model="form.execution"></el-input>
                     </el-col>
                 </div>
             </el-form-item>
 
-            <el-form-item label="3) 이미지 설정" style="margin-top: 13px;">
-                    <el-upload action="#" list-type="picture-card" :on-change="imageUpload" :auto-upload="false" :limit=1>
-                        <i slot="default" class="el-icon-plus"></i>
-                        <div slot="file" slot-scope="{file}">
-                        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" >
-                        <span class="el-upload-list__item-actions">
-                            <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)" >
-                                <i class="el-icon-zoom-in"></i>
-                            </span>
-                            <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)" >
-                                <i class="el-icon-delete"></i>
-                            </span>
-                        </span>
-                        </div>
-                    </el-upload>
-                    <el-dialog :visible.sync="dialogVisible">
-                        <img width="100%" :src="dialogImageUrl" alt="">
-                    </el-dialog>
-            </el-form-item>
+            <div v-if ="bannerType != 'belt'">
+                <!-- <div v-if="bannerType != 'big'"> -->
+                    <el-form-item label="3) 이미지 설정" style="margin-top: 13px;">
+                        <input type="file" ref="imageUpload" @change="onChangeImage(item, $event)" />
+                    </el-form-item>
+                <!-- </div> -->
 
-            <el-form-item label="4) 타이틀 설정" style="margin-top: 15px;">
-                <div class="row" style="margin-left: 5px;">
-                    <el-input placeholder="배너 타이틀을 입력해 주세요" v-model="form.title"></el-input>
-                </div>
-            </el-form-item>
+                <!-- <div v-if="bannerType == 'big'">
+                    <el-form-item label="3-1) 큰 이미지 설정" style="margin-top: 13px;">
+                        <input type="file" ref="imageUpload" @change="onChangeImage(item, $event)" />
+                    </el-form-item>
 
-            <el-form-item label="5) 유료 광고" style="margin-top: 13px;">
-                <div class="row" style="margin-left: 5px; margin-top: 5px;">
-                    <el-checkbox v-model="form.isPaid">광고주 광고일 경우 체크</el-checkbox>
-                </div>
-            </el-form-item>
+                    <el-form-item label="3-2) 썸네일 설정" style="margin-top: 13px;">
+                        <input type="file" ref="imageUpload" @change="onChangeImage(item, $event)" />
+                    </el-form-item>
+                </div> -->
+
+                <el-form-item label="4) 타이틀 설정" style="margin-top: 15px;">
+                    <div class="row" style="margin-left: 5px;">
+                        <el-input placeholder="배너 타이틀을 입력해 주세요" v-model="form.title"></el-input>
+                    </div>
+                </el-form-item>
+                
+
+                <el-form-item label="5) 유료 광고" style="margin-top: 13px;">
+                    <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                        <el-checkbox v-model="form.isPaid" true-label="1" false-label="0">광고주 광고일 경우 체크</el-checkbox>
+                    </div>
+                </el-form-item>
+            </div>
+                
+            <div v-if="bannerType == 'belt'">
+                <el-form-item label="3) 내용 설정" style="margin-top: 15px;">
+                    <div class="row" style="margin-left: 5px;">
+                        <el-input placeholder="내용을 입력해 주세요" v-model="form.title"></el-input>
+                    </div>
+                </el-form-item>
+
+                <el-form-item label="4) 유료 광고" style="margin-top: 13px;">
+                    <div class="row" style="margin-left: 5px; margin-top: 5px;">
+                        <el-checkbox v-model="form.isPaid" true-label="1" false-label="0">광고주 광고일 경우 체크</el-checkbox>
+                    </div>
+                </el-form-item>
+            </div>
+            
 
             <el-form-item style="text-align: right;">
                 <div style="display: inline-block;">
                     <el-button @click="bannerInsert">배너 등록</el-button>
                 </div>
                 <div style="display: inline-block; margin-left: 10px;">
-                    <el-button type="primary">즉시 등록</el-button>
+                    <el-button type="primary" @click="bannerInsertNow">즉시 등록</el-button>
                 </div>
             </el-form-item>
       </el-form>
@@ -77,6 +99,7 @@
 <script>
 import { file } from '../../api/file'
 import { banner } from '../../api/banner'
+import { EventBus } from '../../utils/event-bus'
 
 export default {
     props : ['bannerType'],
@@ -94,8 +117,18 @@ export default {
             dialogImageUrl: '',
             dialogVisible: false,
             disabled: false,
-            imageFile : null
+            imageFile : null,
+            selectAudition : '',
+            auditionOption : {
+                auditionNo: 0,
+                auditionTitle: ''
+            },
+            files : []
         }
+    },
+    created() {
+        this.auditionOption2();
+        
     },
     methods : {
         handleRemove(file) {
@@ -105,28 +138,96 @@ export default {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
+        onChangeImage(item, e) {
+            // alert("!!");
+            var files = e.target.files || e.dataTransfer.files;
+            this.files.push(files[0]);
+        },
         imageUpload(file) {
             this.imageFile = file
             console.log(file)
         },
-        bannerInsert() {
-            if(this.validCheck()) {
-                // 1. 파일 업로드 
-                var formData = new FormData();
-                formData.append("file", this.imageFile);
-                file.upload(formData)
+        auditionOption2() {
+            banner.auditionList(this.bannerType)
                     .then(response => {
-                        this.form.image = response.data
-                        console.log(this.form.image)
-                    });
-
-                banner.insert(this.bannerType, this.form)
-                      .then(response => {
-                        if(response.data.status.code == 0) {
-                            alert("배너 등록 성공!");
-                        }
-                      });
-
+                        this.auditionOption = response.data.results;
+                    })
+        },
+        data : function() {
+            return {
+                auditionOption : []
+            }
+        },
+        async fileUpload() {
+            // 1. 파일 업로드 
+            var formData = new FormData();
+            formData.append("image", this.files[0]);
+            const response = await file.upload(formData);
+            this.form.image = response
+            console.log(this.form.image);
+        },
+        async bannerInsert() {
+            if(this.bannerType != 'belt'){
+                if(this.validCheck()) {
+                    
+                    await this.fileUpload();
+                    if(this.form.image) {
+                        banner.insert(this.bannerType, this.form)
+                        .then(response => {
+                            if(response.data.status.code == 0) {
+                                alert("배너가 정상적으로 등록되었습니다.");
+                                EventBus.$emit('uploadForm', true);
+                                this.form = {};
+                                this.files[0] = '';
+                            }
+                        });
+                    } else {
+                    this.$message.error("배너 이미지를 업로드 해주세요!")
+                    }
+                }
+            } else if(this.bannerType == 'belt') {
+                if(this. validCheck()) {
+                    banner.insert(this.bannerType, this.form)
+                            .then(response => {
+                                if(response.data.status.code == 0) {
+                                    alert("배너가 정상적으로 등록되었습니다.")
+                                    EventBus.$emit('uploadForm', true);
+                                    this.form = {};
+                                }
+                            });
+                }
+            }
+        },
+        async bannerInsertNow() {
+            if(this.bannerType != 'belt'){
+                if(this.validCheck()) {
+                    
+                    await this.fileUpload();
+                    if(this.form.image) {
+                        banner.showBanner(this.bannerType, this.form)
+                        .then(response => {
+                            if(response.data.status.code == 0) {
+                                alert("배너가 정상적으로 등록되었습니다.");
+                                EventBus.$emit('uploadForm', true); 
+                                this.form = {};
+                                this.files[0] = '';
+                            }
+                        });
+                    } else {
+                        this.$message.error("배너 이미지를 업로드 해주세요!")
+                    }
+                }
+            } else if(this.bannerType == 'belt') {
+                if(this. validCheck()) {
+                    banner.insert(this.bannerType, this.form)
+                            .then(response => {
+                                if(response.data.status.code == 0) {
+                                    alert("배너가 정상적으로 등록되었습니다.")
+                                    EventBus.$emit('uploadForm', true);
+                                    this.form = {};
+                                }
+                            });
+                }
             }
         },
         validCheck() {
@@ -145,10 +246,10 @@ export default {
                     return false
                 }
             }
-            if(!this.imageFile) {
-                this.$message.error("배너 이미지를 업로드 해주세요!")
-                return false
-            }
+            // if(!this.form.image) {
+            //     this.$message.error("배너 이미지를 업로드 해주세요!")
+            //     return false
+            // }
             if(!this.form.title) {
                 this.$message.error("배너 타이틀을 입력해 주세요!")
                 return false
