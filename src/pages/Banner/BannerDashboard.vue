@@ -10,8 +10,8 @@
                     <li :class="{active:bannerType == 'biz'}">
                         <a href="#" @click="bannerType = 'biz'"> APP : 기업 홈 </a>
                     </li>
-                    <li :class="{active:bannerType == 'artist'}">
-                        <a href="#" @click="bannerType = 'artist'"> APP & PC : 중간 배너  </a>
+                    <li :class="{active:bannerType == 'middle'}">
+                        <a href="#" @click="bannerType = 'middle'"> APP & PC : 중간 배너  </a>
                     </li>
                     <li :class="{active:bannerType == 'big'}">
                         <a href="#" @click="bannerType = 'big'"> PC : 메인배너 </a>
