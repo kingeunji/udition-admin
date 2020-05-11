@@ -170,6 +170,7 @@ export default {
                         this.fetchData()
                         if(flag == 1) this.$message("해당 오디션이 정지되었습니다!")
                         else if(flag == 0) this.$message("해당 오디션이 게시되었습니다!")
+                        this.dialogVisible = false
                     })
 
         },
@@ -195,7 +196,7 @@ export default {
                     .then(data => {
                         if(data.status.code == "0")
                             this.$message("오디션을 승인했습니다!")
-                            this.innerVisible = false
+                            this.dialogVisible = false
                             this.rejectReason = ''
                             this.selectedAuditionNo = 0
                             this.fetchData()
