@@ -53,9 +53,6 @@
 
         <el-table-column width="120">
             <template slot-scope="scope">
-                <div style="padding-left: 15px; padding-right: 15px; margin-bottom: 5px;">
-                    <el-button size="mini" @click="bannerDetailUpdate(scope.row)">수정</el-button>
-                </div>
                 <div style="padding-left: 15px; padding-right: 15px;">
                     <el-button size="mini" type="danger" @click="deleteDialog(scope.row.pk)">삭제</el-button>
                 </div>
@@ -88,102 +85,6 @@
         </span>
     </el-dialog>
 
-    <el-dialog width="65%" :visible.sync="dialogUpdate" title="배너" >
-        <div class="banner-form">
-            <el-form ref="form" :model="form" label-width="140px">
-                    <el-form-item label="1) 기간 설정" style="margin-top: 13px;">
-                        <el-col :span="8">
-                            <el-date-picker type="date" v-model="bannerInfo.showStart" style="width: 100%;" ></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="1" style="text-align: center;">-</el-col>
-                        <el-col :span="8">
-                            <el-date-picker type="date" v-model="bannerInfo.showEnd" style="width: 100%;" ></el-date-picker>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item label="2) 랜딩 설정" style="margin-top: 13px;">
-                        <div class="row" style="margin-left: 5px;">
-                            <el-col :span="4">
-                                <el-radio v-model="bannerInfo.kind" label="2" :value="2" style="font-size: 13px;">오디션 랜딩 </el-radio>
-                            </el-col>
-                            <el-col :span="12">
-                                <!-- <el-input :disabled="form.kind != 1"  placeholder="오디션을 선택해 주세요"></el-input> -->
-                                <el-select v-model="bannerInfo.execution" :disabled="bannerInfo.kind != 2" placeholder="오디션을 선택해주세요" style="width:100%;">
-                                    <el-option
-                                        v-for="item in auditionOption"
-                                        :key="item.auditionNo"
-                                        :value="item.auditionNo"
-                                        :label="item.title">
-                                    </el-option>
-                                </el-select>
-                            </el-col>
-                            
-                        </div>
-                        <div class="row" style="margin-left: 5px; margin-top: 5px;">
-                            <el-col :span="4">
-                                <el-radio v-model="bannerInfo.kind" label="1" :value="1" style="font-size: 13px;">URL 랜딩 </el-radio>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-input v-model="bannerInfo.execution" :disabled="bannerInfo.kind != 1" placeholder="URL 주소 복붙"></el-input>
-                            </el-col>
-                        </div>
-                    </el-form-item>
-
-                    <div v-if ="bannerType != 'belt'">
-                        <!-- <div v-if="bannerType != 'big'"> -->
-                            <el-form-item label="3) 이미지 설정" style="margin-top: 13px;">
-                                <input type="file" ref="imageUpload" @change="onChangeImage(item, $event)" />
-                            </el-form-item>
-                        <!-- </div> -->
-
-                        <!-- <div v-if="bannerType == 'big'">
-                            <el-form-item label="3-1) 큰 이미지 설정" style="margin-top: 13px;">
-                                <input type="file" ref="imageUpload" @change="onChangeImage(item, $event)" />
-                            </el-form-item>
-
-                            <el-form-item label="3-2) 썸네일 설정" style="margin-top: 13px;">
-                                <input type="file" ref="imageUpload" @change="onChangeImage(item, $event)" />
-                            </el-form-item>
-                        </div> -->
-
-                        <el-form-item label="4) 타이틀 설정" style="margin-top: 15px;">
-                            <div class="row" style="margin-left: 5px;">
-                                <el-input placeholder="배너 타이틀을 입력해 주세요" v-model="bannerInfo.title"></el-input>
-                            </div>
-                        </el-form-item>
-                        
-
-                        <el-form-item label="5) 유료 광고" style="margin-top: 13px;">
-                            <div class="row" style="margin-left: 5px; margin-top: 5px;">
-                                <el-checkbox v-model="bannerInfo.isPaid">광고주 광고일 경우 체크</el-checkbox>
-                            </div>
-                        </el-form-item>
-                    </div>
-                        
-                    <div v-if="bannerType == 'belt'">
-                        <el-form-item label="3) 내용 설정" style="margin-top: 15px;">
-                            <div class="row" style="margin-left: 5px;">
-                                <el-input placeholder="내용을 입력해 주세요" v-model="bannerInfo.title"></el-input>
-                            </div>
-                        </el-form-item>
-
-                        <el-form-item label="4) 유료 광고" style="margin-top: 13px;">
-                            <div class="row" style="margin-left: 5px; margin-top: 5px;">
-                                <el-checkbox v-model="bannerInfo.isPaid">광고주 광고일 경우 체크</el-checkbox>
-                            </div>
-                        </el-form-item>
-                    </div>
-                    
-
-                    <el-form-item style="text-align: right;">
-                        <div style="display: inline-block; margin-left: 10px;">
-                            <el-button type="primary" @click="bannerUpdate">수정</el-button>
-                            <el-button @click="dialogUpdate = false">취소</el-button>
-                        </div>
-                    </el-form-item>
-            </el-form>
-        </div>
-    </el-dialog>
-
   </div>
 </template>
 
@@ -204,18 +105,18 @@ export default {
         targetSort : '',
         dialogDelete : false,
         dialogUpdate : false,
-        isPaidCheck : '',
         bannerInfo :{
             pk: '',
             title: '',
             image: '',
-            kind: '',
+            kind: this.bannerKind,
             execution: '',
             showStart: '',
             showEnd: '',
             isPaid: '',
             auditionName: '',
-        }
+        },
+        bannerKind: '',
     };
   },
   created() {
@@ -259,10 +160,11 @@ export default {
         this.bannerInfo.pk = detail.pk,
         this.bannerInfo.title = detail.title,
         this.bannerInfo.image = detail.image
-        this.bannerInfo.kind = detail.kind,
+        this.bannerKind = detail.kind,
         this.bannerInfo.execution = detail.execution,
         this.bannerInfo.showStart = detail.showStart,
         this.bannerInfo.showEnd = detail.showEnd,
+        this.bannerInfo.isPaid = detail.isPaid,
         this.bannerInfo.auditionName = detail.auditionName
     },
     async fileUpload() {
@@ -273,89 +175,6 @@ export default {
             this.form.image = response
             console.log(this.form.image);
         },
-    async bannerUpdate() {
-        if(this.bannerType != 'belt') {
-            if(!this.bannerInfo.showStart || !this.bannerInfo.showEnd) {
-                this.$message.error("배너 기간 설정을 입력해 주세요!")
-                return false
-            }
-            if(!this.bannerInfo.kind) {
-                this.$message.error("배너 랜딩 설정은 필수입니다!")
-                return false
-            } else {
-                if(!this.bannerInfo.execution) {
-                    this.$message.error("배너 랜딩 설정은 필수입니다!")
-                    return false
-                }
-            }
-            if(!this.bannerInfo.image) {
-                this.$message.error("배너 이미지를 업로드 해주세요!")
-                return false
-            }
-            if(!this.bannerInfo.title) {
-                this.$message.error("배너 타이틀을 입력해 주세요!")
-                return false
-            }
-            let form={
-                title : this.bannerInfo.title,
-                image : this.bannerInfo.image,
-                kind : this.bannerInfo.kind,
-                execution : this.bannerInfo.execution,
-                showStart : this.bannerInfo.showStart,
-                showEnd : this.bannerInfo.showEnd,
-                isPaid : this.bannerInfo.isPaid
-            }
-
-            await this.fileUpload();
-                if(this.form.image) {
-                    banner.update(this.bannerType, this.form)
-                        .then(response => {
-                        if(response.data.status.code == 0) {
-                            alert("배너가 정상적으로 수정되었습니다.");
-                            EventBus.$emit('uploadForm', true);
-                            this.dialogUpdate = false
-                        }
-                    });
-                } else {
-                    this.$message.error("배너 이미지를 업로드 해주세요!")
-                }
-        } else if(this.bannerType == 'belt') {
-            if(!this.bannerInfo.showStart || !this.bannerInfo.showEnd) {
-                this.$message.error("배너 기간 설정을 입력해 주세요!")
-                return false
-            }
-            if(!this.bannerInfo.kind) {
-                this.$message.error("배너 랜딩 설정은 필수입니다!")
-                return false
-            } else {
-                if(!this.bannerInfo.execution) {
-                    this.$message.error("배너 랜딩 설정은 필수입니다!")
-                    return false
-                }
-            }
-            if(!this.bannerInfo.title) {
-                this.$message.error("배너 내용을 입력해 주세요!")
-                return false
-            }
-            let form={
-                title : this.bannerInfo.title,
-                kind : this.bannerInfo.kind,
-                execution : this.bannerInfo.execution,
-                showStart : this.bannerInfo.showStart,
-                showEnd : this.bannerInfo.showEnd,
-                isPaid : this.bannerInfo.isPaid
-            }
-            banner.update(this.bannerType, this.form)
-                .then(response => {
-                if(response.data.status.code == 0) {
-                    alert("배너가 정상적으로 수정되었습니다.");
-                    EventBus.$emit('uploadForm', true);
-                    this.dialogUpdate = false
-                }
-            });
-        }
-
-    },
     deleteDialog(pk) {
         this.dialogDelete = true
         this.pk = pk
