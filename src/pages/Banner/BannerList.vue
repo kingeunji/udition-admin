@@ -10,7 +10,10 @@
                 <div v-if="bannerType != 'belt'">
                     <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + scope.row.image" class="img-fluid" />
                 </div>
-                <div style="text-align:center;"> <b> {{ scope.row.title }} </b> </div>
+                <!-- <div style="text-align:center;"> <b> {{ scope.row.title }} </b> </div> -->
+                <div style="text-align:center;">
+                    <b><el-input type="textarea" autocomplete="off" rows="2" id="txtBorder" readonly="readonly" v-model="scope.row.title"></el-input></b>
+                </div>
             </template>
         </el-table-column>
 
@@ -268,5 +271,12 @@ export default {
     padding: 0 5px;
     width: fit-content;
     font-size: 12px;
+}
+
+#txtBorder {
+    border:none;
+    text-align: center;
+    resize: none;
+    font-weight: bold;
 }
 </style>
