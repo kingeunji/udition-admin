@@ -57,7 +57,8 @@
 
                 <el-form-item label="4) 타이틀 설정" style="margin-top: 15px;">
                     <div class="row" style="margin-left: 5px;">
-                        <el-input placeholder="배너 타이틀을 입력해 주세요" v-model="form.title"></el-input>
+                        <!-- <el-input placeholder="배너 타이틀을 입력해 주세요" v-model="form.title"></el-input> -->
+                        <el-input type="textarea" autocomplete="off" rows="2" placeholder="배너 타이틀을 입력해 주세요" v-model="form.title"></el-input>
                     </div>
                 </el-form-item>
                 
@@ -72,7 +73,8 @@
             <div v-if="bannerType == 'belt'">
                 <el-form-item label="3) 내용 설정" style="margin-top: 15px;">
                     <div class="row" style="margin-left: 5px;">
-                        <el-input placeholder="내용을 입력해 주세요" v-model="form.title"></el-input>
+                        <!-- <el-input placeholder="내용을 입력해 주세요" v-model="form.title"></el-input> -->
+                        <el-input type="textarea" autocomplete="off" rows="2" placeholder="배너 타이틀을 입력해 주세요" v-model="form.title"></el-input>
                     </div>
                 </el-form-item>
 
