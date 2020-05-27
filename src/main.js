@@ -26,10 +26,18 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Viewer from 'v-viewer'
 import VueYoutube  from 'vue-youtube'
 
+
+import Html2Canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+
+
 Vue.use(ElementUI , {locale});
 Vue.use(Viewer);
 Vue.use(PaperDashboard);
 Vue.use(VueYoutube);
+
+Vue.use(Html2Canvas);
+Vue.use(jsPDF);
 
 /* eslint-disable no-new */
 new Vue({

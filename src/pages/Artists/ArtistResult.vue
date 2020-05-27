@@ -39,8 +39,11 @@
                                         :step="5">
                                 </el-slider>
                             </div>
-                            
-                            
+                        </div>
+                        <div>
+                            <el-radio v-model="form.orderType" @change="changeOrder" label="2">최신 등록순</el-radio>
+                            <el-radio v-model="form.orderType" @change="changeOrder" label="3">업데이트순</el-radio>
+                            <el-radio v-model="form.orderType" @change="changeOrder" label="4">완성도순</el-radio>
                         </div>
                         
                     </div>
@@ -89,8 +92,8 @@
             </div>
         </div>            
 
-        <div class="list-group-gallery auditon-detail-list">
-            <div class="row" v-loading="loading">
+        <div class="list-group-gallery auditon-detail-list"  v-loading="loading">
+            <div class="row" >
                 
                 
                 <div class="col-3" v-for="item in this.artistList" v-bind:key="item.uid">
@@ -123,9 +126,8 @@
                 </div>
 
             </div>
-        </div>
 
-        <div style="text-align: center; margin-top: 15px;">
+            <div style="text-align: center; margin-top: 15px;">
             <el-pagination
                 background
                 layout="prev, pager, next"
@@ -137,6 +139,9 @@
                 @prev-click="pageChange">
             </el-pagination>
         </div>
+        </div>
+
+        
 
         <el-dialog
             title="이메일 보내기"
@@ -285,7 +290,7 @@ export default {
             actionSelect : '',
             artistList : [],
             error : '',
-            form : { filterType : 0, allFlag : 0, pageSize : 40 },
+            form : { filterType : 0, allFlag : 0, pageSize : 40, orderType: '2' },
             pagination : '',
             localType : {
                 filterType : '',
@@ -320,6 +325,7 @@ export default {
             this.form = {}
             this.form.memberTier = this.activeName
             this.form.pageSize = 40
+            this.form.orderType = 2
             this.localType.memberTier = this.activeName
             
             this.perfectionFlg = false
@@ -331,17 +337,13 @@ export default {
         },
     },
     methods : {
-        fetchData() {
+        async fetchData() {
             this.loading = true
-            artist.search(this.form)
-                  .then(data => {
-                      this.artistList = data.results
-                      this.pagination = data.page
-                      this.loading = false
-                  })
-                  .catch(err => {
-                      this.error = err.data
-                  })
+            const response = await artist.search(this.form)
+            this.artistList = response.results
+            this.pagination = response.page
+            this.loading = false
+        
             if(this.form.memberTier) {
                 this.activeName = this.form.memberTier.toString()
             }
@@ -351,6 +353,26 @@ export default {
             this.form.allFlag = 0
             
         },
+        // fetchData() {
+        //     this.loading = true
+        //     artist.search(this.form)
+        //           .then(data => {
+        //               this.artistList = data.results
+        //               this.pagination = data.page
+        //               this.loading = false
+        //           })
+        //           .catch(err => {
+        //               this.error = err.data
+        //           })
+        //     if(this.form.memberTier) {
+        //         this.activeName = this.form.memberTier.toString()
+        //     }
+        //     // form 값 초기화
+        //     this.allSelect = false
+        //     this.selectedProfile = []
+        //     this.form.allFlag = 0
+            
+        // },
         imageLoadOnError(e) {
             e.target.src = image
         },
@@ -499,6 +521,11 @@ export default {
             this.form.pageSize = val
             this.fetchData()
         },
+        changeOrder(val){
+            this.form.orderType = val
+            this.fetchData()
+        }
+        ,
         actionDialog() {
             console.log(this.form.allFlag + ", " + this.selectedProfile.length)
             if(this.allSelect == 0 && this.selectedProfile.length == 0 ) {
