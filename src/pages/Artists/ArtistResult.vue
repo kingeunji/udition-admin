@@ -284,17 +284,19 @@ export default {
             pageSelect : false,
             perfectionFlg : false,
             perfection : [0, 40],
+            orderType : 0,
             profileFlg : false,
             profileSelect : false,
             perfectionSelect : "1",
             actionSelect : '',
             artistList : [],
             error : '',
-            form : { filterType : 0, allFlag : 0, pageSize : 40, orderType: '2' },
+            form : { filterType : 0, allFlag : 0, pageSize : 40, orderType: 0},
             pagination : '',
             localType : {
                 filterType : '',
-                memberTier : ''
+                memberTier : '',
+                orderType : '',
             },
             loading: true,
             dialogVisible : false,
@@ -325,7 +327,7 @@ export default {
             this.form = {}
             this.form.memberTier = this.activeName
             this.form.pageSize = 40
-            this.form.orderType = 2
+            this.orderType = '2'
             this.localType.memberTier = this.activeName
             
             this.perfectionFlg = false
