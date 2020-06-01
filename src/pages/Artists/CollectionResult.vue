@@ -203,7 +203,7 @@ export default {
                     this.form.isBizView = 0
                 }
 
-                collection.update(form)
+                collection.update(this.form)
                           .then(data => {
                               if(data.status.code == "0") {
                                   this.fetchData()
