@@ -7,7 +7,7 @@
             effect="dark">
         </el-alert>
 
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" @tab-click="activeNameHandle">
             <el-tab-pane label="전체 회원" name="0"></el-tab-pane>
             <el-tab-pane label="Tier 01" name="1"></el-tab-pane>
             <el-tab-pane label="Tier 02" name="2"></el-tab-pane>
@@ -291,7 +291,7 @@ export default {
             actionSelect : '',
             artistList : [],
             error : '',
-            form : { filterType : 0, allFlag : 0, pageSize : 40, orderType: 0},
+            form : { filterType : 0, allFlag : 0, pageSize : 40, orderType: 0, memberTier: ''},
             pagination : '',
             localType : {
                 filterType : '',
@@ -315,6 +315,7 @@ export default {
     mounted() {
         EventBus.$on("emitEvent", form => {
             this.form = form;
+            console.log(this.form);
             this.excelUrl = 'https://webapi.udition.co/api/artistFilter/excelDownload?'
             // this.excelUrl = 'http://localhost:8082/api/artistFilter/excelDownload?'
             this.excelCheck()
@@ -323,58 +324,43 @@ export default {
         });
     },
     watch : {
-        activeName : function() {
-            this.form = {}
-            this.form.memberTier = this.activeName
-            this.form.pageSize = 40
-            this.orderType = '2'
-            this.localType.memberTier = this.activeName
-            
-            this.perfectionFlg = false
-            this.profileFlg = false
+        // activeName : function() {
+        //     this.form = {}
+        //     this.form.memberTier = this.activeName
+        //     this.form.pageSize = 40
+        //     this.orderType = '2'
 
-            this.profileSelect = false
-            this.perfection = [0, 40]
-            this.fetchData()
-        },
+        //     this.localType.memberTier = this.activeName
+            
+        //     this.perfectionFlg = false
+        //     this.profileFlg = false
+
+        //     this.profileSelect = false
+        //     this.perfection = [0, 40]
+        //     this.fetchData()
+        // },
     },
     methods : {
-        async fetchData() {
+        fetchData() {
             this.loading = true
-            const response = await artist.search(this.form)
-            this.artistList = response.results
-            this.pagination = response.page
-            this.loading = false
-        
-            if(this.form.memberTier) {
-                this.activeName = this.form.memberTier.toString()
-            }
+            artist.search(this.form)
+                  .then(data => {
+                      this.artistList = data.results
+                      this.pagination = data.page
+                      this.loading = false
+                  })
+                  .catch(err => {
+                      this.error = err.data
+                  })
+                if(this.form.memberTier) {
+                    this.activeName = this.form.memberTier.toString()
+                }
             // form 값 초기화
             this.allSelect = false
             this.selectedProfile = []
             this.form.allFlag = 0
             
         },
-        // fetchData() {
-        //     this.loading = true
-        //     artist.search(this.form)
-        //           .then(data => {
-        //               this.artistList = data.results
-        //               this.pagination = data.page
-        //               this.loading = false
-        //           })
-        //           .catch(err => {
-        //               this.error = err.data
-        //           })
-        //     if(this.form.memberTier) {
-        //         this.activeName = this.form.memberTier.toString()
-        //     }
-        //     // form 값 초기화
-        //     this.allSelect = false
-        //     this.selectedProfile = []
-        //     this.form.allFlag = 0
-            
-        // },
         imageLoadOnError(e) {
             e.target.src = image
         },
@@ -497,6 +483,11 @@ export default {
                 this.form.perfectionType = ''
                 this.fetchData()
             }
+        },
+        activeNameHandle(){
+            this.form.memberTier = this.activeName
+            this.localType.memberTier = this.activeName
+            this.fetchData()
         },
         profileFlgHandle() {
             // 이미지 플래그 선택시 
