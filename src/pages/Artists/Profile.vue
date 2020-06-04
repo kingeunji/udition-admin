@@ -217,22 +217,19 @@
       <div class="col-lg-10">
         <div class="images" v-viewer>
           <div v-if="detailInfo.cutImgInfo.faceFile" style="display: inline; padding: 5px;">
-            <img
+            <img id="myImage1"
               :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.cutImgInfo.faceFile"
               style="width: 130px;"
             />
           </div>
           <div v-if="detailInfo.cutImgInfo.sideFile" style="display: inline; padding: 5px;">
-            <img
+            <img id="myImage2"
               :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.cutImgInfo.sideFile"
               style="width: 130px;"
             />
           </div>
-          <div
-            v-if="detailInfo.cutImgInfo.wholeFile"
-            style="display: inline; padding: 5px;"
-          >
-            <img
+          <div v-if="detailInfo.cutImgInfo.wholeFile" style="display: inline; padding: 5px;">
+            <img id="myImage3"
               :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.cutImgInfo.wholeFile"
               style="width: 130px;"
             />
