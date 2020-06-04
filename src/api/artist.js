@@ -34,5 +34,8 @@ export const artist = {
     push(formData){
       return request('post', 'member/push', formData)
     },
+    deleteFile(formData){
+      return request('post', 'file/deleteFile', formData)
+    }
 }
 

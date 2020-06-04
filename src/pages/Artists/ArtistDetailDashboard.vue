@@ -4,16 +4,14 @@
             <card class="card-user">
                 <div slot="image">
                     <img id="myImage" :src=" 'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.image" alt="..." @error="imageLoadOnError"/>
-                    <!-- <img id="myImage" :src=" 'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.image" alt="..." /> -->
-                    <!-- <el-image v-bind:src=" 'data:jpg;base64,'.base64_encode(file_get_contents('https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.image))" alt="..."> </el-image> -->
-                    <!-- <canvas id="sketch"></canvas> -->
+                    <!-- <img id="myImage" :src=" 'http://webapi.udition.co/api/file/getFile?downloadFileName=' + detailInfo.image" alt="..." /> -->
                 </div>
                 <div>
                     <div class="author">
                         <div class="avatar" alt="..."> </div>
                         <h4 class="title">{{ detailInfo.fullName }}
                         <br>
-                        <small>@{{ detailInfo.stageName }}</small>
+                        <small id="fileName">@{{ detailInfo.stageName }}</small>
                         </h4>
                     </div>
                     <p class="description text-center">
@@ -42,7 +40,7 @@
                 </div>
             </card>
 
-            <!-- <el-button style="width:360px; height: 50px; font-size: large;" type="primary" @click="makePDF">프로필 PDF 다운로드</el-button> -->
+            <el-button style="width:360px; height: 50px; font-size: large;" type="primary" @click="makePDF">프로필 PDF 다운로드</el-button>
 
         </div>
 
@@ -121,53 +119,71 @@ export default {
         imageLoadOnError(e) {
             e.target.src = image
         },
-        // makePDF(){
-        //   html2canvas(document.querySelector(".content"), {
-        //         allowTaint : true,
-        //         useCORS : true,
-        //   }).then(function(canvas) {
-        //         var originImage = document.getElementById("myImage").getAttribute('src');
-        //         console.log("originImage= " + originImage);
-        //         var encode = window.btoa(originImage);
-        //         console.log("encode= " + encode);
-        //         document.getElementById("myImage").setAttribute('src', 'data:image/png;base64,' + encode);
-        //         var imgData = canvas.toDataURL('image/png');
-        //         var imgWidth = 210;
-        //         var pageHeight = imgWidth * 1.414;
-        //         var imgHeight = canvas.height * imgWidth / canvas.width;
-        //         var doc = new jsPDF('p', 'mm', 'a4');
+        makePDF(){
+            var fullName = this.detailInfo.fullName
+            var stageName = this.detailInfo.stageName
 
-        //         doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-        //         doc.save("artist_profile.pdf");
-        //      document.getElementById("myImage").setAttribute('src', originImage);
-        //     });
-        // },
-        
-        
-        // makePDF() {
-        //     function downloadURI(uri, name){
-        //         var link = document.createElement("a");
-        //         link.download = name;
-        //         link.href = uri;
-        //         document.body.appendChild(link);
-        //         link.click();
-        //     }
-        //     html2canvas(document.querySelector(".content"), {
-        //         useCORS : true,
-        //     }).then(function(canvas) {
-                
-        //         var originImage = document.getElementById("myImage").getAttribute('src');
-        //         console.log("originImage= " + originImage);
-        //         var encode = window.btoa(originImage);
-        //         console.log("encode= " + encode);
-        //         document.getElementById("myImage").setAttribute('src', 'data:image/png;base64,' + encode);
-                
-        //         var imageDownload = canvas.toDataURL();
-        //         downloadURI(imageDownload, "artist.png");
+            if(document.getElementById("myImage").getAttribute("src") !== "/img/img_default_user@3x.e2f0ae3d.png"){
+                var originImage = document.getElementById("myImage").getAttribute('src');
+                console.log("originImage= " + originImage);
+                var imgUrl = originImage.split("/").reverse()[0];
+                console.log("imgUrl= " + imgUrl);
+                document.getElementById("myImage").setAttribute('src', 'http://webapi.udition.co/api/file/getFile?downloadFileName=' + imgUrl);
+                console.log("local= " + document.getElementById("myImage").getAttribute('src'));
+            }
 
-        //         document.getElementById("myImage").setAttribute('src', originImage);
-        //     });
-        // },
+            if(document.getElementById("myImage1") != null) {
+                var originImage1 = document.getElementById("myImage1").getAttribute('src');
+                var imgUrl1 = originImage1.split("/").reverse()[0];
+                document.getElementById("myImage1").setAttribute('src', 'http://webapi.udition.co/api/file/getFile?downloadFileName=' + imgUrl1);
+            }
+
+            if(document.getElementById("myImage2") != null){
+                var originImage2 = document.getElementById("myImage2").getAttribute('src');
+                var imgUrl2 = originImage2.split("/").reverse()[0];
+                document.getElementById("myImage2").setAttribute('src', 'http://webapi.udition.co/api/file/getFile?downloadFileName=' + imgUrl2);
+            }
+
+            if(document.getElementById("myImage3") != null){
+                var originImage3 = document.getElementById("myImage3").getAttribute('src');
+                var imgUrl3 = originImage3.split("/").reverse()[0];
+                document.getElementById("myImage3").setAttribute('src', 'http://webapi.udition.co/api/file/getFile?downloadFileName=' + imgUrl3);
+            }
+
+            html2canvas(document.querySelector(".content"), {
+                allowTaint : true,
+                useCORS : true,
+            }).then(function(canvas) {
+                
+                var imgData = canvas.toDataURL('image/png');
+                var imgWidth = 210;
+                var pageHeight = imgWidth * 1.414;
+                var imgHeight = canvas.height * imgWidth / canvas.width;
+                var doc = new jsPDF('p', 'mm', 'a4');
+
+                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                doc.save(fullName + "(@" + stageName + ").pdf");
+                
+            });
+
+            if(document.getElementById("myImage").getAttribute("src") !== "/img/img_default_user@3x.e2f0ae3d.png"){
+                document.getElementById("myImage").setAttribute('src', originImage);
+                artist.deleteFile(imgUrl);
+            }
+            if(document.getElementById("myImage1") != null){
+                document.getElementById("myImage1").setAttribute('src', originImage1);
+                artist.deleteFile(imgUrl1);
+            }
+            if(document.getElementById("myImage2") != null){
+                document.getElementById("myImage2").setAttribute('src', originImage2);
+                artist.deleteFile(imgUrl2);
+            }
+            if(document.getElementById("myImage3") != null){
+                document.getElementById("myImage3").setAttribute('src', originImage3);
+                artist.deleteFile(imgUrl3);
+            }
+        },
+        
         
     }
 }

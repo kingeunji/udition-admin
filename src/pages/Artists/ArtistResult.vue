@@ -315,7 +315,7 @@ export default {
     mounted() {
         EventBus.$on("emitEvent", form => {
             this.form = form;
-            console.log(this.form);
+            this.activeName = "0";
             this.excelUrl = 'https://webapi.udition.co/api/artistFilter/excelDownload?'
             // this.excelUrl = 'http://localhost:8082/api/artistFilter/excelDownload?'
             this.excelCheck()
