@@ -154,7 +154,7 @@
                     <div class="row">
                         <div class="col-md-4 col-lg-3">
                             <div class="thumbnail mr-0 mr-md-2">
-                                <el-image :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.logo"  class="img-fluid" @error="imageLoadOnError"></el-image>
+                                <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.logo"  class="img-fluid" @error="imageLoadOnError"/>
                             </div>
                         </div>
                         <div class="col-md-8 col-lg-4 col-xl-5">
