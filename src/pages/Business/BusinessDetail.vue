@@ -4,12 +4,12 @@
             <card class="card-user">
                 <div class="image" style="text-align:center; border-radius: 0px; height: auto; width: auto;">
                     <div v-if="loading">
-                        <el-image :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.logo" alt="..."> </el-image>
+                        <img :src="'https://storage.googleapis.com/udition-web/fileFolder/' + detailInfo.logo" alt="..." @error="imageLoadOnError"/>
                     </div>
                 </div>
 
                 <div>
-                    <div class="author" style="margin-top: -120px;">
+                    <div class="author" style="margin-top: -100px;">
                         <div class="avatar" alt="..."> </div>
                         <h4 class="title">{{ detailInfo.bizName }}
                         <br>
@@ -76,6 +76,7 @@ import Detail from './Detail.vue'
 import AuditionList from './AuditionList.vue'
 import Log from './Log.vue'
 import MemberList from './MemberList.vue'
+import image from '../../assets/img/img_default_user@3x.png'
 
 
 export default {
@@ -104,7 +105,10 @@ export default {
                         console.log(this.detailInfo.bizNo);
                         this.loading = true
                     })
-        }
+        },
+        imageLoadOnError(e) {
+            e.target.src = image
+        },
     }
 
 
